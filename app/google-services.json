@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "264962644647",
+    "project_id": "vetlog-fec63",
+    "storage_bucket": "vetlog-fec63.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264962644647:android:05bc36ffcb877c61281982",
+        "android_client_info": {
+          "package_name": "com.example.vet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "264962644647-ivietr7p7qphpbmnjsjjqrhq0iu6t8iv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyW82rJMR1uaLawbNmNOeyqndYm84PCS8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "264962644647-ivietr7p7qphpbmnjsjjqrhq0iu6t8iv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
