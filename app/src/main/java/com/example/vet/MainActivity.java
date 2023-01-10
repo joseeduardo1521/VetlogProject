@@ -3,6 +3,7 @@ package com.example.vet;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,12 +22,13 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     Button btnregistrar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        btnregistrar = findViewById(R.id.btnRegistrar);
+        btnregistrar = findViewById(R.id.btnregister);
 
         btnregistrar.setOnClickListener(new View.OnClickListener() {
             @Override
