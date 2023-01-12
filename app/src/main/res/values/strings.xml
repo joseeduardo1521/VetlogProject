@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Alpha Vetlog</string>
+    <string name="err_email">Ingrese un correo valido</string>
+    <string name="err_pass">Ingrese una contraseñá</string>
 </resources>
