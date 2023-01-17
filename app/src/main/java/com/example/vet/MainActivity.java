@@ -4,13 +4,10 @@ import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentContainerView;
 
-import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -18,14 +15,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
-import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseUser;
-
 
 
 public class MainActivity extends AppCompatActivity {
@@ -89,6 +83,11 @@ public class MainActivity extends AppCompatActivity {
          iniciar.putExtra("mail", et_mail.getText().toString());
          iniciar.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
          startActivity(iniciar);
+    }
+
+    public void clickOlvido(View view){
+        Intent iniciar = new Intent(this,OlvidoActivity.class);
+        startActivity(iniciar);
     }
 
     private void errotToast(String error) {

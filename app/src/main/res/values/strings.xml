@@ -2,4 +2,6 @@
     <string name="app_name">Alpha Vetlog</string>
     <string name="err_email">Ingrese un correo valido</string>
     <string name="err_pass">Ingrese una contraseñá</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
