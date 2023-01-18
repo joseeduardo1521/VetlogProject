@@ -2,10 +2,6 @@ package com.example.vet;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentContainerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -13,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.google.android.gms.tasks.OnCompleteListener;
