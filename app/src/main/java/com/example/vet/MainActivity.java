@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         et_mail= findViewById(R.id.etmail);
         et_pass= findViewById(R.id.etPass);
 
-
         btnregistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +64,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            irMenu();
+                            if(et_mail.getText().toString().contains("josee")){
+                                irMenu();
+                            }else if(et_mail.getText().toString().contains("vetlog")){
+                                use();
+                            }
+                            // irMenu();
                         }else{
                             String error = ((FirebaseAuthException) task.getException()).getErrorCode();
                             errotToast(error);
@@ -78,10 +82,16 @@ public class MainActivity extends AppCompatActivity {
 }
 
     private void irMenu(){
-         Intent iniciar = new Intent(this,Menuprueba.class);
+         Intent iniciar = new Intent(this,SplashScreen.class);
          iniciar.putExtra("mail", et_mail.getText().toString());
          iniciar.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
          startActivity(iniciar);
+    }
+    private void use(){
+        Intent reg = new Intent(this, RegisUser.class);
+        reg.putExtra("mail", et_mail.getText().toString());
+        reg.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(reg);
     }
 
     public void clickOlvido(View view){
