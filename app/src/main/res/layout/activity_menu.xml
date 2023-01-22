@@ -77,17 +77,30 @@
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
-                    <ImageView
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/animation_view1"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/vetg"></ImageView>
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="agregar.json"
+                        app:lottie_imageAssetsFolder="assets"
+                        app:lottie_loop="true"
+                        />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Vetlog"
+                        android:text="Agregar"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"></TextView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Mascota"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"></TextView>
@@ -108,17 +121,30 @@
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="65dp"
-                        android:layout_height="65dp"
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/animation_view2"
+                        android:layout_width="75dp"
+                        android:layout_height="75dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/vetg"></ImageView>
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="qr.json"
+                        app:lottie_imageAssetsFolder="assets"
+                        app:lottie_loop="true"
+                        />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Vetlog"
+                        android:text="Consultar"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"></TextView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Mascota"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"></TextView>
@@ -135,7 +161,6 @@
             android:layout_weight="1">
 
             <androidx.cardview.widget.CardView
-
                 android:id="@+id/D3"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
@@ -149,17 +174,30 @@
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
-                    <ImageView
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/animation_view3"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/vetg"></ImageView>
+                        app:lottie_autoPlay="true"
+                        app:lottie_fileName="calendar.json"
+                        app:lottie_imageAssetsFolder="assets"
+                        app:lottie_loop="true"
+                        />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Vetlog"
+                        android:text="Consultar"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"></TextView>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="Citas"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"></TextView>
