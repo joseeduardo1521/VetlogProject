@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             if(et_mail.getText().toString().contains("josee375")){
                                 irMenu();
-                            }else if(et_mail.getText().toString().contains("vetlog")){
+                            }else if(et_mail.getText().toString().contains("kenji.guillermo")){
                                 use();
                             }else{
                                 test();
@@ -90,13 +90,13 @@ public class MainActivity extends AppCompatActivity {
          startActivity(iniciar);
     }
     private void use(){
-        Intent reg = new Intent(this, RegisUser.class);
+        Intent reg = new Intent(this, MenuSec.class);
         reg.putExtra("mail", et_mail.getText().toString());
         reg.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(reg);
     }
     private void test(){
-        Intent reg = new Intent(this, SplashScreen.class);
+        Intent reg = new Intent(this, Usuarios.class);
         reg.putExtra("mail", et_mail.getText().toString());
         reg.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(reg);
