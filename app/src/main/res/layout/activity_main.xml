@@ -14,7 +14,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="41dp"
-        android:layout_marginBottom="22dp"
+        android:layout_marginBottom="30dp"
         android:backgroundTint="@color/design_default_color_secondary"
         android:text="REGISTRATE" />
 
@@ -40,18 +40,26 @@
         android:layout_above="@id/btnregister"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="150dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="30dp"
         android:text="No tienes cuenta?" />
+
+    <ImageView
+        android:layout_width="78dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="310dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="300dp"
+        app:srcCompat="@drawable/vetg" />
 
     <TextView
         android:id="@+id/signin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="50dp"
         android:layout_marginBottom="50dp"
-        android:gravity="center"
         android:text="Iniciar sesión"
         android:textColor="@color/white"
         android:textSize="35dp"
@@ -59,11 +67,9 @@
 
     <TextView
         android:id="@+id/version"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="310dp"
-        android:layout_marginTop="710dp"
-        android:layout_marginBottom="50dp"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+
         android:gravity="center"
         android:text="alpha 0.1"
         android:textColor="@color/black"
