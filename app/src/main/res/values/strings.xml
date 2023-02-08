@@ -7,5 +7,8 @@
     <string name="recuperar_contrase_a">Recuperar contraseña</string>
     <string name="ingrese_su_correo_electronico">Ingrese su correo electronico</string>
     <string name="email">Email</string>
+    <string name="err_tel">Ingrese un numero de telefono</string>
+    <string name="err_dir">Ingrese una direccion</string>
+    <string name="err_nom">Ingrese su nombre completo</string>
     <string name="restablecer_contrase_a">Restablecer contraseña</string>
 </resources>
