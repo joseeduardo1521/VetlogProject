@@ -19,14 +19,19 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
     Button btnregistrar, btnlogin;
     EditText et_mail, et_pass;
-
+    private DatabaseReference mDatabase;
     AwesomeValidation awesomeValidation;
-    FirebaseAuth firebaseAuth;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
         btnregistrar = findViewById(R.id.btnregister);
         btnlogin = findViewById(R.id.loginbtn);
-
-        firebaseAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
         awesomeValidation = new AwesomeValidation(BASIC);
         awesomeValidation.addValidation(this, R.id.etmail, Patterns.EMAIL_ADDRESS,  R.string.err_email);
         awesomeValidation.addValidation(this,R.id.etPass,".{6,}", R.string.err_pass);
@@ -60,17 +65,18 @@ public class MainActivity extends AppCompatActivity {
                 String mail = String.valueOf(et_mail.getText());//Correo
                 String pass = String.valueOf(et_pass.getText());//Contraseña
 
-                firebaseAuth.signInWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                mAuth.signInWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            if(et_mail.getText().toString().contains("josee375")){
+                           /* if(et_mail.getText().toString().contains("josee375")){
                                 irMenu();
                             }else if(et_mail.getText().toString().contains("kenji.guillermo")){
                                 use();
                             }else{
                                 test();
-                            }
+                            }*/
+                            verificar(mail);
 
                         }else{
                             String error = ((FirebaseAuthException) task.getException()).getErrorCode();
@@ -83,17 +89,57 @@ public class MainActivity extends AppCompatActivity {
     });
 }
 
+private void verificar(String mail){
+    String id= mAuth.getCurrentUser().getUid();
+
+    mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if(snapshot.exists()){
+                String correo,lvl;
+                correo = snapshot.child("email").getValue().toString();
+                lvl = snapshot.child("lvl").getValue().toString();
+                if(mail.equals(correo)) {
+                    switch (lvl){
+                        case "1":
+                            irMenu();
+                            break;
+                        case "2":
+                            break;
+                        case "3":
+                            use();
+                            break;
+                        default:
+                            Toast.makeText(MainActivity.this, "Error",
+                                    Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
+            }
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    });
+
+}
+
     private void irMenu(){
          Intent iniciar = new Intent(this,Menu.class);
          iniciar.putExtra("mail", et_mail.getText().toString());
          iniciar.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
          startActivity(iniciar);
+         finish();
     }
     private void use(){
         Intent reg = new Intent(this, MenuSec.class);
         reg.putExtra("mail", et_mail.getText().toString());
         reg.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(reg);
+        finish();
     }
     private void test(){
         Intent reg = new Intent(this, Usuarios.class);
