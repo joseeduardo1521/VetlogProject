@@ -54,9 +54,9 @@ public class RegisterAct extends AppCompatActivity {
         awesomeValidation.addValidation(this, R.id.edtDir, "[a-zA-Z0-9\\s]+", R.string.err_dir);
         awesomeValidation.addValidation(this, R.id.edtNom, "[a-zA-Z\\s]+", R.string.err_nom);
         awesomeValidation.addValidation(this, R.id.txtCorreo, Patterns.EMAIL_ADDRESS, R.string.err_email);
-        awesomeValidation.addValidation(this, R.id.txtPass, ".{6,}", R.string.err_pass);
+        awesomeValidation.addValidation(this, R.id.txtPass, ".{8,}", R.string.err_pass);
         awesomeValidation.addValidation(this, R.id.edtTel, RegexTemplate.TELEPHONE, R.string.err_tel);
-        awesomeValidation.addValidation(this, R.id.txtPass2, ".{6,}", R.string.err_pass);
+        awesomeValidation.addValidation(this, R.id.txtPass2, ".{8,}", R.string.err_pass);
 
 
         btncrespo.setOnClickListener(new View.OnClickListener() {
