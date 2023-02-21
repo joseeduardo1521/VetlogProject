@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         awesomeValidation = new AwesomeValidation(BASIC);
         awesomeValidation.addValidation(this, R.id.etmail, Patterns.EMAIL_ADDRESS,  R.string.err_email);
-        awesomeValidation.addValidation(this,R.id.etPass,".{6,}", R.string.err_pass);
+        awesomeValidation.addValidation(this,R.id.etPass,".{8,}", R.string.err_pass);
 
         et_mail= findViewById(R.id.etmail);
         et_pass= findViewById(R.id.etPass);

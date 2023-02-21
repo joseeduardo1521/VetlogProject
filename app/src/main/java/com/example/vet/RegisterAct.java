@@ -18,6 +18,7 @@ import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -28,7 +29,7 @@ import java.util.Map;
 
 public class RegisterAct extends AppCompatActivity {
     private EditText TxtUsuario;
-    private EditText TxtPass, TxtPass2;
+    private TextInputEditText TxtPass, TxtPass2;
     private EditText TxtTel, TxtDir, TxtNom;
     private Button btncrespo;
     FirebaseAuth mAuth;
@@ -45,18 +46,19 @@ public class RegisterAct extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         TxtUsuario = (EditText) findViewById(R.id.txtUsuario);
         TxtNom = (EditText) findViewById(R.id.edtNom);
-        TxtPass = (EditText) findViewById(R.id.txtPass);
-        TxtPass2 = (EditText) findViewById(R.id.txtPass2);
+        TxtPass = (TextInputEditText) findViewById(R.id.txtPass);
+        TxtPass2 = (TextInputEditText) findViewById(R.id.txtPass2);
         TxtTel = (EditText) findViewById(R.id.edtTel);
         TxtDir = (EditText) findViewById(R.id.edtDir);
         btncrespo = (Button) findViewById(R.id.btncrespo);
         awesomeValidation = new AwesomeValidation(BASIC);
+        String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
         awesomeValidation.addValidation(this, R.id.edtDir, "[a-zA-Z0-9\\s]+", R.string.err_dir);
         awesomeValidation.addValidation(this, R.id.edtNom, "[a-zA-Z\\s]+", R.string.err_nom);
         awesomeValidation.addValidation(this, R.id.txtCorreo, Patterns.EMAIL_ADDRESS, R.string.err_email);
-        awesomeValidation.addValidation(this, R.id.txtPass, ".{8,}", R.string.err_pass);
+        awesomeValidation.addValidation(this, R.id.txtPass, regexPassword, R.string.err_pass);
         awesomeValidation.addValidation(this, R.id.edtTel, RegexTemplate.TELEPHONE, R.string.err_tel);
-        awesomeValidation.addValidation(this, R.id.txtPass2, ".{8,}", R.string.err_pass);
+        awesomeValidation.addValidation(this, R.id.txtPass2, regexPassword, R.string.err_pass);
 
 
         btncrespo.setOnClickListener(new View.OnClickListener() {
