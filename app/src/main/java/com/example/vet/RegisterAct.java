@@ -94,7 +94,7 @@ public class RegisterAct extends AppCompatActivity {
                                     }
                                 });
 
-                    } else {        TxtPass2.setError("No coiniden");
+                    } else {        TxtPass2.setError("Las contraseñas no coiniden");
 
                     }
 

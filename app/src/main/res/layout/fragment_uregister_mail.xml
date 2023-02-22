@@ -155,7 +155,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Spinner
-            android:id="@+id/spinner"
+            android:id="@+id/sRoles"
             android:layout_width="343dp"
             android:layout_height="65dp"
             android:layout_gravity="center"
