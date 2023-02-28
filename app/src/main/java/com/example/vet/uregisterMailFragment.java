@@ -86,18 +86,30 @@ public class uregisterMailFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+
                 if (awesomeValidation.validate()){
-                    String email, password, password2;
+                    String email, password, password2,nivels;
                     email = String.valueOf(TxtUsuario.getText());
                     password = String.valueOf(TxtPass.getText());
                     password2 = String.valueOf(TxtPass2.getText());
+                    nivels = item;
+
+                    switch (nivels){
+                        case "Veterinario":
+                            nivels = "1";
+                            break;
+                        case "Secretario":
+                            nivels = "2";
+                            break;
+                    }
+
 
                     if(password.equals(password2)){
 
                         Bundle bundle = new Bundle();
                         bundle.putString("mail", email.trim());
                         bundle.putString("pass", password.trim());
-                        bundle.putString("lvl", item.trim());
+                        bundle.putString("lvl", nivels.trim());
 
                         getParentFragmentManager().setFragmentResult("key",bundle);
 
@@ -108,6 +120,7 @@ public class uregisterMailFragment extends Fragment {
 
                         ft.detach(bottomFragment);
                         ft.attach(bottomFragment);
+                        ft.show(bottomFragment);
                         Fragment bottomFragment1 = manager.findFragmentById(R.id.fragmentMP);
                         ft.hide(bottomFragment1);
                         ft.commit();
