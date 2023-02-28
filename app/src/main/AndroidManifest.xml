@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".CodigoQR"
+            android:exported="false" />
+        <activity
             android:name=".Usuarios"
             android:exported="false">
             <meta-data
