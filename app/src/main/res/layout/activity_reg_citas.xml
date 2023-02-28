@@ -16,53 +16,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/txtNom"
             android:layout_width="match_parent"
-            android:gravity="center"
-            android:layout_height="23dp"
+            android:layout_height="45dp"
             android:layout_gravity="center"
             android:layout_marginTop="120dp"
-            android:text="Nombre(s)"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.093"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.24" />
-
-        <EditText
-            android:id="@+id/edtNom"
-            android:layout_width="334dp"
-            android:layout_height="65dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:background="#30ffffff"
-            android:drawableLeft="@drawable/ic_baseline_person_outline_24"
-            android:drawablePadding="20dp"
-            android:hint="Nombre completo"
-            android:padding="20dp"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.402"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.315" />
-
-        <TextView
-            android:id="@+id/txtDate"
-            android:layout_width="match_parent"
             android:gravity="center"
-            android:layout_height="23dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="Ingrese Fecha"
+            android:text="Seleccione la Fecha"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -70,11 +34,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.24" />
+        <Button
+            android:id="@+id/dataPickerButton"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="JAN 01 2022"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            style="?android:spinnerStyle"
+            android:layout_marginTop="40dp"
+            android:onClick="openDatePicker"/>
 
-        <CalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="45dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Registrar"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/tatanka_button"/>
+
 
 
     </LinearLayout>
