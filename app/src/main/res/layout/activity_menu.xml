@@ -39,9 +39,10 @@
             </TextView>
 
             <TextView
+                android:id="@+id/puesto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Loremipsusm"
+                android:text="Rol: "
                 android:textColor="@color/white">
 
             </TextView>
@@ -90,7 +91,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Agregar"
+                        android:text="Gestionar"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"></TextView>
@@ -98,7 +99,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="Mascota"
+                        android:text="Mascotas"
                         android:textColor="@color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"></TextView>

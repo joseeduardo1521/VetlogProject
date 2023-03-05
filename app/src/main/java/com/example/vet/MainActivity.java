@@ -3,11 +3,14 @@ package com.example.vet;
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,24 +30,32 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
-    Button btnregistrar, btnlogin;
-    EditText et_mail, et_pass;
+    private Button btnregistrar, btnlogin;
+    private EditText et_mail, et_pass;
     private DatabaseReference mDatabase;
-    AwesomeValidation awesomeValidation;
-    FirebaseAuth mAuth;
+    private AwesomeValidation awesomeValidation;
+    private FirebaseAuth mAuth;
+    private Switch swSesion;
+
+    private static final String STRING_PREFERENCES = "Vetlog.Sesion";
+    private static final String STRING_ESTADO_BUTTON_SESION = "estado.button.sesion";
+    public static final String SHARED_PREFS ="sharedPrefs.mail";
+    public static final String SHARED_PREFS2 ="sharedPrefs.pass";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        obetenerEstadoSw();
 
         btnregistrar = findViewById(R.id.btnregister);
         btnlogin = findViewById(R.id.loginbtn);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
         awesomeValidation = new AwesomeValidation(BASIC);
         awesomeValidation.addValidation(this, R.id.etmail, Patterns.EMAIL_ADDRESS,  R.string.err_email);
         awesomeValidation.addValidation(this,R.id.etPass,".{8,}", R.string.err_pass);
+        swSesion = findViewById(R.id.swSesion);
 
         et_mail= findViewById(R.id.etmail);
         et_pass= findViewById(R.id.etPass);
@@ -57,18 +68,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnlogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(awesomeValidation.validate()){
+                    String mail = String.valueOf(et_mail.getText());//Correo
+                    String pass = String.valueOf(et_pass.getText());//Contraseña
+                    logIn(mail,pass);
+                }
+            }
+        });
+    }
 
-     btnlogin.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if(awesomeValidation.validate()){
-                String mail = String.valueOf(et_mail.getText());//Correo
-                String pass = String.valueOf(et_pass.getText());//Contraseña
+    private void   obetenerEstadoSw(){
+        SharedPreferences sharedPreferences =getSharedPreferences(SHARED_PREFS,MODE_PRIVATE);
+        String check = sharedPreferences.getString("mail", "");
+        String check2 = sharedPreferences.getString("pass","");
+        if(!check.equals("")){
+            logIn(check,check2);
+        }
 
-                mAuth.signInWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
+
+
+    }
+
+
+    private void logIn(String mail,String pass){
+
+        mAuth.signInWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
                            /* if(et_mail.getText().toString().contains("josee375")){
                                 irMenu();
                             }else if(et_mail.getText().toString().contains("kenji.guillermo")){
@@ -76,63 +106,78 @@ public class MainActivity extends AppCompatActivity {
                             }else{
                                 test();
                             }*/
-                            verificar(mail);
+                    verificar(mail);
 
-                        }else{
-                            String error = ((FirebaseAuthException) task.getException()).getErrorCode();
-                            errotToast(error);
-                        }
-                    }
-                });
-            }
-        }
-    });
-}
-
-private void verificar(String mail){
-    String id= mAuth.getCurrentUser().getUid();
-
-    mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-            if(snapshot.exists()){
-                String correo,lvl;
-                correo = snapshot.child("email").getValue().toString();
-                lvl = snapshot.child("lvl").getValue().toString();
-                if(mail.equals(correo)) {
-                    switch (lvl){
-                        case "1":
-                            irMenu();
-                            break;
-                        case "2":
-                            break;
-                        case "3":
-                            use();
-                            break;
-                        default:
-                            Toast.makeText(MainActivity.this, "Error",
-                                    Toast.LENGTH_SHORT).show();
-                            break;
-                    }
+                }else{
+                    String error = ((FirebaseAuthException) task.getException()).getErrorCode();
+                    errotToast(error);
                 }
             }
+        });
+    }
 
-        }
+    private void  guardarEstadoSw(){
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor= sharedPreferences.edit();
+        editor.putString("mail",et_mail.getText().toString());
+        editor.putString("pass",et_pass.getText().toString());
+        editor.apply();
+    }
 
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
 
-        }
-    });
+    private void verificar(String mail){
+        String id= mAuth.getCurrentUser().getUid();
 
-}
+        mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String correo,lvl;
+                    correo = snapshot.child("email").getValue().toString();
+                    lvl = snapshot.child("lvl").getValue().toString();
+                    if(mail.equals(correo)) {
+                        switch (lvl){
+                            case "1":
+                                irMenu();
+                                break;
+                            case "2":
+                                break;
+                            case "3":
+                                use();
+                                break;
+                            default:
+                                Toast.makeText(MainActivity.this, "Error",
+                                        Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    }
+
+                    if(swSesion.isChecked()){
+                        guardarEstadoSw();
+
+                    }
+
+
+
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
 
     private void irMenu(){
-         Intent iniciar = new Intent(this,Menu.class);
-         iniciar.putExtra("mail", et_mail.getText().toString());
-         iniciar.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-         startActivity(iniciar);
-         finish();
+        Intent iniciar = new Intent(this,Menu.class);
+        iniciar.putExtra("mail", et_mail.getText().toString());
+        iniciar.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(iniciar);
+        finish();
     }
     private void use(){
         Intent reg = new Intent(this, MenuSec.class);
@@ -234,7 +279,7 @@ private void verificar(String mail){
 
     }
 
-    }
+}
 
 
 

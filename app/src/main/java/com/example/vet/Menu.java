@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 public class Menu extends AppCompatActivity {
 
     private View cardPersonal;
-    private TextView mnombre;
+    private TextView mnombre,mRol;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private View cardCitas;
@@ -31,6 +31,7 @@ public class Menu extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mnombre = (TextView) findViewById(R.id.usu);
+        mRol = (TextView) findViewById(R.id.puesto);
         cardPersonal = (View) findViewById(R.id.D4);
         cardCitas = (View) findViewById(R.id.D3);
         getUserInfo();
@@ -58,11 +59,20 @@ public class Menu extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    String nombre,correo,phone,direc;
+                    String nombre,correo,phone,direc,lvl;
                     nombre = snapshot.child("name").getValue().toString();
                     correo = snapshot.child("email").getValue().toString();
                     phone = snapshot.child("phone").getValue().toString();
                     direc = snapshot.child("address").getValue().toString();
+                    lvl = snapshot.child("lvl").getValue().toString();
+                    switch (lvl){
+                        case "1":
+                                mRol.setText("Veterinario");
+                            break;
+                        case "2":
+                                mRol.setText("Secretario");
+                            break;
+                    }
                     mnombre.setText(nombre);
                 }
             }
