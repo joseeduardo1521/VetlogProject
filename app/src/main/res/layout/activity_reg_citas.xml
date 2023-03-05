@@ -46,6 +46,25 @@
             style="?android:spinnerStyle"
             android:layout_marginTop="40dp"
             android:onClick="openDatePicker"/>
+        <EditText
+            android:id="@+id/fechitas"
+            android:layout_width="334dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="#30ffffff"
+            android:editable="false"
+            android:drawableLeft="@drawable/ic_baseline_calendar_month_24"
+            android:drawablePadding="20dp"
+            android:hint="D/M/Y"
+            android:padding="20dp"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.402"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.315" />
 
         <Button
             android:layout_width="250dp"
@@ -57,6 +76,40 @@
             android:textSize="20sp"
             android:textColor="#FFFFFF"
             android:background="@drawable/tatanka_button"/>
+        <EditText
+            android:id="@+id/horitas"
+            android:layout_width="334dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="#30ffffff"
+            android:drawableLeft="@drawable/ic_baseline_access_time_24"
+            android:drawablePadding="20dp"
+            android:hint="12:00 PM"
+            android:padding="20dp"
+            android:textColor="@color/black"
+            android:editable="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.402"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.315" />
+
+        <Button
+            android:id="@+id/TimePickerButton"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="Seleccione la hora"
+            android:textSize="30sp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textColor="@color/white"
+            style="?android:timePickerMode"
+            android:layout_marginTop="40dp"
+            android:onClick="openTimePicker"
+            android:background="@drawable/tatanka_button"
+            />
 
 
 
