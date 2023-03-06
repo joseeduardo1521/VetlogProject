@@ -114,7 +114,7 @@ public class RegisterAct extends AppCompatActivity {
         map.put("email",email);
         map.put("address",address);
         map.put("phone",phone);
-        map.put("lvl",1);
+        map.put("lvl",3);
 
 
 

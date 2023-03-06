@@ -6,10 +6,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,11 +36,12 @@ import java.util.Map;
 
 public class uregisterFragment extends Fragment {
 
-    String mail, pass, lvl;
-    Button btnregistrar;
-    EditText edtTel, edtDir, edtNom;
-    FirebaseAuth mAuth;
-    DatabaseReference mDatabase;
+    private String mail, pass, lvl;
+    private Button btnregistrar;
+    private EditText edtTel, edtDir, edtNom;
+   private FirebaseAuth mAuth,mAuthM;
+    private DatabaseReference mDatabase;
+    String  arr;
     AwesomeValidation awesomeValidation;
 
     public uregisterFragment() {
@@ -71,7 +75,10 @@ public class uregisterFragment extends Fragment {
         edtTel = view.findViewById(R.id.edtTel1);
         edtDir = view.findViewById(R.id.edtDir1);
         mAuth = FirebaseAuth.getInstance();
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
+    arr = mAuthM.getInstance().getCurrentUser().getIdToken(true).toString();
+
         awesomeValidation = new AwesomeValidation(BASIC);
         awesomeValidation.addValidation(getActivity(), R.id.edtDir1, "[a-zA-Z0-9\\s]+", R.string.err_dir);
         awesomeValidation.addValidation(getActivity(), R.id.edtNom1, "[a-zA-Z\\s]+", R.string.err_nom);
@@ -88,7 +95,6 @@ public class uregisterFragment extends Fragment {
         });
 
 
-
         btnregistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,11 +106,7 @@ public class uregisterFragment extends Fragment {
                     name = String.valueOf(edtNom.getText());
                     phone = String.valueOf(edtTel.getText());
                     nivels = lvl;
-
-
-
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
@@ -113,7 +115,6 @@ public class uregisterFragment extends Fragment {
                                         volverMenu();
                                     } else {
                                         // If sign in fails, display a message to the user.
-
                                         Toast.makeText(getActivity(), "Ya existe una cuenta con ese correo",
                                                 Toast.LENGTH_SHORT).show();
 
@@ -126,15 +127,37 @@ public class uregisterFragment extends Fragment {
         });
 
         return view;
+
+
     }
+
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        setuponBack();
         super.onViewCreated(view, savedInstanceState);
+    }
+    private void setuponBack(){
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                FragmentManager manager = getParentFragmentManager();
+                FragmentTransaction ft = manager.beginTransaction();
+                Fragment bottomFragment = manager.findFragmentById(R.id.fragmentMP);
+
+                ft.detach(bottomFragment);
+                ft.attach(bottomFragment);
+                ft.show(bottomFragment);
+                Fragment bottomFragment1 = manager.findFragmentById(R.id.fragmentDato);
+                ft.hide(bottomFragment1);
+                ft.commit();
+            }
+        });
     }
 
     private void registro(String name,String email, String address, String phone, String nivel){
-
         final Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("email",email);
@@ -142,9 +165,7 @@ public class uregisterFragment extends Fragment {
         map.put("phone",phone);
         map.put("lvl",nivel);
 
-
-
-        final String id = mAuth.getCurrentUser().getUid();
+        String id = mAuth.getCurrentUser().getUid();
         mDatabase.child("Usuario").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task2) {
@@ -154,11 +175,11 @@ public class uregisterFragment extends Fragment {
                 else Toast.makeText(getActivity(), "Error al registrar datos", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
 
     private void volverMenu (){
+        mAuthM.signInWithCustomToken(arr);
         Intent iniciar = new Intent(getActivity(),Menu.class);
         iniciar.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(iniciar);

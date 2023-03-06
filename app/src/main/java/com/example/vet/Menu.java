@@ -22,6 +22,7 @@ public class Menu extends AppCompatActivity {
     private View cardPersonal,cardCerSesion,cardCitas,cardGesM;
     private TextView mnombre,mRol;
     private FirebaseAuth mAuth;
+    private String idMas;
     private DatabaseReference mDatabase;
     public static final String SHARED_PREFS ="sharedPrefs.mail";
 
@@ -69,6 +70,7 @@ public class Menu extends AppCompatActivity {
     }
 
     private void getUserInfo(){
+
         String id= mAuth.getCurrentUser().getUid();
         mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
             @Override
@@ -82,10 +84,10 @@ public class Menu extends AppCompatActivity {
                     lvl = snapshot.child("lvl").getValue().toString();
                     switch (lvl){
                         case "1":
-                                mRol.setText("Veterinario");
+                            mRol.setText("Veterinario");
                             break;
                         case "2":
-                                mRol.setText("Secretario");
+                            mRol.setText("Secretario");
                             break;
                     }
                     mnombre.setText(nombre);

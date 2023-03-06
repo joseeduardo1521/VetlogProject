@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void verificar(String mail){
         String id= mAuth.getCurrentUser().getUid();
-
         mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -277,11 +276,3 @@ public class MainActivity extends AppCompatActivity {
     }
 
 }
-
-
-
-
-
-
-
-
