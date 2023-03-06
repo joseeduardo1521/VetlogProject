@@ -160,6 +160,7 @@ public class uregisterFragment extends Fragment {
 
     private void volverMenu (){
         Intent iniciar = new Intent(getActivity(),Menu.class);
+        iniciar.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(iniciar);
         getActivity().finish();
     }

@@ -37,10 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Switch swSesion;
 
-    private static final String STRING_PREFERENCES = "Vetlog.Sesion";
-    private static final String STRING_ESTADO_BUTTON_SESION = "estado.button.sesion";
     public static final String SHARED_PREFS ="sharedPrefs.mail";
-    public static final String SHARED_PREFS2 ="sharedPrefs.pass";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
