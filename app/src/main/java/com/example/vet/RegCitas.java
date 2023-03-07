@@ -1,5 +1,6 @@
 package com.example.vet;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -11,9 +12,18 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class RegCitas extends AppCompatActivity {
@@ -21,7 +31,10 @@ public class RegCitas extends AppCompatActivity {
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
     private Button dateButton;
-    private Button timeButton;
+    private Button timeButton,grabacita;
+    //private Button grabacita;
+    FirebaseAuth mAuth;
+    DatabaseReference mDatabase;
     private EditText textoss, hor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +42,11 @@ public class RegCitas extends AppCompatActivity {
         setContentView(R.layout.activity_reg_citas);
         initDatePicker();
         dateButton = findViewById(R.id.dataPickerButton);
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         textoss = (EditText) findViewById(R.id.fechitas);
         hor = (EditText) findViewById(R.id.horitas);
+        grabacita = findViewById(R.id.ecita);
         dateButton.setText(getTodaysDate());
         timeButton = findViewById(R.id.TimePickerButton);
 
@@ -57,8 +73,38 @@ public class RegCitas extends AppCompatActivity {
             }
         });
 
-    }
+        grabacita.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String fecha,hora;
+                fecha = String.valueOf(textoss.getText());
+                hora = String.valueOf(hor.getText());
+                registro(fecha,hora);
+            }
+        });
 
+    }
+    private void registro(String fecha,String hora){
+
+        final Map<String, Object> map = new HashMap<>();
+        map.put("date", fecha);
+        map.put("time",hora);
+
+
+
+
+        final String id = mAuth.getCurrentUser().getUid();
+        mDatabase.child("Citas").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task2) {
+                if(task2.isSuccessful()){
+                    Toast.makeText(RegCitas.this, "Registrado", Toast.LENGTH_SHORT).show();
+                }
+                else Toast.makeText(RegCitas.this, "Error al registrar datos", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
     private String getTodaysDate() {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);

@@ -67,6 +67,14 @@ public class Menu extends AppCompatActivity {
                 cerrarSesion();
             }
         });
+
+        cardGesM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent fu = new Intent(Menu.this,Usuarios.class);
+                startActivity(fu);
+            }
+        });
     }
 
     private void getUserInfo(){

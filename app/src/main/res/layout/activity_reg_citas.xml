@@ -34,18 +34,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.24" />
-        <Button
-            android:id="@+id/dataPickerButton"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:text="JAN 01 2022"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:textColor="@color/black"
-            style="?android:spinnerStyle"
-            android:layout_marginTop="40dp"
-            android:onClick="openDatePicker"/>
+
         <EditText
             android:id="@+id/fechitas"
             android:layout_width="334dp"
@@ -65,30 +54,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.315" />
-
         <Button
+            android:id="@+id/dataPickerButton"
             android:layout_width="250dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="45dp"
-            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:text="JAN 01 2022"
+            android:textSize="30sp"
             android:gravity="center"
-            android:text="Registrar"
-            android:textSize="20sp"
-            android:textColor="#FFFFFF"
-            android:background="@drawable/tatanka_button"/>
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            style="?android:spinnerStyle"
+            android:layout_marginTop="40dp"
+            android:onClick="openDatePicker"/>
+
         <EditText
             android:id="@+id/horitas"
             android:layout_width="334dp"
-            android:layout_height="65dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:background="#30ffffff"
             android:drawableLeft="@drawable/ic_baseline_access_time_24"
             android:drawablePadding="20dp"
+            android:editable="false"
             android:hint="12:00 PM"
             android:padding="20dp"
             android:textColor="@color/black"
-            android:editable="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.402"
@@ -98,19 +89,29 @@
 
         <Button
             android:id="@+id/TimePickerButton"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:text="Seleccione la hora"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:textColor="@color/white"
             style="?android:timePickerMode"
+            android:layout_width="168dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="40dp"
-            android:onClick="openTimePicker"
             android:background="@drawable/tatanka_button"
-            />
+            android:gravity="center"
+            android:onClick="openTimePicker"
+            android:text="Seleccione la hora"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
 
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="75dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Registrar"
+            android:id="@+id/ecita"
+            android:textSize="20sp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/tatankauno_button"/>
 
 
     </LinearLayout>
