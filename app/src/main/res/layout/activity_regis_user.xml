@@ -4,18 +4,19 @@
     android:layout_width="match_parent"
     android:background="@drawable/backgroundnl"
     android:layout_height="match_parent"
+    android:screenOrientation="portrait"
     tools:context=".RegisterAct">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentMP"
-        android:name="com.example.vet.uregisterMailFragment"
+        android:name="com.example.vet.frag.uregisterMailFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_uregister_mail" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentDato"
-        android:name="com.example.vet.uregisterFragment"
+        android:name="com.example.vet.frag.uregisterFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout="@layout/fragment_uregister" />

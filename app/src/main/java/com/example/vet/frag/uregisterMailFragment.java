@@ -1,4 +1,4 @@
-package com.example.vet;
+package com.example.vet.frag;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
@@ -19,9 +19,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.example.vet.R;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 
 
 public class uregisterMailFragment extends Fragment {

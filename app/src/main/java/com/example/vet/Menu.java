@@ -40,6 +40,9 @@ public class Menu extends AppCompatActivity {
         cardGesM = (View) findViewById(R.id.D1);
         getUserInfo();
 
+
+
+
         cardPersonal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,8 +74,8 @@ public class Menu extends AppCompatActivity {
         cardGesM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent fu = new Intent(Menu.this,Usuarios.class);
-                startActivity(fu);
+                Intent gesMascotas = new Intent(Menu.this,gesMacotasActivity.class);
+                startActivity(gesMascotas);
             }
         });
     }

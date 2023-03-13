@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:background="@drawable/backgroundnl"
     android:layout_height="match_parent"
+    android:screenOrientation="portrait"
     tools:context=".RegisterAct">
 
     <ScrollView
@@ -19,15 +20,14 @@
             android:orientation="vertical">
 
 
-
             <TextView
                 android:id="@+id/textView"
-                android:layout_marginStart="10dp"
                 android:layout_width="206dp"
                 android:layout_height="126dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="30dp"
                 android:text="Registrar cuenta nueva"
-                android:textColor="@color/black"
+                android:textColor="@color/azul_fuerte2"
                 android:textSize="35dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"

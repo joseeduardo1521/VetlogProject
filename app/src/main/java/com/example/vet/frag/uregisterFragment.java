@@ -1,8 +1,7 @@
-package com.example.vet;
+package com.example.vet.frag;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -23,6 +22,8 @@ import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.example.vet.Menu;
+import com.example.vet.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -180,7 +181,7 @@ public class uregisterFragment extends Fragment {
 
     private void volverMenu (){
         mAuthM.signInWithCustomToken(arr);
-        Intent iniciar = new Intent(getActivity(),Menu.class);
+        Intent iniciar = new Intent(getActivity(), Menu.class);
         iniciar.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(iniciar);
         getActivity().finish();
