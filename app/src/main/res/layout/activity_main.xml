@@ -43,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/btnregister"
         android:layout_alignParentEnd="true"
+        android:textColor="@color/Azultxt"
         android:layout_marginEnd="145dp"
         android:layout_marginBottom="30dp"
         android:text="No tienes cuenta?" />
@@ -65,8 +66,8 @@
         android:layout_width="100dp"
         android:layout_height="20dp"
         android:gravity="center"
-        android:text="alpha 1.1"
-        android:textColor="@color/black"
+        android:text="@string/app_ver"
+        android:textColor="@color/Azultxt"
         android:textSize="12dp"
         android:textStyle="bold" />
 
