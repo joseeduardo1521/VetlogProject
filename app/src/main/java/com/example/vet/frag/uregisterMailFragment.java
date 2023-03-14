@@ -105,24 +105,7 @@ public class uregisterMailFragment extends Fragment {
 
                     if(password.equals(password2)){
 
-                        Bundle bundle = new Bundle();
-                        bundle.putString("mail", email.trim());
-                        bundle.putString("pass", password.trim());
-                        bundle.putString("lvl", nivels.trim());
-
-                        getParentFragmentManager().setFragmentResult("key",bundle);
-
-
-                        FragmentManager manager = getParentFragmentManager();
-                        FragmentTransaction ft = manager.beginTransaction();
-                        Fragment bottomFragment = manager.findFragmentById(R.id.fragmentDato);
-
-                        ft.detach(bottomFragment);
-                        ft.attach(bottomFragment);
-                        ft.show(bottomFragment);
-                        Fragment bottomFragment1 = manager.findFragmentById(R.id.fragmentMP);
-                        ft.hide(bottomFragment1);
-                        ft.commit();
+                     cambiarFragment(email,password,nivels);
 
                     }else {
                         TxtPass2.setError("Las contraseñas no coiniden");
@@ -135,4 +118,26 @@ public class uregisterMailFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
+
+    public void cambiarFragment(String email,String password,String nivels){
+        Bundle bundle = new Bundle();
+        bundle.putString("mail", email.trim());
+        bundle.putString("pass", password.trim());
+        bundle.putString("lvl", nivels.trim());
+
+        getParentFragmentManager().setFragmentResult("key",bundle);
+
+
+        FragmentManager manager = getParentFragmentManager();
+        FragmentTransaction ft = manager.beginTransaction();
+        Fragment bottomFragment = manager.findFragmentById(R.id.fragmentDato);
+
+        ft.detach(bottomFragment);
+        ft.attach(bottomFragment);
+        ft.show(bottomFragment);
+        Fragment bottomFragment1 = manager.findFragmentById(R.id.fragmentMP);
+        ft.hide(bottomFragment1);
+        ft.commit();
+    }
+
 }

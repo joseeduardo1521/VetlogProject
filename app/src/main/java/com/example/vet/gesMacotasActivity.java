@@ -5,6 +5,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 
+import com.example.vet.clases.ViewPagerAgesMas;
 import com.google.android.material.tabs.TabLayout;
 
 public class gesMacotasActivity extends AppCompatActivity {
