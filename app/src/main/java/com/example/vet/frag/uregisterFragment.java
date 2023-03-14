@@ -78,7 +78,7 @@ public class uregisterFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-    arr = mAuthM.getInstance().getCurrentUser().getIdToken(true).toString();
+        arr = mAuthM.getInstance().getCurrentUser().getIdToken(true).toString();
 
         awesomeValidation = new AwesomeValidation(BASIC);
         awesomeValidation.addValidation(getActivity(), R.id.edtDir1, "[a-zA-Z0-9\\s]+", R.string.err_dir);

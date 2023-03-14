@@ -15,6 +15,7 @@
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linearLayoutCompat"
                 android:layout_width="match_parent"
                 android:layout_height="230dp"
                 android:background="@drawable/bg_header"
@@ -27,7 +28,7 @@
                 <ImageView
                     android:layout_width="264dp"
                     android:layout_height="220dp"
-                    android:src="@drawable/mascotas1"/>
+                    android:src="@drawable/mascotas1" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -37,7 +38,7 @@
                 android:layout_width="326dp"
                 android:layout_height="100dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:text="Registrar nueva mascota"
                 android:textColor="#304f58"
@@ -47,8 +48,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.426"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.334" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayoutCompat"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -67,7 +68,6 @@
                 android:id="@+id/edtCorreoDueño"
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
                 android:layout_marginTop="20dp"
                 android:autofillHints=""
                 android:background="#30ffffff"
@@ -78,6 +78,7 @@
                 android:padding="20dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
@@ -85,21 +86,13 @@
                 android:id="@+id/btnBuscarMail"
                 android:layout_width="250dp"
                 android:layout_height="48dp"
-                android:layout_marginStart="80dp"
                 android:layout_marginTop="32dp"
                 android:text="Buscar usuario"
+                android:backgroundTint="@color/teal_200"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edtCorreoDueño" />
 
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="95dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="168dp"
-                android:layout_marginTop="680dp"
-                android:text="Button"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
