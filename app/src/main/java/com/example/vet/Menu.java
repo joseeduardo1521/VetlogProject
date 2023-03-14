@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Menu extends AppCompatActivity {
 
-    private View cardPersonal,cardCerSesion,cardCitas,cardGesM;
+    private View cardPersonal,cardCerSesion,cardCitas,cardGesM, cardQR;
     private TextView mnombre,mRol;
     private FirebaseAuth mAuth;
     private String idMas;
@@ -38,6 +38,7 @@ public class Menu extends AppCompatActivity {
         cardCerSesion = (View) findViewById(R.id.D7);
         cardCitas = (View) findViewById(R.id.D3);
         cardGesM = (View) findViewById(R.id.D1);
+        cardQR = (View) findViewById(R.id.D2);
         getUserInfo();
 
 
@@ -78,6 +79,16 @@ public class Menu extends AppCompatActivity {
                 startActivity(gesMascotas);
             }
         });
+
+        cardQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent qr = new Intent(Menu.this,CodigoQR.class);
+                startActivity(qr);
+            }
+        });
+
+
     }
 
     private void getUserInfo(){

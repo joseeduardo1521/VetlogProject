@@ -42,6 +42,7 @@ dependencies {
     implementation "androidx.cardview:cardview:1.0.0"
     implementation 'com.basgeekball:awesome-validation:4.3'
     implementation 'androidx.fragment:fragment:1.4.1'
+    implementation 'com.google.mlkit:barcode-scanning:17.0.3'
     implementation 'androidx.navigation:navigation-fragment:2.4.1'
     implementation 'androidx.navigation:navigation-ui:2.4.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
