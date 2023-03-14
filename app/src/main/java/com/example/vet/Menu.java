@@ -83,8 +83,8 @@ public class Menu extends AppCompatActivity {
         cardQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent qr = new Intent(Menu.this,CodigoQR.class);
-                startActivity(qr);
+                Intent qrs = new Intent(Menu.this,CodigoQR.class);
+                startActivity(qrs);
             }
         });
 

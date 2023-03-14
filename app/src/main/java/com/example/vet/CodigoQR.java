@@ -44,6 +44,7 @@ public class CodigoQR extends AppCompatActivity {
     private MaterialButton cameraBtn;
     private MaterialButton galleria;
     private ImageView imagen;
+    //private
     private MaterialButton scanBtn;
     private TextView result;
 
