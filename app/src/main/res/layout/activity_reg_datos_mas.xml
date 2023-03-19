@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@drawable/backgroundnl"
     tools:context=".regDatosMasActivity">
 
 
@@ -20,7 +20,7 @@
                 android:layout_marginTop="232dp"
                 android:gravity="center"
                 android:text="Nombre de la mascota"
-                android:textColor="@color/black"
+                android:textColor="@color/Azultxt"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
@@ -37,7 +37,8 @@
                 android:drawablePadding="20dp"
                 android:hint="Nombre completo"
                 android:padding="20dp"
-                android:textColor="@color/black"
+                android:textColor="@color/Azultxt"
+                android:textColorHint="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtNomM" />
@@ -49,8 +50,50 @@
                 android:background="@drawable/tatanka_button"
                 android:drawableTintMode="@null"
                 android:text="Registrar"
+                android:id="@+id/btnRegMas"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edtNomM" />
+
+
+            <TextView
+                android:id="@+id/txtSexMas"
+                android:layout_width="350dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:text="Seleccione el sexo de la mascota"
+                android:textColor="@color/Azultxt"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtNomM" />
+
+            <RadioGroup
+                android:id="@+id/rGroupSex"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="26dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/txtSexMas"
+                tools:layout_editor_absoluteX="-16dp">
+
+                <RadioButton
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="50dp"
+                    android:text="Macho"
+                    android:textColor="@color/Azultxt" />
+
+                <RadioButton
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="100dp"
+                    android:text="Hembra"
+                    android:textColor="@color/Azultxt" />
+
+            </RadioGroup>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

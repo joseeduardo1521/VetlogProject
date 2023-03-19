@@ -96,15 +96,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                           /* if(et_mail.getText().toString().contains("josee375")){
-                                irMenu();
-                            }else if(et_mail.getText().toString().contains("kenji.guillermo")){
-                                use();
-                            }else{
-                                test();
-                            }*/
                     verificar(mail);
-
                 }else{
                     String error = ((FirebaseAuthException) task.getException()).getErrorCode();
                     errotToast(error);
@@ -137,9 +129,10 @@ public class MainActivity extends AppCompatActivity {
                                 irMenu();
                                 break;
                             case "2":
+                                use();
                                 break;
                             case "3":
-                                use();
+
                                 break;
                             default:
                                 Toast.makeText(MainActivity.this, "Error",
