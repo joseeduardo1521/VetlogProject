@@ -81,9 +81,9 @@ public class uregisterFragment extends Fragment {
         arr = mAuthM.getInstance().getCurrentUser().getIdToken(true).toString();
 
         awesomeValidation = new AwesomeValidation(BASIC);
-        awesomeValidation.addValidation(getActivity(), R.id.edtDir1, "[a-zA-Z0-9\\s]+", R.string.err_dir);
-        awesomeValidation.addValidation(getActivity(), R.id.edtNom1, "[a-zA-Z\\s]+", R.string.err_nom);
-        awesomeValidation.addValidation(getActivity(), R.id.edtTel1, RegexTemplate.TELEPHONE, R.string.err_tel);
+        awesomeValidation.addValidation( edtDir, "[a-zA-Z0-9\\s]+", "Ingrese una direccion");
+        awesomeValidation.addValidation( edtNom, "[a-zA-Z\\s]+", "Ingrese su nombre completo");
+        awesomeValidation.addValidation( edtTel, RegexTemplate.TELEPHONE, "Ingrese un numero de telefono");
 
 
         getParentFragmentManager().setFragmentResultListener("key", getActivity(), new FragmentResultListener() {
@@ -131,8 +131,6 @@ public class uregisterFragment extends Fragment {
 
 
     }
-
-
 
 
     @Override

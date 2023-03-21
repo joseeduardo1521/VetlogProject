@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:screenOrientation="portrait"
-    android:background="@drawable/background"
+    android:background="@drawable/backgroundnl"
     >
 
     <LinearLayout

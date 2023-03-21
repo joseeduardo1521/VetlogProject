@@ -30,14 +30,6 @@
 
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragmentDatosMas"
-        android:layout_below="@id/tab_layout"
-        >
-    </androidx.fragment.app.FragmentContainerView>
-
   <androidx.viewpager2.widget.ViewPager2
       android:layout_width="match_parent"
       android:layout_height="match_parent"

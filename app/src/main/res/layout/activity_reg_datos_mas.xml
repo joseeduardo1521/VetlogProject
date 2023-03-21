@@ -4,20 +4,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroundnl"
+    android:background="@color/azul_back"
+    android:orientation="vertical"
     tools:context=".regDatosMasActivity">
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
+            android:background="@color/azul_fuerte"
             android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txtReg"
+                android:layout_width="280dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="26dp"
+                android:text="Registrar datos de la Mascota"
+                android:textColor="@color/white"
+                android:textSize="35dp"
+                android:textStyle="bold"
+                android:layout_marginEnd="50dp"
+                />
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginStart="300dp"
+                android:layout_marginEnd="10dp"
+
+                />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginTop="150dp"
+            android:elevation="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_footer">
+
 
             <TextView
                 android:id="@+id/txtNomM"
                 android:layout_width="match_parent"
                 android:layout_height="23dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="232dp"
+                android:layout_marginTop="36dp"
                 android:gravity="center"
                 android:text="Nombre de la mascota"
                 android:textColor="@color/Azultxt"
@@ -27,33 +59,204 @@
                 tools:layout_editor_absoluteX="0dp" />
 
             <EditText
+                android:id="@+id/edtPeso"
+                android:layout_width="334dp"
+                android:layout_height="65dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:background="#30ffffff"
+                android:drawablePadding="20dp"
+                android:hint="Peso de la mascota (Kg)"
+                android:padding="20dp"
+                android:inputType="numberDecimal"
+                android:textColor="@color/Azultxt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.493"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtPeso" />
+
+            <TextView
+                android:id="@+id/txtPeso"
+                android:layout_width="350dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:text="Peso de la mascota"
+                android:textColor="@color/Azultxt"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtColor" />
+
+            <EditText
+                android:id="@+id/edtColor"
+                android:layout_width="334dp"
+                android:layout_height="65dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="22dp"
+                android:background="#30ffffff"
+                android:drawablePadding="20dp"
+                android:hint="Color de la mascota"
+                android:padding="20dp"
+                android:textColor="@color/Azultxt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.506"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtColor" />
+
+            <TextView
+                android:id="@+id/txtFechaNac"
+                android:layout_width="350dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="28dp"
+                android:gravity="center"
+                android:text="Fecha de nacimiento"
+                android:textColor="@color/Azultxt"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rGroupSex" />
+
+
+
+
+            <EditText
+                android:id="@+id/edtraza"
+                android:layout_width="334dp"
+                android:layout_height="65dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:background="#30ffffff"
+                android:drawablePadding="20dp"
+                android:hint="Ingrese la raza de la mascota"
+                android:padding="20dp"
+                android:textColor="@color/Azultxt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtraza" />
+
+
+            <TextView
+                android:id="@+id/txtColor"
+                android:layout_width="350dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="Color de la mascota"
+                android:textColor="@color/Azultxt"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtFecha" />
+
+            <TextView
+                android:id="@+id/txtEspecie"
+                android:layout_width="350dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="29dp"
+                android:gravity="center"
+                android:text="Seleccione la especie"
+                android:textColor="@color/Azultxt"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtPeso" />
+
+            <Spinner
+                android:id="@+id/sEspecie"
+                android:layout_width="343dp"
+                android:layout_height="65dp"
+                android:layout_gravity="center"
+                android:layout_marginStart="34dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="34dp"
+                android:background="#30ffffff"
+                android:gravity="center"
+                android:padding="20dp"
+                android:paddingStart="20dp"
+                android:paddingTop="10dp"
+                android:spinnerMode="dropdown"
+                android:textColor="@color/Azultxt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtEspecie"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <TextView
+                android:id="@+id/txtraza"
+                android:layout_width="350dp"
+                android:layout_height="23dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="Raza de la mascota"
+                android:textColor="@color/Azultxt"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/sEspecie" />
+
+            <EditText
                 android:id="@+id/edtNomM"
                 android:layout_width="334dp"
                 android:layout_height="65dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
                 android:background="#30ffffff"
-                android:drawableLeft="@drawable/ic_baseline_person_outline_24"
+                android:drawableLeft="@drawable/ic_baseline_pets_24"
                 android:drawablePadding="20dp"
-                android:hint="Nombre completo"
+                android:hint="Nombre de la mascota"
                 android:padding="20dp"
                 android:textColor="@color/Azultxt"
-                android:textColorHint="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtNomM" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="328dp"
-                android:background="@drawable/tatanka_button"
-                android:drawableTintMode="@null"
-                android:text="Registrar"
-                android:id="@+id/btnRegMas"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtNomM" />
 
+            <EditText
+                android:id="@+id/edtFecha"
+                android:layout_width="334dp"
+                android:layout_height="65dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="24dp"
+                android:background="#30ffffff"
+                android:drawableLeft="@drawable/ic_baseline_calendar_month_24"
+                android:drawablePadding="20dp"
+                android:editable="false"
+                android:hint="D/M/Y"
+                android:textColor="@color/Azultxt"
+                android:padding="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtFechaNac" />
+
+            <Button
+                android:id="@+id/btnRegMas"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@color/teal_200"
+                android:drawableTintMode="@null"
+                android:gravity="center"
+                android:text="Registrar"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/Azultxt"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtraza" />
 
             <TextView
                 android:id="@+id/txtSexMas"
@@ -80,6 +283,7 @@
                 tools:layout_editor_absoluteX="-16dp">
 
                 <RadioButton
+                    android:id="@+id/rbMacho"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="50dp"
@@ -87,6 +291,7 @@
                     android:textColor="@color/Azultxt" />
 
                 <RadioButton
+                    android:id="@+id/rbHembra"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="100dp"
@@ -94,9 +299,8 @@
                     android:textColor="@color/Azultxt" />
 
             </RadioGroup>
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+        </RelativeLayout>
 
     </ScrollView>
 

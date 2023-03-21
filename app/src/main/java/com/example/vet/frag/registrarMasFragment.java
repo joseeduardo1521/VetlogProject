@@ -66,7 +66,7 @@ public class registrarMasFragment extends Fragment {
         edtBusMail = view.findViewById(R.id.edtCorreoDueño);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         awesomeValidation = new AwesomeValidation(BASIC);
-        awesomeValidation.addValidation(getActivity(), R.id.edtCorreoDueño, Patterns.EMAIL_ADDRESS, R.string.err_email);
+        awesomeValidation.addValidation(edtBusMail, Patterns.EMAIL_ADDRESS, "Ingrese un correo valido");
 
 
 
@@ -86,7 +86,6 @@ public class registrarMasFragment extends Fragment {
                                     cambiarFragment(key);
                             }
                             verificar(key);
-
                         }
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {

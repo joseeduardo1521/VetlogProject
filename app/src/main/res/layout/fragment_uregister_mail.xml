@@ -54,7 +54,7 @@
             app:layout_constraintVertical_bias="0.24" />
 
         <EditText
-            android:id="@+id/txtUsuario"
+            android:id="@+id/txtUsuarioR"
             android:layout_width="334dp"
             android:layout_height="65dp"
             android:layout_gravity="center"
@@ -91,7 +91,7 @@
             app:layout_constraintVertical_bias="0.416" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input"
+            android:id="@+id/inputR"
             android:layout_width="343dp"
             android:layout_height="65dp"
             android:layout_gravity="center"
@@ -101,11 +101,10 @@
             app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtPass"
+                android:id="@+id/txtPassR"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:layout_gravity="center"
-
                 android:background="#30ffffff"
                 android:drawablePadding="20dp"
                 android:hint="Contraseña"
@@ -122,30 +121,27 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/input2"
+            android:id="@+id/input2R"
             android:layout_marginTop="20dp"
             android:layout_width="343dp"
             android:layout_height="65dp"
             android:layout_gravity="center"
             app:startIconDrawable="@drawable/ic_baseline_info_24"
             android:gravity="center"
-            app:endIconMode="password_toggle"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black">
+            app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtPass2"
+                android:id="@+id/txtPass2R"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:background="#30ffffff"
                 android:drawablePadding="20dp"
-                android:hint=" Repetir Contraseña"
+                android:hint="Repetir Contraseña"
                 android:inputType="textPassword"
                 android:padding="20dp"
-                android:textColorHint="@color/black"
-                android:textColor="@color/black"
+                android:textColorHint="@color/Azultxt"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.455"
@@ -163,8 +159,10 @@
             android:layout_marginTop="20dp"
             android:gravity="center"
             android:padding="20dp"
+            android:background="#30ffffff"
             android:paddingStart="20dp"
             android:paddingTop="10dp"
+            android:textColor="@color/Azultxt"
             android:spinnerMode="dropdown"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

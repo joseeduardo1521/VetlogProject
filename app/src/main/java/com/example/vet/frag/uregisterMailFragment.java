@@ -2,8 +2,12 @@ package com.example.vet.frag;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,6 +23,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.example.vet.Menu;
 import com.example.vet.R;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -55,15 +61,17 @@ public class uregisterMailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_uregister_mail, container, false);
+
         btnregisDatos = view.findViewById(R.id.btnPersonal);
-        TxtUsuario = (EditText) view.findViewById(R.id.txtUsuario);
+        TxtUsuario = (EditText) view.findViewById(R.id.txtUsuarioR);
         comboRoles = (Spinner) view.findViewById(R.id.sRoles);
-        TxtPass = (TextInputEditText) view.findViewById(R.id.txtPass);
-        TxtPass2 = (TextInputEditText) view.findViewById(R.id.txtPass2);
+        TxtPass = (TextInputEditText) view.findViewById(R.id.txtPassR);
+        TxtPass2 = (TextInputEditText) view.findViewById(R.id.txtPass2R);
         awesomeValidation = new AwesomeValidation(BASIC);
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
-        awesomeValidation.addValidation(getActivity(), R.id.txtUsuario, Patterns.EMAIL_ADDRESS, R.string.err_email);
-        awesomeValidation.addValidation(getActivity(), R.id.txtPass, regexPassword, R.string.err_pass);
+        awesomeValidation.addValidation(TxtUsuario, Patterns.EMAIL_ADDRESS, "Introduzca un correo valido");
+        awesomeValidation.addValidation(TxtPass, regexPassword, "La contraseña no es segura min 8 Caracteres una letra mayuscula y un numero");
+        awesomeValidation.addValidation(TxtPass2, regexPassword, "La contraseña no es segura min 8 Caracteres una letra mayuscula y un numero");
 
         ArrayAdapter<CharSequence> adapter=ArrayAdapter.createFromResource(getActivity(),R.array.combo_lvl,
                 android.R.layout.simple_spinner_item);
@@ -84,8 +92,6 @@ public class uregisterMailFragment extends Fragment {
         btnregisDatos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 if (awesomeValidation.validate()){
                     String email, password, password2,nivels;
                     email = String.valueOf(TxtUsuario.getText());
@@ -101,22 +107,32 @@ public class uregisterMailFragment extends Fragment {
                             nivels = "2";
                             break;
                     }
-
-
                     if(password.equals(password2)){
-
                      cambiarFragment(email,password,nivels);
-
                     }else {
                         TxtPass2.setError("Las contraseñas no coiniden");
                     }
-
-
                  }
             }
         });
         // Inflate the layout for this fragment
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        setuponBack();
+        super.onViewCreated(view, savedInstanceState);
+    }
+    private void setuponBack(){
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent iniciar = new Intent(getActivity(), Menu.class);
+                startActivity(iniciar);
+                getActivity().finish();
+            }
+        });
     }
 
     public void cambiarFragment(String email,String password,String nivels){
