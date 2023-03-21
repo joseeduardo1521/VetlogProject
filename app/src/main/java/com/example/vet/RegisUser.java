@@ -12,8 +12,6 @@ import android.widget.Button;
 public class RegisUser extends AppCompatActivity {
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

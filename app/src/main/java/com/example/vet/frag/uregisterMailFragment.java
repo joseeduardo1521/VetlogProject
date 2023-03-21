@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
@@ -35,6 +36,7 @@ public class uregisterMailFragment extends Fragment {
     private Spinner comboRoles;
     private String item;
     AwesomeValidation awesomeValidation;
+    private ImageView btnRegresar;
 
    private Button btnregisDatos;
     public uregisterMailFragment() {
@@ -67,6 +69,8 @@ public class uregisterMailFragment extends Fragment {
         comboRoles = (Spinner) view.findViewById(R.id.sRoles);
         TxtPass = (TextInputEditText) view.findViewById(R.id.txtPassR);
         TxtPass2 = (TextInputEditText) view.findViewById(R.id.txtPass2R);
+        TxtPass2 = (TextInputEditText) view.findViewById(R.id.txtPass2R);
+        btnRegresar = (ImageView) view.findViewById(R.id.btnRegresar);
         awesomeValidation = new AwesomeValidation(BASIC);
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
         awesomeValidation.addValidation(TxtUsuario, Patterns.EMAIL_ADDRESS, "Introduzca un correo valido");
@@ -86,6 +90,16 @@ public class uregisterMailFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+
+        btnRegresar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent iniciar = new Intent(getActivity(), Menu.class);
+                startActivity(iniciar);
+                getActivity().finish();
             }
         });
 
