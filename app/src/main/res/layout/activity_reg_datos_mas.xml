@@ -27,14 +27,7 @@
                 android:textStyle="bold"
                 android:layout_marginEnd="50dp"
                 />
-            <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="300dp"
-                android:layout_marginEnd="10dp"
 
-                />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_marginTop="150dp"
@@ -44,19 +37,47 @@
             android:background="@drawable/bg_footer">
 
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imgMascota"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginStart="130dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="131dp"
+                android:background="@drawable/cicle"
+                android:scaleType="centerCrop"
+                android:padding="2dp"
+                android:src="@drawable/pantalla"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="100dp"
+                android:background="@drawable/circle2"
+                android:gravity="center"
+
+                android:src="@drawable/ic_baseline_file_upload_24"
+                app:layout_constraintEnd_toEndOf="@+id/imgMascota"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/imgMascota"
+                app:layout_constraintTop_toTopOf="@+id/imgMascota" />
+
             <TextView
                 android:id="@+id/txtNomM"
                 android:layout_width="match_parent"
                 android:layout_height="23dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="37dp"
                 android:gravity="center"
                 android:text="Nombre de la mascota"
                 android:textColor="@color/Azultxt"
                 android:textSize="20dp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="0dp" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgMascota" />
 
             <EditText
                 android:id="@+id/edtPeso"

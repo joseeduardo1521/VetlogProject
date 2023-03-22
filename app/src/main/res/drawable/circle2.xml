@@ -4,7 +4,7 @@
     >
 
     <solid
-        android:color="@color/azul_fuerte"/>
+        android:color="@color/azul_back"/>
 
     <size
         android:height="120dp"
