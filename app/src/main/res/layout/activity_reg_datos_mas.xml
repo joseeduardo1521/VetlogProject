@@ -53,12 +53,12 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/btnSubirImgMasc"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="100dp"
                 android:background="@drawable/circle2"
                 android:gravity="center"
-
                 android:src="@drawable/ic_baseline_file_upload_24"
                 app:layout_constraintEnd_toEndOf="@+id/imgMascota"
                 app:layout_constraintHorizontal_bias="1.0"

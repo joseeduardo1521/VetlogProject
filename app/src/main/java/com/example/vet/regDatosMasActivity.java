@@ -3,10 +3,13 @@ package com.example.vet;
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,14 +26,25 @@ import com.example.vet.clases.DataEspecies;
 import com.example.vet.clases.EspecieAdapter;
 import com.example.vet.clases.Especies;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class regDatosMasActivity extends AppCompatActivity {
@@ -45,9 +59,18 @@ public class regDatosMasActivity extends AppCompatActivity {
     private String item;
     private DatePickerDialog datePickerDialog;
     private int year;
-
+    private CircleImageView imgMascota, btnSubirImg;
     private DataEspecies data;
     private EspecieAdapter adapter;
+    StorageReference storageReference;
+    String storage_path = "pet/*";
+    private  String download_uri;
+    private FirebaseAuth mAuth;
+
+    private static final int COD_SEL_IMAGE = 300;
+    private Uri image_url;
+    String photo = "photo";
+    String idd;
 
 
 
@@ -59,12 +82,16 @@ public class regDatosMasActivity extends AppCompatActivity {
         this.key = key;
         initDatePicker();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+        storageReference = FirebaseStorage.getInstance().getReference();
         edtNomM = (EditText) findViewById(R.id.edtNomM);
         edtColor = (EditText) findViewById(R.id.edtColor);
         edtRaza = (EditText) findViewById(R.id.edtraza);
         edtPeso = (EditText) findViewById(R.id.edtPeso);
         edtFecha = (EditText) findViewById(R.id.edtFecha);
         sEspecie = (Spinner) findViewById(R.id.sEspecie);
+        btnSubirImg = (CircleImageView) findViewById(R.id.btnSubirImgMasc);
+        imgMascota = (CircleImageView) findViewById(R.id.imgMascota);
         btnRegistratmas = (Button) findViewById(R.id.btnRegMas);
         rbMacho = findViewById(R.id.rbMacho);
         rbHembra = findViewById(R.id.rbHembra);
@@ -80,6 +107,13 @@ public class regDatosMasActivity extends AppCompatActivity {
 
         adapter = new EspecieAdapter(this, DataEspecies.getEspecieList());
         sEspecie.setAdapter(adapter);
+
+        btnSubirImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadPhoto();
+            }
+        });
 
         edtFecha.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +131,7 @@ public class regDatosMasActivity extends AppCompatActivity {
                     String peso = String.valueOf(edtPeso.getText());
                     String color = String.valueOf(edtColor.getText());
                     String raza = String.valueOf(edtRaza.getText());
+
 
 
 
@@ -136,8 +171,59 @@ public class regDatosMasActivity extends AppCompatActivity {
         });
     }
 
-    private void registro(String name,String date, String weight, String color, String raze, String species,String sex){
+    private void uploadPhoto() {
+        Intent i = new Intent(Intent.ACTION_PICK);
+        i.setType("image/*");
+        startActivityForResult(i, COD_SEL_IMAGE);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(resultCode == RESULT_OK){
+            if (requestCode == COD_SEL_IMAGE){
+                image_url = data.getData();
+                imgMascota.setImageURI(image_url);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void subirPhoto(Uri image_url, String token) {
+        String rute_storage_photo = storage_path + "" + photo + "" + key +""+ idd;
+        StorageReference reference = storageReference.child(rute_storage_photo);
+        reference.putFile(image_url).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                while (!uriTask.isSuccessful());
+                if (uriTask.isSuccessful()){
+                    uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            download_uri = uri.toString();
+                            HashMap<String, Object> map = new HashMap<>();
+                            map.put("photo", download_uri);
+                            mDatabase.child("Mascotas").child(token).updateChildren(map);
+                            Toast.makeText(regDatosMasActivity.this, download_uri, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(regDatosMasActivity.this, "Error al cargar foto", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+
+
+    private void registro(String name,String date, String weight, String color, String raze, String species,String sex){
+        idd = year+species+name;
+
+        String token= year+species+name;
         final Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("birth", date);
@@ -146,21 +232,60 @@ public class regDatosMasActivity extends AppCompatActivity {
         map.put("raze", raze);
         map.put("species", species);
         map.put("sex", sex);
+        map.put("key", key);
 
-
-
-
-
-        mDatabase.child("Usuario").child(key).child("Mascotas").child(year+species+name).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+        mDatabase.child("Mascotas").child(token).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task2) {
                 if(task2.isSuccessful()){
                     Toast.makeText(regDatosMasActivity.this, "Registrado", Toast.LENGTH_SHORT).show();
+                    subirPhoto(image_url,token);
+
+                    salir();
                 }
                 else Toast.makeText(regDatosMasActivity.this, "Error al registrar datos", Toast.LENGTH_SHORT).show();
             }
         });
 
+    }
+
+    private void regresarmenu() {
+    Intent intent = new Intent(this,Menu.class);
+    startActivity(intent);
+    finish();
+
+    }
+
+    private void regresarmenu2() {
+        Intent intent = new Intent(this,MenuSec.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void salir(){
+        String id= mAuth.getCurrentUser().getUid();
+        mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String lvl;
+                    lvl = snapshot.child("lvl").getValue().toString();
+                    switch (lvl){
+                        case "1":
+                           regresarmenu();
+                            break;
+                        case "2":
+                            regresarmenu2();
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void initDatePicker(){
@@ -173,7 +298,7 @@ public class regDatosMasActivity extends AppCompatActivity {
             }
         };
         Calendar cal = Calendar.getInstance();
-         year = cal.get(Calendar.YEAR);
+        year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
         int style = AlertDialog.THEME_HOLO_LIGHT;
