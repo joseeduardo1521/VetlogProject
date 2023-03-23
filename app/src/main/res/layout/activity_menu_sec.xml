@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:screenOrientation="portrait"
-    android:background="@drawable/background"
+    android:background="@drawable/backgroundnl"
     >
     <LinearLayout
         android:layout_width="wrap_content"
@@ -64,8 +64,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/D1"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_margin="10dp"
                 app:cardBackgroundColor="#2D2D2D"
                 app:cardCornerRadius="15dp">
@@ -107,8 +107,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/D2"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_margin="10dp"
                 app:cardBackgroundColor="#2D2D2D"
                 app:cardCornerRadius="15dp">
@@ -160,8 +160,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/D3"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_margin="10dp"
                 app:cardBackgroundColor="#2D2D2D"
                 app:cardCornerRadius="15dp">
@@ -203,8 +203,8 @@
             </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:id="@+id/D5"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_margin="10dp"
                 app:cardBackgroundColor="#2D2D2D"
                 app:cardCornerRadius="15dp">
@@ -257,8 +257,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/D6"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_margin="10dp"
                 app:cardBackgroundColor="#2D2D2D"
                 app:cardCornerRadius="15dp">
@@ -301,8 +301,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/D7"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_margin="10dp"
                 app:cardBackgroundColor="#2D2D2D"
                 app:cardCornerRadius="20dp">
