@@ -36,7 +36,18 @@
         app:lottie_fileName="pets.json"
         app:lottie_imageAssetsFolder="assets"
         app:lottie_loop="true" />
-
+    <TextView
+        android:id="@+id/nofifi"
+        android:layout_width="233dp"
+        android:layout_height="76dp"
+        android:text="No internet conection"
+        android:gravity="center"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
         android:id="@+id/textView4"
         android:layout_width="116dp"
