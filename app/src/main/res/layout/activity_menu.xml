@@ -296,7 +296,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="Consultar"
+                            android:text="Agregar"
                             android:textColor="@color/white"
                             android:textSize="14sp"
                             android:textStyle="bold"></TextView>
@@ -340,7 +340,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="Consultar"
+                            android:text="Agregar"
                             android:textColor="@color/white"
                             android:textSize="14sp"
                             android:textStyle="bold"></TextView>

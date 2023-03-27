@@ -4,20 +4,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgroundnl"
     tools:context=".Prueba">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view2"
+        android:layout_width="318dp"
+        android:layout_height="268dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.269"
+        app:lottie_autoPlay="true"
+        app:lottie_fileName="fificon.json"
+        app:lottie_imageAssetsFolder="assets"
+        app:lottie_loop="true" />
 
     <TextView
         android:id="@+id/nofifi"
         android:layout_width="233dp"
         android:layout_height="76dp"
-        android:text="No internet conection"
         android:gravity="center"
-        android:textSize="14dp"
+        android:text="El dispositivo no cuenta con una conexión a internet."
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.668" />
+
+    <TextView
+        android:layout_width="235dp"
+        android:layout_height="64dp"
+        android:gravity="center"
+        android:text="Vetlog Requiere de una conexión a internet en todo momento."
+        android:textSize="18dp"
+        android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/nofifi"
+        app:layout_constraintVertical_bias="0.329" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
