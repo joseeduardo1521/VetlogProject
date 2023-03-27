@@ -32,9 +32,9 @@ public class RegisterAct extends AppCompatActivity {
     private TextInputEditText TxtPass, TxtPass2;
     private EditText TxtTel, TxtDir, TxtNom;
     private Button btncrespo;
-    FirebaseAuth mAuth;
-    DatabaseReference mDatabase;
-    AwesomeValidation awesomeValidation;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private AwesomeValidation awesomeValidation;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -45,20 +45,20 @@ public class RegisterAct extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         TxtUsuario = (EditText) findViewById(R.id.txtUsuario);
-        TxtNom = (EditText) findViewById(R.id.edtNom);
-        TxtPass = (TextInputEditText) findViewById(R.id.txtPass);
-        TxtPass2 = (TextInputEditText) findViewById(R.id.txtPass2);
-        TxtTel = (EditText) findViewById(R.id.edtTel);
-        TxtDir = (EditText) findViewById(R.id.edtDir);
-        btncrespo = (Button) findViewById(R.id.btncrespo);
+        TxtNom = (EditText) findViewById(R.id.edtNomU);
+        TxtPass = (TextInputEditText) findViewById(R.id.txtPassU);
+        TxtPass2 = (TextInputEditText) findViewById(R.id.txtPass2U);
+        TxtTel = (EditText) findViewById(R.id.edtTelU);
+        TxtDir = (EditText) findViewById(R.id.edtDirU);
+        btncrespo = (Button) findViewById(R.id.btncrespoU);
         awesomeValidation = new AwesomeValidation(BASIC);
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
-        awesomeValidation.addValidation(this, R.id.edtDir, "[a-zA-Z0-9\\s]+", R.string.err_dir);
-        awesomeValidation.addValidation(this, R.id.edtNom, "[a-zA-Z\\s]+", R.string.err_nom);
+        awesomeValidation.addValidation(this, R.id.edtDirU, "[a-zA-Z0-9\\s]+", R.string.err_dir);
+        awesomeValidation.addValidation(this, R.id.edtNomU, "[a-zA-Z\\s]+", R.string.err_nom);
         awesomeValidation.addValidation(this, R.id.txtCorreo, Patterns.EMAIL_ADDRESS, R.string.err_email);
-        awesomeValidation.addValidation(this, R.id.txtPass, regexPassword, R.string.err_pass);
-        awesomeValidation.addValidation(this, R.id.edtTel, RegexTemplate.TELEPHONE, R.string.err_tel);
-        awesomeValidation.addValidation(this, R.id.txtPass2, regexPassword, R.string.err_pass);
+        awesomeValidation.addValidation(this, R.id.txtPassU, regexPassword, R.string.err_pass);
+        awesomeValidation.addValidation(this, R.id.edtTelU, RegexTemplate.TELEPHONE, R.string.err_tel);
+        awesomeValidation.addValidation(this, R.id.txtPass2U, regexPassword, R.string.err_pass);
 
 
         btncrespo.setOnClickListener(new View.OnClickListener() {
@@ -66,13 +66,14 @@ public class RegisterAct extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (awesomeValidation.validate()) {
-                    String email, password, password2,address,phone,name;
+                    String email, password, password2,address,phone,name,photo;
                     email = String.valueOf(TxtUsuario.getText());
                     password = String.valueOf(TxtPass.getText());
                     password2 = String.valueOf(TxtPass2.getText());
                     address = String.valueOf(TxtDir.getText());
                     name = String.valueOf(TxtNom.getText());
                     phone = String.valueOf(TxtTel.getText());
+                    photo = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
 
                     if (password.equals(password2)) {
 
@@ -81,7 +82,7 @@ public class RegisterAct extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
-                                            registro(name,email,address,phone);
+                                            registro(name,email,address,phone,photo);
                                             Toast.makeText(RegisterAct.this, "Registrado con exito",Toast.LENGTH_SHORT).show();
                                             volverLogin();
                                         } else {
@@ -107,13 +108,14 @@ public class RegisterAct extends AppCompatActivity {
 
     }
 
-    private void registro(String name,String email, String address, String phone){
+    private void registro(String name,String email, String address, String phone,String photo){
 
         final Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("email",email);
         map.put("address",address);
         map.put("phone",phone);
+        map.put("photo", photo);
         map.put("lvl",3);
 
 

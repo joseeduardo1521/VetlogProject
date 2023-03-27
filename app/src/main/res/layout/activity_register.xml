@@ -56,7 +56,7 @@
                 app:layout_constraintVertical_bias="0.24" />
 
             <EditText
-                android:id="@+id/edtNom"
+                android:id="@+id/edtNomU"
                 android:layout_width="334dp"
                 android:layout_height="65dp"
                 android:layout_gravity="center"
@@ -139,7 +139,7 @@
                 app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/txtPass"
+                android:id="@+id/txtPassU"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:layout_gravity="center"
@@ -168,10 +168,10 @@
                 android:gravity="center"
                 app:endIconMode="password_toggle"
                 android:textColor="@color/black"
-                android:textColorHint="@color/black">
+               >
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/txtPass2"
+                    android:id="@+id/txtPass2U"
                     android:layout_width="match_parent"
                     android:layout_height="65dp"
                     android:layout_gravity="center"
@@ -211,7 +211,7 @@
                 app:layout_constraintVertical_bias="0.24" />
 
             <EditText
-                android:id="@+id/edtTel"
+                android:id="@+id/edtTelU"
                 android:layout_width="343dp"
                 android:layout_height="65dp"
                 android:layout_gravity="center"
@@ -249,7 +249,7 @@
                 app:layout_constraintVertical_bias="0.24" />
 
             <EditText
-                android:id="@+id/edtDir"
+                android:id="@+id/edtDirU"
                 android:layout_width="343dp"
                 android:layout_height="65dp"
                 android:layout_gravity="center"
@@ -268,13 +268,14 @@
                 app:layout_constraintVertical_bias="0.617" />
 
             <Button
-                android:id="@+id/btncrespo"
+                android:id="@+id/btncrespoU"
                 android:layout_width="228dp"
                 android:layout_height="79dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/design_default_color_secondary"
                 android:text="Registrar"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.497"

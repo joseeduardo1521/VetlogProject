@@ -12,8 +12,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -24,7 +22,6 @@ import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.example.vet.clases.DataEspecies;
 import com.example.vet.clases.EspecieAdapter;
-import com.example.vet.clases.Especies;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,7 +36,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,16 +57,16 @@ public class regDatosMasActivity extends AppCompatActivity {
     private int year;
     private CircleImageView imgMascota, btnSubirImg;
     private DataEspecies data;
-    private EspecieAdapter adapter;
-    StorageReference storageReference;
-    String storage_path = "pet/*";
-    private  String download_uri;
     private FirebaseAuth mAuth;
+    private EspecieAdapter adapter;
+    private StorageReference storageReference;
+    private String storage_path = "pet/*";
+    private  String download_uri;
 
     private static final int COD_SEL_IMAGE = 300;
     private Uri image_url;
-    String photo = "photo";
-    String idd;
+    private String photo = "photo";
+    private String idd;
 
 
 
@@ -91,7 +87,7 @@ public class regDatosMasActivity extends AppCompatActivity {
         edtFecha = (EditText) findViewById(R.id.edtFecha);
         sEspecie = (Spinner) findViewById(R.id.sEspecie);
         btnSubirImg = (CircleImageView) findViewById(R.id.btnSubirImgMasc);
-        imgMascota = (CircleImageView) findViewById(R.id.imgMascota);
+        imgMascota = (CircleImageView) findViewById(R.id.imgUser);
         btnRegistratmas = (Button) findViewById(R.id.btnRegMas);
         rbMacho = findViewById(R.id.rbMacho);
         rbHembra = findViewById(R.id.rbHembra);
@@ -131,9 +127,6 @@ public class regDatosMasActivity extends AppCompatActivity {
                     String peso = String.valueOf(edtPeso.getText());
                     String color = String.valueOf(edtColor.getText());
                     String raza = String.valueOf(edtRaza.getText());
-
-
-
 
                     switch ((int) sEspecie.getSelectedItemId()){
                         case 0:

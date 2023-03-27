@@ -18,12 +18,14 @@
 
 
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imgUsuario"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@drawable/vetg">
-
-        </ImageView>
+            android:scaleType="centerCrop"
+            android:src="@drawable/vetg"
+            android:background="@drawable/circle2">
+        </de.hdodenhof.circleimageview.CircleImageView>
 
 
         <LinearLayout
