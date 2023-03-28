@@ -47,7 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Menu extends AppCompatActivity {
 
-    private View cardPersonal,cardCerSesion,cardCitas,cardGesM, cardQR;
+    private View cardPersonal,cardCerSesion,cardCitas,cardGesM, cardQR, cardAdop, cardVacu;
     private TextView mnombre,mRol;
     private FirebaseAuth mAuth;
     private String idMas;
@@ -86,6 +86,8 @@ public class Menu extends AppCompatActivity {
         cardCitas = (View) findViewById(R.id.D3);
         cardGesM = (View) findViewById(R.id.D1);
         cardQR = (View) findViewById(R.id.D2);
+        cardAdop =(View) findViewById(R.id.D5);
+        cardVacu = (View) findViewById(R.id.D6);
         imgUsu =  findViewById(R.id.imgUsuario);
         getUserInfo();
 
@@ -109,6 +111,22 @@ public class Menu extends AppCompatActivity {
             public void onClick(View view) {
                 Intent Citas = new Intent(Menu.this, RegCitas.class);
                 startActivity(Citas);
+            }
+        });
+
+        cardVacu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent vacu = new Intent(Menu.this, CrearVacuna.class);
+                startActivity(vacu);
+            }
+        });
+
+        cardAdop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent adop = new Intent(Menu.this, CrearAdopcion.class);
+                startActivity(adop);
             }
         });
 
