@@ -85,13 +85,10 @@ public class MainActivity extends AppCompatActivity {
             logIn(check,check2);
         }
 
-
-
     }
 
 
     private void logIn(String mail,String pass){
-
         mAuth.signInWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
