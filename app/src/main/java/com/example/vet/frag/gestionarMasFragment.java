@@ -29,6 +29,7 @@ public class gestionarMasFragment extends Fragment {
     private List<mostrarMascota> mascotaList;
     private RecyclerView recyclerView;
     private DatabaseReference mDatabase;
+    String corr = "";
 
     public gestionarMasFragment() {
         // Required empty public constructor
@@ -57,27 +58,51 @@ public class gestionarMasFragment extends Fragment {
         return view;
     }
 
-    private void obtenerInfo(){
+    public interface OnCorreoDuenoListener {
+        void onCorreoDuenoObtenido(String correoDueno);
+    }
 
+    private void correoDueno(String keydueno, OnCorreoDuenoListener listener){
+        String[] correoDu = new String[1];
+        mDatabase.child("Usuario").child(keydueno).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                correoDu[0] = snapshot.child("email").getValue().toString();
+                listener.onCorreoDuenoObtenido(correoDu[0]);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void obtenerInfo(){
         mDatabase.child("Mascotas").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     for(DataSnapshot ds: snapshot.getChildren()){
+                        String key = ds.getKey();
                         String name = ds.child("name").getValue().toString();
                         String img = ds.child("photo").getValue().toString();
                         String edad =ds.child("birth").getValue().toString();
                         String genero =ds.child("sex").getValue().toString();
                         String raza =ds.child("raze").getValue().toString();
                         String especie =ds.child("species").getValue().toString();
-                        String dueno =ds.child("key").getValue().toString();
-                        mascotaList.add(new mostrarMascota(
-                                name, img, edad, raza, genero, especie, dueno
-                        ));
-                    }
+                        String correo = ds.child("key").getValue().toString();
+                        correoDueno(correo, new OnCorreoDuenoListener() {
+                            @Override
+                            public void onCorreoDuenoObtenido(String correoDueno) {
+                                mascotaList.add(new mostrarMascota(
+                                        key, name, img, edad, raza, genero, especie, correoDueno
+                                ));
 
-                    AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
-                    recyclerView.setAdapter(adapter);
+                                AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
+                                recyclerView.setAdapter(adapter);
+                            }
+                        });
+                    }
                 }
             }
 
@@ -87,4 +112,6 @@ public class gestionarMasFragment extends Fragment {
             }
         });
     }
+
+
 }

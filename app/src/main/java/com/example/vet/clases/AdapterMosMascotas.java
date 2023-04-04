@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -16,14 +18,16 @@ import java.util.List;
 
 public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.MosMacotasViewHolder> {
 
-    private String[] localDataSet;
+    private LayoutInflater mInflater;
     private Context mCtx;
     private List<mostrarMascota> mascotaList;
 
 
     public AdapterMosMascotas(Context mCtx, List<mostrarMascota> mascotaList) {
+
         this.mCtx=mCtx;
         this.mascotaList = mascotaList;
+        this.mInflater = LayoutInflater.from(mCtx);
 
     }
 
@@ -31,6 +35,7 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
     public static class MosMacotasViewHolder extends RecyclerView.ViewHolder {
         TextView txtNombre, txtRaza,txtEdad,txtEspecie, txtDueño,txtGenero;
         ImageView imgMasc;
+        CardView cv;
 
         public MosMacotasViewHolder(View view) {
             super(view);
@@ -41,6 +46,7 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
             txtDueño = view.findViewById(R.id.correoDueño);
             txtGenero = view.findViewById(R.id.generoTextView);
             imgMasc = view.findViewById(R.id.imageViewM);
+            cv = view.findViewById(R.id.cardViewM);
             // Define click listener for the ViewHolder's View
         }
     }
@@ -49,8 +55,8 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
     @Override
     public MosMacotasViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
-       LayoutInflater inflater = LayoutInflater.from(mCtx);
-        View view  = inflater.inflate(R.layout.cardmascotas, null   );
+
+        View view  = mInflater.from(viewGroup.getContext()).inflate(R.layout.cardmascotas, viewGroup,false   );
         return new MosMacotasViewHolder(view);
     }
 
@@ -67,6 +73,7 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
         viewHolder.txtRaza.setText(mascota.getRazaM());
         viewHolder.txtEdad.setText(mascota.getEdadM());
         viewHolder.txtGenero.setText(mascota.getGeneroM());
+        viewHolder.cv.setAnimation(AnimationUtils.loadAnimation(mCtx,R.anim.fade_trans));
     }
 
     // Return the size of your dataset (invoked by the layout manager)
