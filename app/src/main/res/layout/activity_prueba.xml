@@ -41,18 +41,32 @@
         app:layout_constraintVertical_bias="0.668" />
 
     <TextView
+        android:id="@+id/textView6"
         android:layout_width="235dp"
         android:layout_height="64dp"
         android:gravity="center"
         android:text="Vetlog Requiere de una conexión a internet en todo momento."
-        android:textSize="18dp"
         android:textColor="@color/black"
+        android:textSize="18dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nofifi"
         app:layout_constraintVertical_bias="0.329" />
+
+    <Button
+        android:id="@+id/btnReload"
+        android:layout_width="121dp"
+        android:layout_height="53dp"
+        android:background="@drawable/tatanka_button"
+        android:text="Recargar"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
