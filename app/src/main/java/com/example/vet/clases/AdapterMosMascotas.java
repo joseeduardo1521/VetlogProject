@@ -1,5 +1,6 @@
 package com.example.vet.clases;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
@@ -118,7 +119,7 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MosMacotasViewHolder viewHolder,int position) {
+    public void onBindViewHolder(MosMacotasViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
         mostrarMascota mascota = mascotaList.get(position);
         viewHolder.imgMascota = mascota.getImagenM();
         viewHolder.llave = mascota.getIdM();
