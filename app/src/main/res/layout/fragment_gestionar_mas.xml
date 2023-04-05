@@ -1,13 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".frag.gestionarMasFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".frag.gestionarMasFragment"
+    android:orientation="vertical">
+
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linearLayoutCompat"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_gravity="center"
+        android:background="@drawable/bg_header2"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="264dp"
+            android:layout_height="220dp"
+            android:src="@drawable/mascotas1" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentTop="true">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:text="Mascotas registradas"
+                android:textColor="#304f58"
+                android:textSize="30sp"
+                android:textStyle="bold"/>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/btnBuscarQR"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="qr.json"
+                app:lottie_imageAssetsFolder="assets"
+                app:lottie_loop="true"
+                />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyvlerMostrarMas"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-</FrameLayout>
+</LinearLayout>

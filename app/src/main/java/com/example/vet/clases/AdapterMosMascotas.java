@@ -1,20 +1,32 @@
 package com.example.vet.clases;
 
 import android.content.Context;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.vet.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
+
 
 public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.MosMacotasViewHolder> {
 
@@ -22,6 +34,11 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
     private Context mCtx;
     private List<mostrarMascota> mascotaList;
 
+
+    @Override
+    public int getItemCount() {
+        return mascotaList.size();
+    }
 
     public AdapterMosMascotas(Context mCtx, List<mostrarMascota> mascotaList) {
 
@@ -32,10 +49,14 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
     }
 
 
-    public static class MosMacotasViewHolder extends RecyclerView.ViewHolder {
+    public class MosMacotasViewHolder extends RecyclerView.ViewHolder {
         TextView txtNombre, txtRaza,txtEdad,txtEspecie, txtDueño,txtGenero;
         ImageView imgMasc;
         CardView cv;
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+        int position;
+        LinearLayout layout_btn;
+        String llave,imgMascota;
 
         public MosMacotasViewHolder(View view) {
             super(view);
@@ -47,38 +68,76 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
             txtGenero = view.findViewById(R.id.generoTextView);
             imgMasc = view.findViewById(R.id.imageViewM);
             cv = view.findViewById(R.id.cardViewM);
+            layout_btn = view.findViewById(R.id.layBotones);
             // Define click listener for the ViewHolder's View
+
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int vw =(layout_btn.getVisibility() ==  v.GONE)? v.VISIBLE: v.GONE;
+                    TransitionManager.beginDelayedTransition(layout_btn, new AutoTransition());
+                    layout_btn.setVisibility(vw);
+                }
+            });
+
+            view.findViewById(R.id.btnBorrarM).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatabaseReference registroRef = databaseRef.child("Mascotas").child(llave);
+                    if (!(imgMascota.equals("https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693"))) {
+                        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(imgMascota);
+                        // Borra el archivo de Firebase Storage
+                        storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                // Borra la referencia al archivo en la base de datos
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // Maneja el error al borrar el archivo de Firebase Storage
+                            }
+                        });
+                    }
+                    registroRef.removeValue();
+                    mascotaList.remove(position);
+                    notifyItemRemoved(position);
+                }
+            });
         }
     }
+
 
     // Create new views (invoked by the layout manager)
     @Override
     public MosMacotasViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
-
         View view  = mInflater.from(viewGroup.getContext()).inflate(R.layout.cardmascotas, viewGroup,false   );
         return new MosMacotasViewHolder(view);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MosMacotasViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(MosMacotasViewHolder viewHolder,int position) {
         mostrarMascota mascota = mascotaList.get(position);
+        viewHolder.imgMascota = mascota.getImagenM();
+        viewHolder.llave = mascota.getIdM();
         Glide.with(mCtx)
                 .load(mascota.getImagenM())
                 .into(viewHolder.imgMasc);
+
         viewHolder.txtNombre.setText(mascota.getNombreM());
         viewHolder.txtEspecie.setText(mascota.getEspecieM());
         viewHolder.txtDueño.setText(mascota.getCorreoDueno());
         viewHolder.txtRaza.setText(mascota.getRazaM());
         viewHolder.txtEdad.setText(mascota.getEdadM());
         viewHolder.txtGenero.setText(mascota.getGeneroM());
+        viewHolder.position = position;
         viewHolder.cv.setAnimation(AnimationUtils.loadAnimation(mCtx,R.anim.fade_trans));
+
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        return mascotaList.size();
-    }
+
 }

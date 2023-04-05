@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -29,6 +30,8 @@ public class gestionarMasFragment extends Fragment {
     private List<mostrarMascota> mascotaList;
     private RecyclerView recyclerView;
     private DatabaseReference mDatabase;
+
+
     String corr = "";
 
     public gestionarMasFragment() {
@@ -77,6 +80,7 @@ public class gestionarMasFragment extends Fragment {
         });
     }
 
+
     private void obtenerInfo(){
         mDatabase.child("Mascotas").addValueEventListener(new ValueEventListener() {
             @Override
@@ -85,7 +89,15 @@ public class gestionarMasFragment extends Fragment {
                     for(DataSnapshot ds: snapshot.getChildren()){
                         String key = ds.getKey();
                         String name = ds.child("name").getValue().toString();
-                        String img = ds.child("photo").getValue().toString();
+                        String img;
+                        if (ds.child("photo").exists()){
+                            if(ds.child("photo").getValue().toString().equals(null))
+                                img = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
+                            else
+                                 img = ds.child("photo").getValue().toString();
+                        }else {
+                           img = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
+                        }
                         String edad =ds.child("birth").getValue().toString();
                         String genero =ds.child("sex").getValue().toString();
                         String raza =ds.child("raze").getValue().toString();

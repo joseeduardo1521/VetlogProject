@@ -1,5 +1,6 @@
 
     <androidx.cardview.widget.CardView
+        android:onClick="expandC"
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/cardViewM"
@@ -22,25 +23,64 @@
                 android:orientation="horizontal"
                 android:padding="6dp">
 
-            <ImageView
-                android:id="@+id/imageViewM"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:paddingLeft="14dp"
-                android:paddingRight="14dp"
-                android:src="@drawable/perro"
-                android:scaleType="centerCrop"/>
+                <ImageView
+                    android:id="@+id/imageViewM"
+                    android:layout_width="80dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:paddingLeft="14dp"
+                    android:paddingRight="14dp"
+                    android:src="@drawable/perro"
+                    android:scaleType="centerCrop"/>
+
+                <LinearLayout
+                    android:id="@+id/layBotones"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="6dp"
+                    android:visibility="gone"
+                    android:layout_below="@+id/cuadro_info"
+                    android:gravity="center"
+                    android:layout_marginTop="16dp">
+
+                    <Button
+                        android:id="@+id/btnEdtMas"
+                        android:drawableStart="@drawable/ic_baseline_edit_24"
+                        android:drawablePadding="8dp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:textColor="@android:color/white"
+                        android:backgroundTint="#007C91"
+                        android:text="Editar"/>
+
+                    <Button
+                        android:id="@+id/btnBorrarM"
+                        android:drawableEnd="@drawable/ic_baseline_delete_forever_24"
+                        android:drawablePadding="8dp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:textColor="@android:color/white"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="#F04C5D"
+                        android:text="Borrar"/>
+
+                </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/cuadro_info"
                 android:layout_width="match_parent"
+                android:backgroundTint="@color/azul_back"
+                android:elevation="7dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_toEndOf="@+id/imageViewM"
-                android:layout_marginStart="16dp">
+                android:layout_marginStart="18dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -50,14 +90,14 @@
                         android:id="@+id/nombreTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         android:textColor="@color/white"
                         android:text="Nombre de la mascota"/>
 
                     <TextView
                         android:id="@+id/edadTextView"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="6dp"
                         android:layout_marginLeft="6dp"
@@ -76,7 +116,7 @@
                         android:id="@+id/razaTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:textColor="@color/white"
                         android:text="Raza de la mascota"/>
 
@@ -84,7 +124,7 @@
                         android:id="@+id/generoTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:textColor="@color/white"
                         android:text="Género de la mascota"/>
 
@@ -92,7 +132,7 @@
                         android:id="@+id/especieTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:textColor="@color/white"
                         android:text="Especie de la mascota"/>
 
@@ -100,7 +140,7 @@
                         android:id="@+id/correoDueño"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:textColor="@color/white"
                         android:text="Correo del dueño"/>
             </LinearLayout>
