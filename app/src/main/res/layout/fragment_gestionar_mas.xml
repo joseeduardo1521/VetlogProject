@@ -11,7 +11,7 @@
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat"
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="130dp"
         android:layout_gravity="center"
         android:background="@drawable/bg_header2"
         android:gravity="center"
@@ -21,9 +21,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="264dp"
-            android:layout_height="220dp"
-            android:src="@drawable/mascotas1" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mascotas1"
+            android:scaleType="centerInside"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -60,6 +61,34 @@
                 app:lottie_imageAssetsFolder="assets"
                 app:lottie_loop="true"
                 />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentTop="true">
+
+            <EditText
+                android:id="@+id/edtBusqueda"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:inputType="textEmailAddress"
+                android:layout_gravity="center"
+                android:hint="Ingrese el email del dueño"
+                android:textColor="#304f58"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+
 
         </LinearLayout>
 
