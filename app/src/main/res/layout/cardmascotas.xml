@@ -52,10 +52,27 @@
                         android:layout_weight="1"
                         android:layout_gravity="center"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
                         android:layout_marginEnd="8dp"
                         android:textColor="@android:color/white"
                         android:backgroundTint="#007C91"
-                        android:text="Editar"/>
+                        android:text="Editar"
+                        app:autoSizeTextType="uniform"/>
+
+                    <Button
+                        android:visibility="gone"
+                        android:id="@+id/btnRecetar"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Recetar"
+                        android:backgroundTint="#FFA500"
+                        android:textColor="@android:color/white"
+                        android:drawablePadding="8dp"
+                        android:drawableStart="@drawable/ic_baseline_add_alert_24"
+                        android:layout_gravity="center"
+                        android:maxLines="1"
+                        app:autoSizeTextType="uniform"/>
 
                     <Button
                         android:id="@+id/btnBorrarM"
@@ -68,10 +85,11 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:backgroundTint="#F04C5D"
-                        android:text="Borrar"/>
+                        android:text="Borrar"
+                        android:maxLines="1"
+                        app:autoSizeTextType="uniform"/>
 
                 </LinearLayout>
-
             <LinearLayout
                 android:id="@+id/cuadro_info"
                 android:layout_width="match_parent"
@@ -92,11 +110,13 @@
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
                         android:textStyle="bold"
+                        app:autoSizeTextType="uniform"
                         android:textColor="@color/white"
                         android:text="Nombre de la mascota"/>
 
                     <TextView
                         android:id="@+id/edadTextView"
+                        app:autoSizeTextType="uniform"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="6dp"
@@ -117,6 +137,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
+                        app:autoSizeTextType="uniform"
                         android:textColor="@color/white"
                         android:text="Raza de la mascota"/>
 
@@ -125,6 +146,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
+                        app:autoSizeTextType="uniform"
                         android:textColor="@color/white"
                         android:text="Género de la mascota"/>
 
@@ -132,7 +154,7 @@
                         android:id="@+id/especieTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
+                        app:autoSizeTextType="uniform"
                         android:textColor="@color/white"
                         android:text="Especie de la mascota"/>
 
@@ -141,6 +163,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
+                        app:autoSizeTextType="uniform"
                         android:textColor="@color/white"
                         android:text="Correo del dueño"/>
             </LinearLayout>

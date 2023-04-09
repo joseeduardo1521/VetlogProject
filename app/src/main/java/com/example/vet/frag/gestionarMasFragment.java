@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Adapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -23,9 +24,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.vet.Menu;
 import com.example.vet.R;
 import com.example.vet.clases.AdapterMosMascotas;
 import com.example.vet.clases.mostrarMascota;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,9 +53,6 @@ public class gestionarMasFragment extends Fragment {
     private static final int REQUEST_CODE_QR_SCAN = 101;
     private String qrData = "";
     private String llaveCodu = "";
-
-
-    String corr = "";
 
     public gestionarMasFragment() {
         // Required empty public constructor

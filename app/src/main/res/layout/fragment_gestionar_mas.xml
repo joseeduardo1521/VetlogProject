@@ -7,7 +7,6 @@
     tools:context=".frag.gestionarMasFragment"
     android:orientation="vertical">
 
-
     <androidx.appcompat.widget.LinearLayoutCompat
         android:id="@+id/linearLayoutCompat"
         android:layout_width="match_parent"

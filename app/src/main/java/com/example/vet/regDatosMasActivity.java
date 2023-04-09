@@ -20,8 +20,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.bumptech.glide.Glide;
+import com.example.vet.clases.AdapterMosMascotas;
 import com.example.vet.clases.DataEspecies;
 import com.example.vet.clases.EspecieAdapter;
+import com.example.vet.clases.mostrarMascota;
+import com.example.vet.frag.gestionarMasFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -49,9 +53,9 @@ public class regDatosMasActivity extends AppCompatActivity {
     private Spinner sEspecie;
     private EditText edtPeso, edtColor, edtRaza, edtNomM, edtFecha;
     private RadioButton rbMacho, rbHembra;
-    private Button btnRegistratmas;
+    private Button btnRegistratmas,btnUpdateMas;
     private AwesomeValidation awesomeValidation;
-    private String key;
+    private String key="",key2="";
     private String item;
     private DatePickerDialog datePickerDialog;
     private int year;
@@ -61,7 +65,7 @@ public class regDatosMasActivity extends AppCompatActivity {
     private EspecieAdapter adapter;
     private StorageReference storageReference;
     private String storage_path = "pet/*";
-    private  String download_uri;
+    private  String download_uri, imgupUrl="";
 
     private static final int COD_SEL_IMAGE = 300;
     private Uri image_url;
@@ -74,8 +78,13 @@ public class regDatosMasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reg_datos_mas);
+
+        String key2 = getIntent().getExtras().getString("llave2");
+        this.key2 = key2;
         String key = getIntent().getExtras().getString("llave");
         this.key = key;
+
+
         initDatePicker();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -89,6 +98,7 @@ public class regDatosMasActivity extends AppCompatActivity {
         btnSubirImg = (CircleImageView) findViewById(R.id.btnSubirImgMasc);
         imgMascota = (CircleImageView) findViewById(R.id.imgUser);
         btnRegistratmas = (Button) findViewById(R.id.btnRegMas);
+        btnUpdateMas = (Button) findViewById(R.id.btnUpdMas);
         rbMacho = findViewById(R.id.rbMacho);
         rbHembra = findViewById(R.id.rbHembra);
         edtFecha.setText(getTodaysDate());
@@ -100,9 +110,24 @@ public class regDatosMasActivity extends AppCompatActivity {
         awesomeValidation.addValidation(this, R.id.edtColor, "[a-zA-Z0-9\\s]+", R.string.err_campova);
         awesomeValidation.addValidation(this, R.id.edtraza, "[a-zA-Z0-9\\s]+", R.string.err_campova);
         awesomeValidation.addValidation(this, R.id.edtPeso, "[0-9\\s]+", R.string.err_campova);
-
         adapter = new EspecieAdapter(this, DataEspecies.getEspecieList());
         sEspecie.setAdapter(adapter);
+
+        if(this.key != null){
+            Toast.makeText(this, key, Toast.LENGTH_SHORT).show();
+            btnRegistratmas.setVisibility(View.VISIBLE);
+        }
+        if(this.key2 != null) {
+            btnUpdateMas.setVisibility(View.VISIBLE);
+            obtenerDatosMascota(this.key2);
+        }
+
+        btnUpdateMas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDatos(2);
+            }
+        });
 
         btnSubirImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,45 +146,112 @@ public class regDatosMasActivity extends AppCompatActivity {
         btnRegistratmas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(awesomeValidation.validate()){
-                    String nom = String.valueOf(edtNomM.getText());
-                    String fecha = String.valueOf(edtFecha.getText());
-                    String peso = String.valueOf(edtPeso.getText());
-                    String color = String.valueOf(edtColor.getText());
-                    String raza = String.valueOf(edtRaza.getText());
+               setDatos(1);
+            }
+        });
+    }
 
-                    switch ((int) sEspecie.getSelectedItemId()){
-                        case 0:
-                            item = "Perro";
+
+    private void setDatos(int op){
+        if(awesomeValidation.validate()){
+            String nom = String.valueOf(edtNomM.getText());
+            String fecha = String.valueOf(edtFecha.getText());
+            String peso = String.valueOf(edtPeso.getText());
+            String color = String.valueOf(edtColor.getText());
+            String raza = String.valueOf(edtRaza.getText());
+
+            switch ((int) sEspecie.getSelectedItemId()){
+                case 0:
+                    item = "Canino";
+                    break;
+                case 1:
+                    item = "Felino";
+                    break;
+                case 2:
+                    item = "Ave";
+                    break;
+                case 3:
+                    item = "Roedor";
+                    break;
+                case 4:
+                    item = "Reptil";
+                    break;
+            }
+            String espe = String.valueOf(item);
+            if(peso.equals("")){
+                peso = "0";
+            }
+            String sexo = "";
+            if(rbMacho.isChecked()==true){
+                sexo = "Macho";
+            }
+
+            if(rbHembra.isChecked()==true)
+                sexo = "Hembra";
+            if(op==1)
+            registro(nom,fecha,peso,color,raza,espe,sexo);
+            else
+                actualizarDatosMascota(nom,fecha,peso,color,raza,espe,sexo);
+        }
+    }
+
+    private void obtenerDatosMascota(String clave) {
+        mDatabase.child("Mascotas").child(clave).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if(snapshot.exists()) {
+                    String name = snapshot.child("name").getValue().toString();
+                    String color = snapshot.child("color").getValue().toString();
+                    if (snapshot.child("photo").exists()){
+                        String img = snapshot.child("photo").getValue().toString();
+                             Glide.with(regDatosMasActivity.this).load(img).into(imgMascota);
+                             image_url= Uri.parse(img);
+                             imgupUrl = img;
+                         }
+                        String edad =snapshot.child("birth").getValue().toString();
+                        String peso =snapshot.child("weight").getValue().toString();
+                        String genero =snapshot.child("sex").getValue().toString();
+                        String raza =snapshot.child("raze").getValue().toString();
+                        String esp =snapshot.child("species").getValue().toString();
+                        key =snapshot.child("key").getValue().toString();
+
+                        edtColor.setText(color);
+                        edtFecha.setText(edad);
+                        edtPeso.setText(peso);
+                        edtRaza.setText(raza);
+                        edtNomM.setText(name);
+
+                    switch (esp){
+                        case "Canino":
+                            sEspecie.setSelection(0);
                             break;
-                        case 1:
-                            item = "Gato";
+                        case "Felino":
+                            sEspecie.setSelection(1);
                             break;
-                        case 2:
-                            item = "Ave";
+                        case "Ave":
+                            sEspecie.setSelection(2);
                             break;
-                        case 3:
-                            item = "Roedor";
+                        case "Roedor":
+                            sEspecie.setSelection(3);
                             break;
-                        case 4:
-                            item = "Reptil";
+                        case "Reptil":
+                            sEspecie.setSelection(4);
                             break;
                     }
-                    String espe = String.valueOf(item);
-                    if(peso.equals("")){
-                        peso = "0";
-                    }
-                    String sexo = "";
-                    if(rbMacho.isChecked()==true){
-                        sexo = "Macho";
-                    }
 
-                    if(rbHembra.isChecked()==true)
-                        sexo = "Hembra";
+                        if(genero.equals("Macho")){
+                            rbMacho.setChecked(true);
+                        }else{
+                            rbHembra.setChecked(true);
+                        }
 
-                    registro(nom,fecha,peso,color,raza,espe,sexo);
 
                 }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
@@ -197,7 +289,7 @@ public class regDatosMasActivity extends AppCompatActivity {
                             HashMap<String, Object> map = new HashMap<>();
                             map.put("photo", download_uri);
                             mDatabase.child("Mascotas").child(token).updateChildren(map);
-                            Toast.makeText(regDatosMasActivity.this, download_uri, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(regDatosMasActivity.this, "Imagen subida correctamente", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -205,18 +297,49 @@ public class regDatosMasActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(regDatosMasActivity.this, "Error al cargar foto", Toast.LENGTH_SHORT).show();
+
+                if (String.valueOf(image_url).equals(imgupUrl)){
+                    Toast.makeText(regDatosMasActivity.this, "No se cambio la foto", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(regDatosMasActivity.this, "Error al cargar foto", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
     }
 
 
+    private void actualizarDatosMascota(String name,String date, String weight, String color, String raze, String species,String sex){
+        idd = key+year+species+name.replace(" ","");
+        final Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("birth", date);
+        map.put("weight", weight);
+        map.put("color", color);
+        map.put("raze", raze);
+        map.put("species", species);
+        map.put("sex", sex);
 
+
+
+        mDatabase.child("Mascotas").child(key2).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task2) {
+                if(task2.isSuccessful()){
+                    Toast.makeText(regDatosMasActivity.this, "Actualizado", Toast.LENGTH_SHORT).show();
+                    if (!(String.valueOf(image_url).equals(""))&&!(String.valueOf(image_url).equals("null"))){
+                        subirPhoto(image_url, key2);
+                    }
+                    salir();
+                }
+                else Toast.makeText(regDatosMasActivity.this, "Error al actualizar datos", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void registro(String name,String date, String weight, String color, String raze, String species,String sex){
         idd = key+year+species+name.replace(" ","");
-
-        String token= year+species+name;
+        String token= key+year+species+name;
         final Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("birth", date);
@@ -233,7 +356,6 @@ public class regDatosMasActivity extends AppCompatActivity {
                 if(task2.isSuccessful()){
                     Toast.makeText(regDatosMasActivity.this, "Registrado", Toast.LENGTH_SHORT).show();
                     subirPhoto(image_url,token);
-
                     salir();
                 }
                 else Toast.makeText(regDatosMasActivity.this, "Error al registrar datos", Toast.LENGTH_SHORT).show();

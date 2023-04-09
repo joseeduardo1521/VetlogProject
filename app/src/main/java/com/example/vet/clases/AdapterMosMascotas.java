@@ -2,6 +2,7 @@ package com.example.vet.clases;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
@@ -18,11 +19,17 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.vet.Menu;
 import com.example.vet.R;
+import com.example.vet.regDatosMasActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -34,6 +41,8 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
     private LayoutInflater mInflater;
     private Context mCtx;
     private List<mostrarMascota> mascotaList;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
 
     @Override
@@ -54,6 +63,7 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
         TextView txtNombre, txtRaza,txtEdad,txtEspecie, txtDueño,txtGenero;
         ImageView imgMasc;
         CardView cv;
+        Button btnreceta;
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
         int position;
         LinearLayout layout_btn;
@@ -68,6 +78,7 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
             txtDueño = view.findViewById(R.id.correoDueño);
             txtGenero = view.findViewById(R.id.generoTextView);
             imgMasc = view.findViewById(R.id.imageViewM);
+            btnreceta = view.findViewById(R.id.btnRecetar);
             cv = view.findViewById(R.id.cardViewM);
             layout_btn = view.findViewById(R.id.layBotones);
             // Define click listener for the ViewHolder's View
@@ -75,9 +86,40 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mAuth = FirebaseAuth.getInstance();
+                    mDatabase = FirebaseDatabase.getInstance().getReference();
+                    String id= mAuth.getCurrentUser().getUid();
+                    mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                String lvl;
+                                lvl = snapshot.child("lvl").getValue().toString();
+                                if (lvl.equals("1")){
+                                    btnreceta.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
+
+
                     int vw =(layout_btn.getVisibility() ==  v.GONE)? v.VISIBLE: v.GONE;
                     TransitionManager.beginDelayedTransition(layout_btn, new AutoTransition());
                     layout_btn.setVisibility(vw);
+
+                }
+            });
+
+            view.findViewById(R.id.btnEdtMas).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        Intent intent = new Intent(mCtx, regDatosMasActivity.class);
+                        intent.putExtra("llave2", llave);
+                        mCtx.startActivity(intent);
+
                 }
             });
 
@@ -107,6 +149,9 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
             });
         }
     }
+
+
+
 
 
     // Create new views (invoked by the layout manager)

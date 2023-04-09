@@ -22,4 +22,5 @@
 
     <string name="errEle">Elemento no encontrado</string>
     <string name="title_activity_ges_mascotas">gesMascotasActivity</string>
+    <string name="ingrese_la_dosis_del_medicamento">Ingrese la dosis del medicamento</string>
 </resources>
