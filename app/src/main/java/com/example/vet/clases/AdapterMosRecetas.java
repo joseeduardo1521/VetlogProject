@@ -18,43 +18,37 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.vet.Menu;
 import com.example.vet.R;
 import com.example.vet.mostrarReceta;
 import com.example.vet.regDatosMasActivity;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
 
-public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.MosMacotasViewHolder> {
+public class AdapterMosRecetas extends RecyclerView.Adapter<AdapterMosRecetas.MosMacotasViewHolder> {
 
     private LayoutInflater mInflater;
     private Context mCtx;
-    private List<mostrarMascota> mascotaList;
+    private List<mostrarRecetaList> recetaList;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
 
     @Override
     public int getItemCount() {
-        return mascotaList.size();
+        return recetaList.size();
     }
 
-    public AdapterMosMascotas(Context mCtx, List<mostrarMascota> mascotaList) {
+    public AdapterMosRecetas(Context mCtx, List<mostrarRecetaList> recetaList) {
 
         this.mCtx=mCtx;
-        this.mascotaList = mascotaList;
+        this.recetaList = recetaList;
         this.mInflater = LayoutInflater.from(mCtx);
 
     }
@@ -68,7 +62,7 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
         int position;
         LinearLayout layout_btn;
-        String llave,imgMascota;
+        String llave,idRec;
 
         public MosMacotasViewHolder(View view) {
             super(view);
@@ -137,24 +131,9 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
             view.findViewById(R.id.btnBorrarM).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DatabaseReference registroRef = databaseRef.child("Mascotas").child(llave);
-                    if (!(imgMascota.equals("https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693"))) {
-                        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(imgMascota);
-                        // Borra el archivo de Firebase Storage
-                        storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // Borra la referencia al archivo en la base de datos
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // Maneja el error al borrar el archivo de Firebase Storage
-                            }
-                        });
-                    }
+                    DatabaseReference registroRef = databaseRef.child("Mascotas").child(llave).child("Recetas").child(idRec);
                     registroRef.removeValue();
-                    mascotaList.remove(position);
+                    recetaList.remove(position);
                     notifyItemRemoved(position);
                 }
             });
@@ -169,27 +148,17 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
     @Override
     public MosMacotasViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
-        View view  = mInflater.from(viewGroup.getContext()).inflate(R.layout.cardmascotas, viewGroup,false   );
+        View view  = mInflater.from(viewGroup.getContext()).inflate(R.layout.cardrecetas, viewGroup,false   );
         return new MosMacotasViewHolder(view);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MosMacotasViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
-        mostrarMascota mascota = mascotaList.get(position);
-        viewHolder.imgMascota = mascota.getImagenM();
-        viewHolder.llave = mascota.getIdM();
-        Glide.with(mCtx)
-                .load(mascota.getImagenM())
-                .into(viewHolder.imgMasc);
+        mostrarRecetaList mascota = recetaList.get(position);
 
-        viewHolder.txtNombre.setText(mascota.getNombreM());
-        viewHolder.txtEspecie.setText(mascota.getEspecieM());
-        viewHolder.txtDueño.setText(mascota.getCorreoDueno());
-        viewHolder.txtRaza.setText(mascota.getRazaM());
-        viewHolder.txtEdad.setText(mascota.getEdadM());
-        viewHolder.txtGenero.setText(mascota.getGeneroM());
-        viewHolder.position = position;
+
+
         viewHolder.cv.setAnimation(AnimationUtils.loadAnimation(mCtx,R.anim.fade_trans));
 
 
