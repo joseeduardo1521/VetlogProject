@@ -42,7 +42,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MenuSec extends AppCompatActivity {
 
-    private View cardCerSesion, cardAgregarMas;
+    private View cardCerSesion, cardAgregarMas, cardVisualCita;
     private FirebaseAuth mAuth;
     private String idMas;
     private TextView mnombre, mRol;
@@ -76,6 +76,7 @@ public class MenuSec extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         cardAgregarMas  = (View) findViewById(R.id.D1);
         cardCerSesion = (View) findViewById(R.id.D7);
+        cardVisualCita = (View) findViewById(R.id.D3);
         mnombre = (TextView) findViewById(R.id.usu);
         mRol = (TextView) findViewById(R.id.puesto);
         imgUsu =  findViewById(R.id.imgUsuario);
@@ -95,7 +96,13 @@ public class MenuSec extends AppCompatActivity {
                 startActivity(gesMascotas);
             }
         });
-
+        cardVisualCita.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent visualCita = new Intent(MenuSec.this,VisualCitas.class);
+                startActivity(visualCita);
+            }
+        });
         cardCerSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
