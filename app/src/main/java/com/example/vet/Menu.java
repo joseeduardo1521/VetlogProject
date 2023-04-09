@@ -350,7 +350,10 @@ public class Menu extends AppCompatActivity {
                 if(snapshot.exists()){
                     String nombre,lvl,photo;
                     nombre = snapshot.child("name").getValue().toString();
-                    photo = snapshot.child("photo").getValue().toString();
+                    if (snapshot.child("photo").exists()) {
+                        photo = snapshot.child("photo").getValue().toString();
+                        Glide.with(Menu.this).load(photo).into(updImage);
+                    }
                     lvl = snapshot.child("lvl").getValue().toString();
                     switch (lvl){
                         case "1":
@@ -361,7 +364,6 @@ public class Menu extends AppCompatActivity {
                             break;
                     }
                     mnombre.setText(nombre);
-                    Glide.with(Menu.this).load(photo).into(imgUsu);
                 }
             }
 
