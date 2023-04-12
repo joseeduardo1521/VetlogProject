@@ -109,7 +109,7 @@ public class regDatosMasActivity extends AppCompatActivity {
         awesomeValidation.addValidation(this, R.id.edtNomM, "[a-zA-Z0-9\\s]+", R.string.err_campova);
         awesomeValidation.addValidation(this, R.id.edtColor, "[a-zA-Z0-9\\s]+", R.string.err_campova);
         awesomeValidation.addValidation(this, R.id.edtraza, "[a-zA-Z0-9\\s]+", R.string.err_campova);
-        awesomeValidation.addValidation(this, R.id.edtPeso, "[0-9\\s]+", R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.edtPeso, "^-?\\d+(?:\\.\\d+)?$", R.string.err_campova);
         adapter = new EspecieAdapter(this, DataEspecies.getEspecieList());
         sEspecie.setAdapter(adapter);
 
@@ -319,8 +319,6 @@ public class regDatosMasActivity extends AppCompatActivity {
         map.put("raze", raze);
         map.put("species", species);
         map.put("sex", sex);
-
-
 
         mDatabase.child("Mascotas").child(key2).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

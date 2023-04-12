@@ -12,7 +12,6 @@ public class mostrarRecetaList {
         this.Freq = Freq;
         this.Durante = Durante;
         this.Obser = Obser;
-
     }
 
     public String getIdM() {

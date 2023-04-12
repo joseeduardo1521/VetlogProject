@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vet.R;
 import com.example.vet.mostrarReceta;
+import com.example.vet.new_receta;
 import com.example.vet.regDatosMasActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -38,6 +39,7 @@ public class AdapterMosRecetas extends RecyclerView.Adapter<AdapterMosRecetas.Mo
     private List<mostrarRecetaList> recetaList;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private String llaveMas;
 
 
     @Override
@@ -45,35 +47,43 @@ public class AdapterMosRecetas extends RecyclerView.Adapter<AdapterMosRecetas.Mo
         return recetaList.size();
     }
 
-    public AdapterMosRecetas(Context mCtx, List<mostrarRecetaList> recetaList) {
-
+    public AdapterMosRecetas(Context mCtx, List<mostrarRecetaList> recetaList,String llaveMas) {
         this.mCtx=mCtx;
         this.recetaList = recetaList;
         this.mInflater = LayoutInflater.from(mCtx);
+        this.llaveMas = llaveMas;
 
     }
 
 
     public class MosMacotasViewHolder extends RecyclerView.ViewHolder {
-        TextView txtNombre, txtRaza,txtEdad,txtEspecie, txtDueño,txtGenero;
-        ImageView imgMasc;
+        TextView txtNombreMed;
+        TextView txtveterinario;
+        TextView txtDosis;
+        TextView txtFrecuencia;
+        TextView txtDuracion;
+        TextView txtObservaciones;
+        TextView txtFechaReceta;
         CardView cv;
-        Button btnreceta;
+        Button btnEdReceta, btnBorrarReceta;
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
         int position;
         LinearLayout layout_btn;
-        String llave,idRec;
+        String idRec;
 
         public MosMacotasViewHolder(View view) {
             super(view);
-            txtNombre = view.findViewById(R.id.nombreTextView);
-            txtRaza = view.findViewById(R.id.razaTextView);
-            txtEdad = view.findViewById(R.id.edadTextView);
-            txtEspecie = view.findViewById(R.id.especieTextView);
-            txtDueño = view.findViewById(R.id.correoDueño);
-            txtGenero = view.findViewById(R.id.generoTextView);
-            imgMasc = view.findViewById(R.id.imageViewM);
-            btnreceta = view.findViewById(R.id.btnRecetar);
+
+            txtNombreMed = view.findViewById(R.id.txtMedicamento);
+            txtveterinario = view.findViewById(R.id.txtveterinario);
+            txtFechaReceta = view.findViewById(R.id.txtFechaReceta);
+            txtDosis = view.findViewById(R.id.txtDosis);
+            txtFrecuencia = view.findViewById(R.id.txtFrecuencia);
+            txtDuracion = view.findViewById(R.id.txtDuracion);
+            txtObservaciones = view.findViewById(R.id.txtObservaciones);
+            btnEdReceta = view.findViewById(R.id.btnEdReceta);
+            btnBorrarReceta = view.findViewById(R.id.btnBorrarReceta);
+
             cv = view.findViewById(R.id.cardViewM);
             layout_btn = view.findViewById(R.id.layBotones);
             // Define click listener for the ViewHolder's View
@@ -81,26 +91,6 @@ public class AdapterMosRecetas extends RecyclerView.Adapter<AdapterMosRecetas.Mo
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mAuth = FirebaseAuth.getInstance();
-                    mDatabase = FirebaseDatabase.getInstance().getReference();
-                    String id= mAuth.getCurrentUser().getUid();
-                    mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if(snapshot.exists()){
-                                String lvl;
-                                lvl = snapshot.child("lvl").getValue().toString();
-                                if (lvl.equals("1")){
-                                    btnreceta.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                        }
-                    });
-
-
                     int vw =(layout_btn.getVisibility() ==  v.GONE)? v.VISIBLE: v.GONE;
                     TransitionManager.beginDelayedTransition(layout_btn, new AutoTransition());
                     layout_btn.setVisibility(vw);
@@ -108,30 +98,21 @@ public class AdapterMosRecetas extends RecyclerView.Adapter<AdapterMosRecetas.Mo
                 }
             });
 
-            view.findViewById(R.id.btnEdtMas).setOnClickListener(new View.OnClickListener() {
+            view.findViewById(R.id.btnEdReceta).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        Intent intent = new Intent(mCtx, regDatosMasActivity.class);
-                        intent.putExtra("llave2", llave);
+                        Intent intent = new Intent(mCtx, new_receta.class);
+                        intent.putExtra("idMas", llaveMas);
+                        intent.putExtra("llave2", idRec);
                         mCtx.startActivity(intent);
 
                 }
             });
 
-            view.findViewById(R.id.btnRecetar).setOnClickListener(new View.OnClickListener() {
+            view.findViewById(R.id.btnBorrarReceta).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(mCtx, mostrarReceta.class);
-                    intent.putExtra("llave2", llave);
-                    mCtx.startActivity(intent);
-
-                }
-            });
-
-            view.findViewById(R.id.btnBorrarM).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DatabaseReference registroRef = databaseRef.child("Mascotas").child(llave).child("Recetas").child(idRec);
+                    DatabaseReference registroRef = databaseRef.child("Mascotas").child(llaveMas).child("Recetas").child(idRec);
                     registroRef.removeValue();
                     recetaList.remove(position);
                     notifyItemRemoved(position);
@@ -155,13 +136,16 @@ public class AdapterMosRecetas extends RecyclerView.Adapter<AdapterMosRecetas.Mo
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MosMacotasViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
-        mostrarRecetaList mascota = recetaList.get(position);
-
-
-
+        mostrarRecetaList receta = recetaList.get(position);
+        viewHolder.idRec = receta.getIdM();
+        viewHolder.txtNombreMed.setText(receta.getMed());
+        viewHolder.txtDosis.setText(receta.getDose());
+        viewHolder.txtDuracion.setText(receta.getDurante());
+        viewHolder.txtveterinario.setText(receta.getIdVet());
+        viewHolder.txtFechaReceta.setText(receta.getDate());
+        viewHolder.txtFrecuencia.setText(receta.getFreq());
+        viewHolder.txtObservaciones.setText(receta.getObser());
         viewHolder.cv.setAnimation(AnimationUtils.loadAnimation(mCtx,R.anim.fade_trans));
-
-
     }
 
     // Return the size of your dataset (invoked by the layout manager)

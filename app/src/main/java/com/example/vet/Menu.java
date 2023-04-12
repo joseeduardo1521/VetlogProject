@@ -362,6 +362,9 @@ public class Menu extends AppCompatActivity {
                         case "2":
                             mRol.setText("Secretario");
                             break;
+                        case "3":
+                            mRol.setText("Dueño de mascota");
+                            break;
                     }
                     mnombre.setText(nombre);
                 }
