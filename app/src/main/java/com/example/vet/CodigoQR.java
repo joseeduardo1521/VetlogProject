@@ -48,6 +48,7 @@ public class CodigoQR extends AppCompatActivity {
     private MaterialButton scanBtn;
     private TextView result;
 
+
     private static final int CAMERA_REQUEST_CODE = 100;
     private static final int STORAGE_REQUEST_CODE = 101;
 

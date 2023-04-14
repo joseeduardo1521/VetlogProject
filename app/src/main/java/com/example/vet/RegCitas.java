@@ -26,7 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class RegCitas extends AppCompatActivity {
+public class
+RegCitas extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
