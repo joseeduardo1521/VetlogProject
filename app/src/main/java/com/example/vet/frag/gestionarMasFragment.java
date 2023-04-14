@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.example.vet.Menu;
 import com.example.vet.R;
 import com.example.vet.clases.AdapterMosMascotas;
 import com.example.vet.clases.mostrarMascota;
+import com.example.vet.mostrarReceta;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,6 +51,9 @@ public class gestionarMasFragment extends Fragment {
 
     private List<mostrarMascota> mascotaList;
     private RecyclerView recyclerView;
+    private FirebaseAuth mAuth;
+    private View btnQR;
+    private TextView txtMasReg;
     private DatabaseReference mDatabase;
     private EditText edtTextoCorreo;
     private static final int REQUEST_CODE_QR_SCAN = 101;
@@ -69,13 +75,16 @@ public class gestionarMasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gestionar_mas, container, false);
+        mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         edtTextoCorreo = view.findViewById(R.id.edtBusqueda);
         recyclerView = view.findViewById(R.id.recyvlerMostrarMas);
+        btnQR = view.findViewById(R.id.btnBuscarQR);
+        txtMasReg = view.findViewById(R.id.textViewMasReg);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mascotaList = new ArrayList<>();
-
+        verificarInicioDueno();
         edtTextoCorreo.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -118,14 +127,37 @@ public class gestionarMasFragment extends Fragment {
             }
         });
 
-        // Inflate the layout for this fragment
-        obtenerInfo();
+
         return view;
     }
 
     public void verificar(String llave){
         if (llave.equals(""))
             edtTextoCorreo.setError("No existe una cuenta con ese correo");
+    }
+
+    private void verificarInicioDueno(){
+       String userkey =  mAuth.getCurrentUser().getUid();
+        mDatabase.child("Usuario").child(userkey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String lvl;
+                    lvl = snapshot.child("lvl").getValue().toString();
+                    if (lvl.equals("3")){
+                       edtTextoCorreo.setVisibility(View.GONE);
+                       btnQR.setVisibility( View.GONE);
+                       txtMasReg.setText("Sus Mascotas registradas");
+                        buscarMascota(userkey, "key");
+                    }else {
+                        obtenerInfo();
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     private void iniciarEscanerQR() {
@@ -202,8 +234,6 @@ public class gestionarMasFragment extends Fragment {
         });
     }
 
-
-
     public interface OnCorreoDuenoListener {
         void onCorreoDuenoObtenido(String correoDueno);
     }
@@ -222,7 +252,6 @@ public class gestionarMasFragment extends Fragment {
             }
         });
     }
-
 
     private void obtenerInfo(){
         mascotaList.clear();

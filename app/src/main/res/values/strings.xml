@@ -23,4 +23,15 @@
     <string name="errEle">Elemento no encontrado</string>
     <string name="title_activity_ges_mascotas">gesMascotasActivity</string>
     <string name="ingrese_la_dosis_del_medicamento">Ingrese la dosis del medicamento</string>
+
+    <!-- String vacunas -->
+    <string name="add_campaign">Añadir Campaña</string>
+    <string name="new_campaign">Nueva Campaña</string>
+    <string name="campaign_name">Nombre de la Campaña</string>
+    <string name="species">Especie</string>
+    <string name="start_date">Fecha de inicio</string>
+    <string name="end_date">Fecha de finalización</string>
+    <string name="location">Ubicación</string>
+    <string name="notes">Notas</string>
+    <string name="save_campaign">Guardar Campaña</string>
 </resources>

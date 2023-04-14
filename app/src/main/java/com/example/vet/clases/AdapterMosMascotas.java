@@ -52,7 +52,6 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
     }
 
     public AdapterMosMascotas(Context mCtx, List<mostrarMascota> mascotaList) {
-
         this.mCtx=mCtx;
         this.mascotaList = mascotaList;
         this.mInflater = LayoutInflater.from(mCtx);
@@ -96,8 +95,18 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
                             if(snapshot.exists()){
                                 String lvl;
                                 lvl = snapshot.child("lvl").getValue().toString();
+                                if (lvl.equals("1")|| lvl.equals("2")){
+                                    int vw =(layout_btn.getVisibility() ==  v.GONE)? v.VISIBLE: v.GONE;
+                                    TransitionManager.beginDelayedTransition(layout_btn, new AutoTransition());
+                                    layout_btn.setVisibility(vw);
+                                }
                                 if (lvl.equals("1")){
                                     btnreceta.setVisibility(View.VISIBLE);
+                                }
+                                if (lvl.equals("3")){
+                                    Intent intent = new Intent(mCtx, mostrarReceta.class);
+                                    intent.putExtra("llave2", llave);
+                                    mCtx.startActivity(intent);
                                 }
                             }
                         }
@@ -105,12 +114,6 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
                         public void onCancelled(@NonNull DatabaseError error) {
                         }
                     });
-
-
-                    int vw =(layout_btn.getVisibility() ==  v.GONE)? v.VISIBLE: v.GONE;
-                    TransitionManager.beginDelayedTransition(layout_btn, new AutoTransition());
-                    layout_btn.setVisibility(vw);
-
                 }
             });
 

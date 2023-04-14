@@ -91,9 +91,26 @@ public class AdapterMosRecetas extends RecyclerView.Adapter<AdapterMosRecetas.Mo
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int vw =(layout_btn.getVisibility() ==  v.GONE)? v.VISIBLE: v.GONE;
-                    TransitionManager.beginDelayedTransition(layout_btn, new AutoTransition());
-                    layout_btn.setVisibility(vw);
+                    mAuth = FirebaseAuth.getInstance();
+                    mDatabase = FirebaseDatabase.getInstance().getReference();
+                    String id= mAuth.getCurrentUser().getUid();
+                    mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if(snapshot.exists()){
+                                String lvl;
+                                lvl = snapshot.child("lvl").getValue().toString();
+                                if (lvl.equals("1")|| lvl.equals("2")){
+                                    int vw =(layout_btn.getVisibility() ==  v.GONE)? v.VISIBLE: v.GONE;
+                                    TransitionManager.beginDelayedTransition(layout_btn, new AutoTransition());
+                                    layout_btn.setVisibility(vw);
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    });
 
                 }
             });
