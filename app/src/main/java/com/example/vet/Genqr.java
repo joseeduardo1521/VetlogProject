@@ -1,9 +1,11 @@
 package com.example.vet;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
@@ -16,14 +18,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Genqr extends AppCompatActivity {
     ImageView imgQr;
+    FirebaseAuth mAuth;
+    DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +42,10 @@ public class Genqr extends AppCompatActivity {
         EditText txtDatos = findViewById(R.id.txtDatos);
         Button btnGenera = findViewById(R.id.btnGenera);
         imgQr = findViewById(R.id.qrCode);
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         Button btnSave = findViewById(R.id.btnSave);
+        Button btnlist = findViewById(R.id.btnLista);
         btnGenera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -44,11 +58,20 @@ public class Genqr extends AppCompatActivity {
                 }
             }
         });
-
+        btnlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pu = new Intent(Genqr.this, VisualHabit.class);
+                startActivity(pu);
+            }
+        });
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveToGallery();
+                String hab;
+                hab = String.valueOf(txtDatos.getText());
+                registro(hab);
             }
         });
 
@@ -83,6 +106,23 @@ public class Genqr extends AppCompatActivity {
                 }
             }
         }
+    }
+    private void registro(String hab){
+
+        final Map<String, Object> map = new HashMap<>();
+        map.put("lugar", hab);
+
+        final String id = mAuth.getCurrentUser().getUid();
+        mDatabase.child("habitaculo").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task2) {
+                if(task2.isSuccessful()){
+                    Toast.makeText(Genqr.this, "Registrado", Toast.LENGTH_SHORT).show();
+                }
+                else Toast.makeText(Genqr.this, "Error al registrar datos", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 }
