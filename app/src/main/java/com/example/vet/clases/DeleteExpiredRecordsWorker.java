@@ -24,9 +24,9 @@ public class DeleteExpiredRecordsWorker extends Worker {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String currentDate = sdf.format(new Date());
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("Campains/");
+        DatabaseReference ref = database.getReference();
 
-        ref.orderByChild("findate").equalTo(currentDate).addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.child("Campains").orderByChild("findate").equalTo(currentDate).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot recordSnapshot : dataSnapshot.getChildren()) {
