@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardCamp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
@@ -35,6 +36,7 @@
             android:id="@+id/campaign_dates"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="4dp"
             android:text="Start Date - End Date"
             android:textColor="@android:color/darker_gray"
@@ -57,6 +59,7 @@
             android:text="Species"
             android:textColor="@android:color/darker_gray"
             android:textSize="16sp" />
+
         <RelativeLayout
             android:id="@+id/layBotones"
             android:layout_width="match_parent"
@@ -85,7 +88,7 @@
                 android:gravity="center">
 
                 <Button
-                    android:id="@+id/btnEdReceta"
+                    android:id="@+id/btnEdCamp"
                     android:drawableStart="@drawable/ic_baseline_edit_24"
                     android:drawablePadding="8dp"
                     android:layout_width="0dp"
@@ -100,7 +103,7 @@
                     app:autoSizeTextType="uniform"/>
 
                 <Button
-                    android:id="@+id/btnBorrarReceta"
+                    android:id="@+id/btnBorrarCamp"
                     android:drawableEnd="@drawable/ic_baseline_delete_forever_24"
                     android:drawablePadding="8dp"
                     android:layout_width="0dp"

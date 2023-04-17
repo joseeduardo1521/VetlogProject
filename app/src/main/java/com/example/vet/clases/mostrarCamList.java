@@ -22,7 +22,6 @@ public class mostrarCamList {
     }
 
     public String getInidate() {
-
         return inidate;
     }
 

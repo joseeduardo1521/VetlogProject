@@ -28,108 +28,92 @@
 
     </FrameLayout>
 
-    <LinearLayout
+    <ScrollView
         android:id="@+id/input_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="350dp"
+        app:layout_constraintTop_toBottomOf="@id/bckimg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/bg_input_container"
         android:orientation="vertical"
+        android:elevation="5dp"
         android:paddingStart="16dp"
         android:paddingTop="16dp"
         android:paddingEnd="16dp"
-        app:layout_constraintTop_toBottomOf="@id/bckimg"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        >
 
         <TextView
             android:id="@+id/title_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
             android:text="@string/add_campaign"
             android:textColor="@color/Azultxt"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/bckimg" />
+             />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/campaign_name_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/campaign_name">
-
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
+                android:hint="@string/campaign_name"
                 android:id="@+id/campaign_name_edit_text"
                 android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/Azultxt"
-                android:textColorHint="#546E7A"
+                android:textColorHint="@color/Azultxt"
                 android:textSize="16sp" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/species_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/species">
 
             <Spinner
                 android:id="@+id/species"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#30ffffff"
+                android:padding="20dp"
+                android:paddingStart="20dp"
+                android:spinnerMode="dropdown"
                 android:textColor="@color/Azultxt"
-                android:textColorHint="#546E7A"
-                android:textSize="16sp" />
+                android:textColorHint="@color/Azultxt"
+                tools:ignore="SpeakableTextPresentCheck"/>
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/location_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/location">
-
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
                 android:id="@+id/location_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/location"
                 android:textColor="@color/Azultxt"
-                android:textColorHint="#546E7A"
+                android:textColorHint="@color/Azultxt"
                 android:textSize="16sp" />
 
-        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/start_date_input_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/start_date">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <EditText
                     android:id="@+id/start_date_edit_text"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/start_date"
                     android:focusable="false"
                     android:textColor="@color/Azultxt"
-                    android:textColorHint="#546E7A"
-                    android:textSize="16sp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:textColorHint="@color/Azultxt"
+                    android:textSize="16sp"  />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -138,45 +122,37 @@
                 android:textColor="@color/Azultxt"
                 android:textSize="26sp" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/end_date_input_layout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/end_date">
 
-                <com.google.android.material.textfield.TextInputEditText
+
+                <EditText
                     android:id="@+id/end_date_edit_text"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/end_date"
                     android:focusable="false"
                     android:textColor="@color/Azultxt"
-                    android:textColorHint="#546E7A"
+                    android:textColorHint="@color/Azultxt"
                     android:textSize="16sp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+
 
         </LinearLayout>
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/notes_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/notes">
-
-            <com.google.android.material.textfield.TextInputEditText
+            <EditText
                 android:id="@+id/notes_edit_text"
+                android:hint="@string/notes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/Azultxt"
-                android:inputType="textMultiLine"
-                android:textColorHint="#546E7A"
+                android:textColorHint="@color/Azultxt"
                 android:textSize="16sp" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
 
+
+    </LinearLayout>
+</ScrollView>
     <Button
         android:id="@+id/btnNuevaCamp"
         android:layout_width="wrap_content"
@@ -187,7 +163,28 @@
         android:background="@drawable/btnredondo"
         android:gravity="center"
         android:padding="16dp"
+        android:visibility="gone"
         android:text="@string/save_campaign"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/input_container"
+        app:strokeColor="@color/azul_back"
+        app:strokeWidth="1dp" />
+
+    <Button
+        android:id="@+id/btnactualizar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:animation="@anim/pulse_animation"
+        android:background="@drawable/btnredondo"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="16dp"
+        android:text="Actualizar Campaña"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"

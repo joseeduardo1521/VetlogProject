@@ -14,6 +14,8 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@color/Azultxt"
         android:text="Name"
         android:layout_toRightOf="@+id/image"
         android:layout_centerVertical="true"

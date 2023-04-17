@@ -114,7 +114,6 @@ public class regDatosMasActivity extends AppCompatActivity {
         sEspecie.setAdapter(adapter);
 
         if(this.key != null){
-            Toast.makeText(this, key, Toast.LENGTH_SHORT).show();
             btnRegistratmas.setVisibility(View.VISIBLE);
         }
         if(this.key2 != null) {

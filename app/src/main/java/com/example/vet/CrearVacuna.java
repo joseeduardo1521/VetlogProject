@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -39,35 +40,51 @@ import java.util.Map;
 
 public class CrearVacuna extends AppCompatActivity {
 
-    Button btnNuevaCamp;
-
-    private TextInputEditText startDateEditText, endDateEditText,campaign_name_edit_text, location_edit_text, notes_edit_text;
+    private EditText startDateEditText, endDateEditText,campaign_name_edit_text, location_edit_text, notes_edit_text;
     private DatabaseReference mDatabase;
     private Spinner species;
     private String item;
+    private String keyCam="";
     private FirebaseAuth mAuth;
     private EspecieAdapter adapter;
     private Calendar startDateCalendar, endDateCalendar;
     private AwesomeValidation awesomeValidation;
+    private Button btnNuevaCamp,btnUpdCamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_vacuna);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey("llaveCam")) {
+            String keyCam = extras.getString("llaveCam");
+            this.keyCam = keyCam;
+        } else {
+            // Manejar el caso en que "llaveCam" no esté presente
+            // Por ejemplo, asignar un valor predeterminado a keyCam o mostrar un mensaje de error
+        }
         btnNuevaCamp = findViewById(R.id.btnNuevaCamp);
-
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.pulse_animation);
         btnNuevaCamp.startAnimation(animation);
-
+        btnUpdCamp = findViewById(R.id.btnactualizar);
+        btnUpdCamp.startAnimation(animation);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-
         startDateEditText = findViewById(R.id.start_date_edit_text);
         endDateEditText = findViewById(R.id.end_date_edit_text);
         campaign_name_edit_text = findViewById(R.id.campaign_name_edit_text);
         location_edit_text = findViewById(R.id.location_edit_text);
         species = findViewById(R.id.species);
         notes_edit_text = findViewById(R.id.notes_edit_text);
+
+        if(keyCam != "") {
+            btnNuevaCamp.setVisibility(View.GONE);
+            btnUpdCamp.setVisibility(View.VISIBLE);
+            obtenerDatosCamp(this.keyCam);
+        }else {
+            btnNuevaCamp.setVisibility(View.VISIBLE);
+            btnUpdCamp.setVisibility(View.GONE);
+        }
 
 
         // Inicializar los calendarios de fecha de inicio y fecha de fin
@@ -82,6 +99,7 @@ public class CrearVacuna extends AppCompatActivity {
         awesomeValidation.addValidation(this, R.id.location_edit_text, ".*", R.string.err_campova);
         adapter = new EspecieAdapter(this, DataEspecies.getEspecieList());
         species.setAdapter(adapter);
+
 
 
         // Establecer el Listener para la selección de fecha de inicio
@@ -200,7 +218,90 @@ public class CrearVacuna extends AppCompatActivity {
         });
 
 
+        btnUpdCamp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(awesomeValidation.validate()) {
+                    String nomCam = campaign_name_edit_text.getText().toString();
+                    String ubiCam = location_edit_text.getText().toString();
+                    String startCam = startDateEditText.getText().toString();
+                    String endCam = endDateEditText.getText().toString();
+                    String noteCam = notes_edit_text.getText().toString();
+
+                    switch ((int) species.getSelectedItemId()){
+                        case 0:
+                            item = "Canino";
+                            break;
+                        case 1:
+                            item = "Felino";
+                            break;
+                        case 2:
+                            item = "Ave";
+                            break;
+                        case 3:
+                            item = "Roedor";
+                            break;
+                        case 4:
+                            item = "Reptil";
+                            break;
+                    }
+                    String espe = String.valueOf(item);
+
+
+                    updCamp(nomCam, ubiCam,startCam,endCam,noteCam,espe);
+                }
+            }
+        });
+
     }
+
+    private void obtenerDatosCamp(String claveCa) {
+        mDatabase.child("Campains").child(claveCa).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    String nomCa = snapshot.child("namecam").getValue().toString();
+                    String iniCa = snapshot.child("iniciodate").getValue().toString();
+                    String finCa =snapshot.child("findate").getValue().toString();
+                    String esp =snapshot.child("speciescam").getValue().toString();
+                    String ubi =snapshot.child("ubicam").getValue().toString();
+                    String note =snapshot.child("notecam").getValue().toString();
+
+                    switch (esp){
+                        case "Canino":
+                            species.setSelection(0);
+                            break;
+                        case "Felino":
+                            species.setSelection(1);
+                            break;
+                        case "Ave":
+                            species.setSelection(2);
+                            break;
+                        case "Roedor":
+                            species.setSelection(3);
+                            break;
+                        case "Reptil":
+                            species.setSelection(4);
+                            break;
+                    }
+
+                    endDateEditText.setText(finCa);
+                    startDateEditText.setText(iniCa);
+                    campaign_name_edit_text.setText(nomCa);
+                    location_edit_text.setText(ubi);
+                    notes_edit_text.setText(note);
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+
 
 
     private void guardarCamp(String nomCam,String ubiCam,String startCam,String endCam,String noteCam,String espe){
@@ -222,6 +323,30 @@ public class CrearVacuna extends AppCompatActivity {
                     salir();
                 }
                 else Toast.makeText(CrearVacuna.this, "Error al registrar datos de la campaña", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    private void updCamp(String nomCam,String ubiCam,String startCam,String endCam,String noteCam,String espe){
+
+        final Map<String, Object> map = new HashMap<>();
+        map.put("namecam", nomCam);
+        map.put("iniciodate", startCam);
+        map.put("findate", endCam);
+        map.put("ubicam", ubiCam);
+        map.put("notecam", noteCam);
+        map.put("speciescam", espe);
+
+        mDatabase.child("Campains").child(keyCam).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task2) {
+                if(task2.isSuccessful()){
+                    Toast.makeText(CrearVacuna.this, "Campaña Actualizada correctamente", Toast.LENGTH_SHORT).show();
+                    salir();
+                }
+                else Toast.makeText(CrearVacuna.this, "Error al Actualizar datos de la campaña", Toast.LENGTH_SHORT).show();
             }
         });
 

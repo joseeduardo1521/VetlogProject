@@ -33,5 +33,8 @@
     <string name="end_date">Fecha de finalización</string>
     <string name="location">Ubicación</string>
     <string name="notes">Notas</string>
+
     <string name="save_campaign">Guardar Campaña</string>
+
+
 </resources>

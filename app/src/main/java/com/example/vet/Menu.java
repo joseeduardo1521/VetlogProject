@@ -117,7 +117,7 @@ public class Menu extends AppCompatActivity {
         cardVacu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent vacu = new Intent(Menu.this, CrearVacuna.class);
+                Intent vacu = new Intent(Menu.this, mostrarCamp.class);
                 startActivity(vacu);
             }
         });
