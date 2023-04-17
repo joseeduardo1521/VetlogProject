@@ -336,7 +336,7 @@ public class regDatosMasActivity extends AppCompatActivity {
 
     private void registro(String name,String date, String weight, String color, String raze, String species,String sex){
         idd = key+year+species+name.replace(" ","");
-        String token= key+year+species+name;
+        String token= mDatabase.push().getKey();
         final Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("birth", date);
