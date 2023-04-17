@@ -90,11 +90,7 @@ RegCitas extends AppCompatActivity {
         final Map<String, Object> map = new HashMap<>();
         map.put("date", fecha);
         map.put("time",hora);
-
-
-
-
-        final String id = mAuth.getCurrentUser().getUid();
+        String id = mDatabase.push().getKey();
         mDatabase.child("Citas").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task2) {

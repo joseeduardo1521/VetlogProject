@@ -112,7 +112,7 @@ public class Genqr extends AppCompatActivity {
         final Map<String, Object> map = new HashMap<>();
         map.put("lugar", hab);
 
-        final String id = mAuth.getCurrentUser().getUid();
+        String id = mDatabase.push().getKey();
         mDatabase.child("habitaculo").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task2) {
