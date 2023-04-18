@@ -23,8 +23,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -50,6 +53,7 @@ public class mostrarCamp extends AppCompatActivity {
         title = findViewById(R.id.txttitle);
         campList = new ArrayList<>();
         verificarInicioDueno();
+        deleteExpiredCampaigns();
         obtenerInfoRecetas();
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -115,12 +119,54 @@ public class mostrarCamp extends AppCompatActivity {
 
     }
 
+    private void deleteExpiredCampaigns() {
+        mDatabase.child("Campains").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date currentDate = new Date();
+
+                boolean hasDeletedCampaign = false;
+
+                for (DataSnapshot campaignSnapshot : dataSnapshot.getChildren()) {
+                    String endDateString = campaignSnapshot.child("findate").getValue().toString();
+                    try {
+                        Date endDate = dateFormat.parse(endDateString);
+                        if (endDate.before(currentDate)) {
+                            mDatabase.child("Campains").child(campaignSnapshot.getKey()).removeValue();
+                            hasDeletedCampaign = true;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (hasDeletedCampaign) {
+                    updateRecyclerView();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void updateRecyclerView() {
+        campList.clear();
+        obtenerInfoRecetas();
+    }
+
+
+
     private void verificarCamp(){
         if (campList.isEmpty()) {
             title.setVisibility(View.VISIBLE);
+            title.setText("No hay campañas activas");
             recyclerView.setVisibility(View.GONE);
         } else {
-            title.setVisibility(View.GONE);
+            title.setVisibility(View.VISIBLE);
+            title.setText("Campañas activas");
             recyclerView.setVisibility(View.VISIBLE);
         }
     }
