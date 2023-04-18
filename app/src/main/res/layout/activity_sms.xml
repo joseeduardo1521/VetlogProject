@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Sms"
+    android:orientation="vertical">
+
+    <EditText
+        android:paddingBottom="18dp"
+        android:id="@+id/txtNombre"
+        android:layout_gravity="center"
+        android:layout_width="250dp"
+        android:hint="Mensaje a enviar"
+        android:layout_height="wrap_content"></EditText>
+    <EditText
+        android:id="@+id/txtSms"
+        android:padding="8dp"
+        android:hint="numero"
+        android:layout_gravity="center"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"></EditText>
+    <Button
+        android:id="@+id/btnSend"
+        android:layout_width="250dp"
+        android:layout_gravity="center"
+        android:background="@drawable/tatanka_button"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        android:text="Enviar"/>
+
+
+</LinearLayout>
