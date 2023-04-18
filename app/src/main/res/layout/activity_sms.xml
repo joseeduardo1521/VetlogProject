@@ -12,10 +12,12 @@
         android:id="@+id/txtNombre"
         android:layout_gravity="center"
         android:layout_width="250dp"
+        android:hint="Mensaje a enviar"
         android:layout_height="wrap_content"></EditText>
     <EditText
         android:id="@+id/txtSms"
         android:padding="8dp"
+        android:hint="numero"
         android:layout_gravity="center"
         android:layout_width="250dp"
         android:layout_height="wrap_content"></EditText>
