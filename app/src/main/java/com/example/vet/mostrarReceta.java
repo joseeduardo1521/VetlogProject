@@ -3,7 +3,9 @@ package com.example.vet;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,10 +46,12 @@ public class mostrarReceta extends AppCompatActivity {
         this.key = key;
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        recyclerView = findViewById(R.id.recycler_view_rec);
         tv_empty = findViewById(R.id.tv_empty);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView = findViewById(R.id.recycler_view_rec);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        // Añade SnapHelper para centrar el elemento
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(recyclerView);
         btnnvRec = findViewById(R.id.btn_nueva_receta);
         recetaList = new ArrayList<>();
         verificarInicioDueno();

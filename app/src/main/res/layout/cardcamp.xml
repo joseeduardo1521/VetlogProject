@@ -90,6 +90,7 @@
                 <Button
                     android:id="@+id/btnEdCamp"
                     android:drawableStart="@drawable/ic_baseline_edit_24"
+                    android:visibility="gone"
                     android:drawablePadding="8dp"
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -106,6 +107,7 @@
                     android:id="@+id/btnBorrarCamp"
                     android:drawableEnd="@drawable/ic_baseline_delete_forever_24"
                     android:drawablePadding="8dp"
+                    android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_gravity="center"

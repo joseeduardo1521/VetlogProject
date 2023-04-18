@@ -36,7 +36,6 @@ public class uregisterMailFragment extends Fragment {
     private Spinner comboRoles;
     private String item;
     AwesomeValidation awesomeValidation;
-    private ImageView btnRegresar;
 
    private Button btnregisDatos;
     public uregisterMailFragment() {
@@ -70,7 +69,6 @@ public class uregisterMailFragment extends Fragment {
         TxtPass = (TextInputEditText) view.findViewById(R.id.txtPassR);
         TxtPass2 = (TextInputEditText) view.findViewById(R.id.txtPass2R);
         TxtPass2 = (TextInputEditText) view.findViewById(R.id.txtPass2R);
-        btnRegresar = (ImageView) view.findViewById(R.id.btnRegresar);
         awesomeValidation = new AwesomeValidation(BASIC);
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
         awesomeValidation.addValidation(TxtUsuario, Patterns.EMAIL_ADDRESS, "Introduzca un correo valido");
@@ -93,15 +91,6 @@ public class uregisterMailFragment extends Fragment {
             }
         });
 
-
-        btnRegresar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent iniciar = new Intent(getActivity(), Menu.class);
-                startActivity(iniciar);
-                getActivity().finish();
-            }
-        });
 
         btnregisDatos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,22 +120,6 @@ public class uregisterMailFragment extends Fragment {
         });
         // Inflate the layout for this fragment
         return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        setuponBack();
-        super.onViewCreated(view, savedInstanceState);
-    }
-    private void setuponBack(){
-        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                Intent iniciar = new Intent(getActivity(), Menu.class);
-                startActivity(iniciar);
-                getActivity().finish();
-            }
-        });
     }
 
     public void cambiarFragment(String email,String password,String nivels){

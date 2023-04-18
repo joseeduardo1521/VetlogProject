@@ -24,6 +24,7 @@ import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.example.vet.Menu;
 import com.example.vet.R;
+import com.example.vet.RegisUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -130,30 +131,6 @@ public class uregisterFragment extends Fragment {
         return view;
 
 
-    }
-
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        setuponBack();
-        super.onViewCreated(view, savedInstanceState);
-    }
-    private void setuponBack(){
-        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                FragmentManager manager = getParentFragmentManager();
-                FragmentTransaction ft = manager.beginTransaction();
-                Fragment bottomFragment = manager.findFragmentById(R.id.fragmentMP);
-
-                ft.detach(bottomFragment);
-                ft.attach(bottomFragment);
-                ft.show(bottomFragment);
-                Fragment bottomFragment1 = manager.findFragmentById(R.id.fragmentDato);
-                ft.hide(bottomFragment1);
-                ft.commit();
-            }
-        });
     }
 
     private void registro(String name,String email, String address, String phone, String nivel){

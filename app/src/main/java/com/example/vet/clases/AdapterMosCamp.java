@@ -84,6 +84,11 @@ public class AdapterMosCamp extends RecyclerView.Adapter<AdapterMosCamp.MosMacot
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    int vw =(layout_btn.getVisibility() ==  v.GONE)? v.VISIBLE: v.GONE;
+                    TransitionManager.beginDelayedTransition(layout_btn, new AutoTransition());
+                    layout_btn.setVisibility(vw);
+
                     mAuth = FirebaseAuth.getInstance();
                     mDatabase = FirebaseDatabase.getInstance().getReference();
                     String id= mAuth.getCurrentUser().getUid();
@@ -94,9 +99,8 @@ public class AdapterMosCamp extends RecyclerView.Adapter<AdapterMosCamp.MosMacot
                                 String lvl;
                                 lvl = snapshot.child("lvl").getValue().toString();
                                 if (lvl.equals("1")|| lvl.equals("2")){
-                                    int vw =(layout_btn.getVisibility() ==  v.GONE)? v.VISIBLE: v.GONE;
-                                    TransitionManager.beginDelayedTransition(layout_btn, new AutoTransition());
-                                    layout_btn.setVisibility(vw);
+                                    btnBorrarCamp.setVisibility(View.VISIBLE);
+                                    btnEdCamp.setVisibility(View.VISIBLE);
                                 }
                             }
                         }
