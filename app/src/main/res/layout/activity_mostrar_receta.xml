@@ -7,6 +7,7 @@
 
     <TextView
         android:id="@+id/tv_empty"
+        android:layout_below="@+id/layotuInfoMas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -47,10 +48,10 @@
 
         <TextView
             android:id="@+id/tv_pet_name_label"
-            android:layout_width="wrap_content"
+            android:layout_width="86dp"
             android:layout_height="wrap_content"
             android:text="Nombre:"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -60,7 +61,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Duke"
-            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_pet_name_label"
@@ -68,10 +70,10 @@
 
         <TextView
             android:id="@+id/tv_pet_species_label"
-            android:layout_width="wrap_content"
+            android:layout_width="86dp"
             android:layout_height="wrap_content"
             android:text="Especie:"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_pet_name_label" />
@@ -81,7 +83,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Reptil"
-            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_pet_species_label"
@@ -89,10 +92,10 @@
 
         <TextView
             android:id="@+id/tv_pet_sex_label"
-            android:layout_width="wrap_content"
+            android:layout_width="86dp"
             android:layout_height="wrap_content"
             android:text="Sexo:"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_pet_species_label" />
@@ -102,7 +105,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Hembra"
-            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_pet_sex_label"
@@ -110,10 +114,10 @@
 
         <TextView
             android:id="@+id/tv_pet_birth_label"
-            android:layout_width="wrap_content"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:text="Nacimiento:"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_pet_sex_label" />
@@ -123,7 +127,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="SEP 11 2022"
-            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_pet_birth_label"
@@ -131,10 +136,10 @@
 
         <TextView
             android:id="@+id/tv_pet_color_label"
-            android:layout_width="wrap_content"
+            android:layout_width="86dp"
             android:layout_height="wrap_content"
             android:text="Color:"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_pet_birth_label" />
@@ -144,7 +149,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Verde"
-            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_pet_color_label"
@@ -152,10 +158,10 @@
 
         <TextView
             android:id="@+id/tv_pet_raze_label"
-            android:layout_width="wrap_content"
+            android:layout_width="86dp"
             android:layout_height="wrap_content"
             android:text="Raza:"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_pet_color_label" />
@@ -165,7 +171,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Duende"
-            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_pet_raze_label"
@@ -173,10 +180,10 @@
 
         <TextView
             android:id="@+id/tv_pet_weight_label"
-            android:layout_width="wrap_content"
+            android:layout_width="86dp"
             android:layout_height="wrap_content"
-            android:text="Peso:"
-            android:textColor="#FFFFFF"
+            android:text="Peso (Kg):"
+            android:textColor="@color/Azultxt"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_pet_raze_label" />
@@ -186,22 +193,25 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="8.3"
-                android:textColor="#FFFFFF"
+                android:gravity="center"
+                android:textColor="@color/Azultxt"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_pet_weight_label"
                 app:layout_constraintTop_toBottomOf="@+id/tv_pet_raze" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/img_pet_photo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
+                android:background="@drawable/cicle"
                 android:layout_marginTop="16dp"
                 android:scaleType="centerCrop"
+                android:src="@drawable/perro"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_pet_weight_label"
-                tools:srcCompat="@tools:sample/avatars" />
+               />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

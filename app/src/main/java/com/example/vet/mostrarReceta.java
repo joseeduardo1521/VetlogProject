@@ -12,7 +12,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.vet.clases.AdapterMosMascotas;
 import com.example.vet.clases.AdapterMosRecetas;
 import com.example.vet.clases.mostrarMascota;
@@ -28,11 +30,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class mostrarReceta extends AppCompatActivity {
 
     private String key="";
     private Button btnnvRec;
     private List<mostrarRecetaList> recetaList;
+    private TextView tv_pet_name,tv_pet_species, tv_pet_sex, tv_pet_birth, tv_pet_color, tv_pet_raze, tv_pet_weight;
+    private CircleImageView img_pet_photo;
     private RecyclerView recyclerView;
     private TextView tv_empty;
     private FirebaseAuth mAuth;
@@ -46,7 +52,16 @@ public class mostrarReceta extends AppCompatActivity {
         this.key = key;
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        img_pet_photo = findViewById(R.id.img_pet_photo);
         tv_empty = findViewById(R.id.tv_empty);
+        tv_pet_name = findViewById(R.id.tv_pet_name);
+        tv_pet_species = findViewById(R.id.tv_pet_species);
+        tv_pet_sex = findViewById(R.id.tv_pet_sex);
+        tv_pet_birth = findViewById(R.id.tv_pet_birth);
+        tv_pet_birth = findViewById(R.id.tv_pet_color);
+        tv_pet_color = findViewById(R.id.tv_pet_color);
+        tv_pet_raze = findViewById(R.id.tv_pet_raze);
+        tv_pet_weight = findViewById(R.id.tv_pet_weight);
         recyclerView = findViewById(R.id.recycler_view_rec);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         // Añade SnapHelper para centrar el elemento
@@ -56,6 +71,7 @@ public class mostrarReceta extends AppCompatActivity {
         recetaList = new ArrayList<>();
         verificarInicioDueno();
         obtenerInfoRecetas();
+        buscarMascota(key);
         btnnvRec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +102,55 @@ public class mostrarReceta extends AppCompatActivity {
 
 
     }
+
+    private void buscarMascota(String clave) {
+        mDatabase.child("Mascotas").child(clave).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot ds) {
+                if(ds.exists()){
+                    String name = ds.child("name").getValue().toString();
+                    String img;
+                    if (ds.child("photo").exists()){
+                        if(ds.child("photo").getValue().toString().equals(null))
+                            img = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
+                        else
+                            img = ds.child("photo").getValue().toString();
+                    }else {
+                        img = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
+                    }
+                    String edad =ds.child("birth").getValue().toString();
+                    String genero =ds.child("sex").getValue().toString();
+                    String raza =ds.child("raze").getValue().toString();
+                    String esp =ds.child("species").getValue().toString();
+                    String color =ds.child("color").getValue().toString();
+                    String weight =ds.child("weight").getValue().toString();
+
+
+                    Glide.with(mostrarReceta.this)
+                            .load(img)
+                            .into(img_pet_photo);
+                    tv_pet_name.setText(name);
+                    tv_pet_species.setText(esp);
+                    tv_pet_sex.setText(genero);
+                    tv_pet_birth.setText(edad);
+                    tv_pet_color.setText(color);
+                    tv_pet_raze.setText(raza);
+                    tv_pet_weight.setText(weight);
+
+
+
+                } else {
+                    Toast.makeText(mostrarReceta.this, "No se encontró ninguna mascota con el código QR proporcionado", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
 
     private void obtenerInfoRecetas(){
         recetaList.clear();
@@ -124,6 +189,7 @@ public class mostrarReceta extends AppCompatActivity {
         });
 
     }
+
 
     private void verificarRecetas(){
         if (recetaList.isEmpty()) {
