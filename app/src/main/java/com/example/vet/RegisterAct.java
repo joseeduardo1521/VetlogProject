@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -21,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -32,6 +34,7 @@ public class RegisterAct extends AppCompatActivity {
     private TextInputEditText TxtPass, TxtPass2;
     private EditText TxtTel, TxtDir, TxtNom;
     private Button btncrespo;
+    private ProgressDialog progressDialog;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private AwesomeValidation awesomeValidation;
@@ -51,6 +54,9 @@ public class RegisterAct extends AppCompatActivity {
         TxtTel = (EditText) findViewById(R.id.edtTelU);
         TxtDir = (EditText) findViewById(R.id.edtDirU);
         btncrespo = (Button) findViewById(R.id.btncrespoU);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Cargando datos...");
+        progressDialog.setMessage("Por favor, espere.");
         awesomeValidation = new AwesomeValidation(BASIC);
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
         awesomeValidation.addValidation(this, R.id.edtDirU, "[a-zA-Z0-9\\s]+", R.string.err_dir);
@@ -66,6 +72,7 @@ public class RegisterAct extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (awesomeValidation.validate()) {
+                    progressDialog.show();
                     String email, password, password2,address,phone,name,photo;
                     email = String.valueOf(TxtUsuario.getText());
                     password = String.valueOf(TxtPass.getText());
@@ -82,9 +89,22 @@ public class RegisterAct extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
-                                            registro(name,email,address,phone,photo);
-                                            Toast.makeText(RegisterAct.this, "Registrado con exito",Toast.LENGTH_SHORT).show();
-                                            volverLogin();
+                                            progressDialog.setTitle("Cuenta casi completa verifique su correo electronico");
+
+                                            mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            if (task.isSuccessful()) {
+                                                                registro(name,email,address,phone,photo);
+                                                                progressDialog.dismiss();
+                                                                volverLogin();
+                                                            } else {
+                                                                Toast.makeText(RegisterAct.this, "Error al verificar el correo",Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    });
+
+
                                         } else {
                                             // If sign in fails, display a message to the user.
 
@@ -125,7 +145,7 @@ public class RegisterAct extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task2) {
                 if(task2.isSuccessful()){
-                    Toast.makeText(RegisterAct.this, "Registrado", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterAct.this, "Registro completado con exito",Toast.LENGTH_SHORT).show();
                 }
                 else Toast.makeText(RegisterAct.this, "Error al registrar datos", Toast.LENGTH_SHORT).show();
             }

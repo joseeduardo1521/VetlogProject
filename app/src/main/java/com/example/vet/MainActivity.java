@@ -2,6 +2,7 @@ package com.example.vet;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
@@ -26,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -102,13 +105,42 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    if(mAuth.getCurrentUser().isEmailVerified())
                     verificar(mail);
+                    else
+                        verCuenta();
                 }else{
                     String error = ((FirebaseAuthException) task.getException()).getErrorCode();
                     errotToast(error);
                 }
             }
         });
+    }
+
+    private void verCuenta(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Verificación de correo electrónico");
+        builder.setMessage("Su cuenta aún no ha sido verificada. ¿Desea reenviar el correo de verificación?");
+        builder.setPositiveButton("Reenviar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mAuth.getCurrentUser().sendEmailVerification()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getApplicationContext(), "Correo de verificación enviado", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Error al enviar el correo de verificación", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+        });
+        builder.setNegativeButton("Cancelar", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void  guardarEstadoSw(){

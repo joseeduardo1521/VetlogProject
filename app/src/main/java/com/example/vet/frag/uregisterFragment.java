@@ -2,6 +2,7 @@ package com.example.vet.frag;
 
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -25,6 +26,7 @@ import com.basgeekball.awesomevalidation.utility.RegexTemplate;
 import com.example.vet.Menu;
 import com.example.vet.R;
 import com.example.vet.RegisUser;
+import com.example.vet.RegisterAct;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -42,6 +44,7 @@ public class uregisterFragment extends Fragment {
     private Button btnregistrar;
     private EditText edtTel, edtDir, edtNom;
    private FirebaseAuth mAuth,mAuthM;
+   private ProgressDialog progressDialog;
     private DatabaseReference mDatabase;
     String  arr;
     AwesomeValidation awesomeValidation;
@@ -78,6 +81,10 @@ public class uregisterFragment extends Fragment {
         edtDir = view.findViewById(R.id.edtDir1);
         mAuth = FirebaseAuth.getInstance();
 
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Cargando datos...");
+        progressDialog.setMessage("Por favor, espere.");
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         arr = mAuthM.getInstance().getCurrentUser().getIdToken(true).toString();
 
@@ -101,20 +108,34 @@ public class uregisterFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (awesomeValidation.validate()) {
-                   String nivels ,email, password,address,phone,name;
+                    progressDialog.show();
+                   String nivels ,email, password,address,phone,name,photo;
                     email = mail;
                     password = pass;
                     address = String.valueOf(edtDir.getText());
                     name = String.valueOf(edtNom.getText());
                     phone = String.valueOf(edtTel.getText());
                     nivels = lvl;
+                    photo = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
+
                     mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if (task.isSuccessful()) {
-                                        registro(name,email,address,phone,nivels);
-                                        Toast.makeText(getActivity(), "Registrado con exito",Toast.LENGTH_SHORT).show();
-                                        volverMenu();
+                                        progressDialog.setTitle("Cuenta casi completa verifique su correo electronico");
+
+                                        mAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    registro(name,email,address,phone,nivels,photo);
+                                                    progressDialog.dismiss();
+                                                    volverMenu();
+                                                } else {
+                                                    Toast.makeText(getActivity(), "Error al verificar el correo",Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
                                     } else {
                                         // If sign in fails, display a message to the user.
                                         Toast.makeText(getActivity(), "Ya existe una cuenta con ese correo",
@@ -133,13 +154,14 @@ public class uregisterFragment extends Fragment {
 
     }
 
-    private void registro(String name,String email, String address, String phone, String nivel){
+    private void registro(String name,String email, String address, String phone, String nivel,String photo){
         final Map<String, Object> map = new HashMap<>();
         map.put("name", name);
         map.put("email",email);
         map.put("address",address);
         map.put("phone",phone);
         map.put("lvl",nivel);
+        map.put("photo",photo);
 
         String id = mAuth.getCurrentUser().getUid();
         mDatabase.child("Usuario").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {

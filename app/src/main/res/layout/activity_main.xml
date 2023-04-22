@@ -18,7 +18,8 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="22dp"
         android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/design_default_color_secondary"
+        android:background="@drawable/btnredondo"
+        android:textColor="@color/white"
         android:text="REGISTRATE" />
 
     <TextView
@@ -123,7 +124,8 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:backgroundTint="@color/design_default_color_secondary"
+        android:background="@drawable/btnredondo"
+        android:textColor="@color/white"
         android:text="LOGIN" />
 
     <Switch

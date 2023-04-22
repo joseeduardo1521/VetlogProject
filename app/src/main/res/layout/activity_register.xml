@@ -270,9 +270,11 @@
             <Button
                 android:id="@+id/btncrespoU"
                 android:layout_width="228dp"
-                android:layout_height="79dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:textSize="20sp"
+                android:background="@drawable/btnredondo"
                 android:backgroundTint="@color/design_default_color_secondary"
                 android:text="Registrar"
                 android:textColor="@color/white"

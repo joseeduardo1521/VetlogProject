@@ -216,10 +216,17 @@ public class Menu extends AppCompatActivity {
             btnHabilitar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(modUsupopup_passlay.getVisibility() == View.GONE){
                     modUsupopup_pass.setEnabled(true);
                     modUsupopup_confpass.setEnabled(true);
                     modUsupopup_passlay.setVisibility(View.VISIBLE);
                     modUsupopup_confpasslay.setVisibility(View.VISIBLE);
+                    }else {
+                        modUsupopup_pass.setEnabled(false);
+                        modUsupopup_confpass.setEnabled(false);
+                        modUsupopup_passlay.setVisibility(View.GONE);
+                        modUsupopup_confpasslay.setVisibility(View.GONE);
+                    }
                 }
             });
 
