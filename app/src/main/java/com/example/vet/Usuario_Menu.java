@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.sax.StartElementListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,7 +73,39 @@ public class Usuario_Menu extends AppCompatActivity {
         cardVacu = (View) findViewById(R.id.D6);
         imgUsu =  findViewById(R.id.imgUsuario);
         getUserInfo();
+
+        cardCerSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cerrarSesion();
+            }
+        });
+
+        cardCitas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent citas = new Intent(Usuario_Menu.this, RegCitas.class);
+                startActivity(citas);
+            }
+        });
+        cardVacu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent vacu = new Intent(Usuario_Menu.this,mostrarCamp.class);
+                startActivity(vacu);
+            }
+        });
+
+        cardGesM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gesMascotas = new Intent(Usuario_Menu.this,gesMacotasActivity.class);
+                startActivity(gesMascotas);
+            }
+        });
+
     }
+
 
 
 
