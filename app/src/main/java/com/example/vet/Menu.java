@@ -109,7 +109,7 @@ public class Menu extends AppCompatActivity {
         cardCitas.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent Citas = new Intent(Menu.this, RegCitas.class);
+                Intent Citas = new Intent(Menu.this, VisualCitas.class);
                 startActivity(Citas);
             }
         });
