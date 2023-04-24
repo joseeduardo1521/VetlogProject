@@ -46,7 +46,7 @@ public class VisualCitas extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 personaSelected = (Cit) parent.getItemAtPosition(position);
-                nombre.setText(personaSelected.getUid());
+                nombre.setText(personaSelected.getName());
                 fecha.setText(personaSelected.getDate());
                 hora.setText(personaSelected.getTime());
             }

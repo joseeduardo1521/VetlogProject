@@ -14,11 +14,15 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,6 +37,7 @@ RegCitas extends AppCompatActivity {
     private TimePickerDialog timePickerDialog;
     private Button dateButton;
     private Button timeButton,grabacita;
+    private String mnombre;
     //private Button grabacita;
     FirebaseAuth mAuth;
     DatabaseReference mDatabase;
@@ -50,7 +55,7 @@ RegCitas extends AppCompatActivity {
         grabacita = findViewById(R.id.ecita);
         dateButton.setText(getTodaysDate());
         timeButton = findViewById(R.id.TimePickerButton);
-
+        getUserInfo();
         timeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,17 +85,39 @@ RegCitas extends AppCompatActivity {
                 String fecha,hora;
                 fecha = String.valueOf(textoss.getText());
                 hora = String.valueOf(hor.getText());
-                registro(fecha,hora);
+                registro(fecha,hora,mnombre);
             }
         });
 
     }
-    private void registro(String fecha,String hora){
+
+    private void getUserInfo(){
+
+        String id= mAuth.getCurrentUser().getUid();
+        mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String nombre,lvl,photo;
+                    nombre = snapshot.child("name").getValue().toString();
+                    mnombre= nombre;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void registro(String fecha,String hora, String mnombre){
 
         final Map<String, Object> map = new HashMap<>();
         map.put("date", fecha);
         map.put("time",hora);
+        map.put("name",mnombre);
         String id = mDatabase.push().getKey();
+        String idu= mAuth.getCurrentUser().getUid();
         mDatabase.child("Citas").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task2) {
