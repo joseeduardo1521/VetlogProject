@@ -89,8 +89,8 @@ public class uregisterFragment extends Fragment {
         arr = mAuthM.getInstance().getCurrentUser().getIdToken(true).toString();
 
         awesomeValidation = new AwesomeValidation(BASIC);
-        awesomeValidation.addValidation( edtDir, "[a-zA-Z0-9\\s]+", "Ingrese una direccion");
-        awesomeValidation.addValidation( edtNom, "[a-zA-Z\\s]+", "Ingrese su nombre completo");
+        awesomeValidation.addValidation( edtDir, "[\\s\\S]*", "Ingrese una direccion");
+        awesomeValidation.addValidation( edtNom, "[\\s\\S]*", "Ingrese su nombre completo");
         awesomeValidation.addValidation( edtTel, RegexTemplate.TELEPHONE, "Ingrese un numero de telefono");
 
 

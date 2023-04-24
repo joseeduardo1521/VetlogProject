@@ -59,8 +59,8 @@ public class RegisterAct extends AppCompatActivity {
         progressDialog.setMessage("Por favor, espere.");
         awesomeValidation = new AwesomeValidation(BASIC);
         String regexPassword = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}";
-        awesomeValidation.addValidation(this, R.id.edtDirU, "[a-zA-Z0-9\\s]+", R.string.err_dir);
-        awesomeValidation.addValidation(this, R.id.edtNomU, "[a-zA-Z\\s]+", R.string.err_nom);
+        awesomeValidation.addValidation(this, R.id.edtDirU, "[\\s\\S]*", R.string.err_dir);
+        awesomeValidation.addValidation(this, R.id.edtNomU, "[\\s\\S]*", R.string.err_nom);
         awesomeValidation.addValidation(this, R.id.txtCorreo, Patterns.EMAIL_ADDRESS, R.string.err_email);
         awesomeValidation.addValidation(this, R.id.txtPassU, regexPassword, R.string.err_pass);
         awesomeValidation.addValidation(this, R.id.edtTelU, RegexTemplate.TELEPHONE, R.string.err_tel);

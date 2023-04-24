@@ -106,9 +106,9 @@ public class regDatosMasActivity extends AppCompatActivity {
         data = new DataEspecies();
 
         awesomeValidation = new AwesomeValidation(BASIC);
-        awesomeValidation.addValidation(this, R.id.edtNomM, "[a-zA-Z0-9\\s]+", R.string.err_campova);
-        awesomeValidation.addValidation(this, R.id.edtColor, "[a-zA-Z0-9\\s]+", R.string.err_campova);
-        awesomeValidation.addValidation(this, R.id.edtraza, "[a-zA-Z0-9\\s]+", R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.edtNomM, "[\\s\\S]*", R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.edtColor, "[\\s\\S]*", R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.edtraza, "[\\s\\S]*", R.string.err_campova);
         awesomeValidation.addValidation(this, R.id.edtPeso, "^-?\\d+(?:\\.\\d+)?$", R.string.err_campova);
         adapter = new EspecieAdapter(this, DataEspecies.getEspecieList());
         sEspecie.setAdapter(adapter);
