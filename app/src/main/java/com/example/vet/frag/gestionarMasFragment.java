@@ -1,22 +1,13 @@
 package com.example.vet.frag;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.transition.AutoTransition;
-import android.transition.TransitionManager;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Adapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,17 +17,16 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.example.vet.Menu;
 import com.example.vet.R;
 import com.example.vet.clases.AdapterMosMascotas;
 import com.example.vet.clases.mostrarMascota;
-import com.example.vet.mostrarReceta;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -59,6 +49,8 @@ public class gestionarMasFragment extends Fragment {
     private static final int REQUEST_CODE_QR_SCAN = 101;
     private String qrData = "";
     private String llaveCodu = "";
+
+
 
     public gestionarMasFragment() {
         // Required empty public constructor
@@ -120,6 +112,8 @@ public class gestionarMasFragment extends Fragment {
         });
 
 
+
+
         view.findViewById(R.id.btnBuscarQR).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,11 +123,6 @@ public class gestionarMasFragment extends Fragment {
 
 
         return view;
-    }
-
-    public void verificar(String llave){
-        if (llave.equals(""))
-            edtTextoCorreo.setError("No existe una cuenta con ese correo");
     }
 
     private void verificarInicioDueno(){
@@ -176,8 +165,26 @@ public class gestionarMasFragment extends Fragment {
         if (result != null) {
             if (result.getContents() != null) {
                 // Código que se ejecutará cuando se escanee el código QR
-                 qrData = result.getContents(); // obtiene los datos del código QR
-                 buscarMascota(qrData,"key");
+                String habitaculoCodigo = result.getContents(); // obtiene los datos del código QR
+                mDatabase.child("habitaculo").orderByChild("lugar").equalTo(habitaculoCodigo).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
+                                String llave = dataSnapshot.child("idMas").getValue().toString();
+                                 buscarMascota(llave,"qr");
+                            }
+                        }else
+                            Toast.makeText(getActivity(), "El codigo no correspone a ningun habitaculo", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getActivity(), "Error al registrar el internado", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
                } else {
                 // Código que se ejecutará si se cancela el escaneo del código QR
                 Toast.makeText(getActivity(), "Se canceló el escaneo del código QR", Toast.LENGTH_SHORT).show();
@@ -185,53 +192,109 @@ public class gestionarMasFragment extends Fragment {
         }
     }
 
-
+    Query busquedas;
     private void buscarMascota(String busqueda,String clave) {
         mascotaList.clear();
-        mDatabase.child("Mascotas").orderByChild(clave).equalTo(busqueda).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    for(DataSnapshot ds: snapshot.getChildren()){
-                        String key = ds.getKey();
-                        String name = ds.child("name").getValue().toString();
-                        String img;
-                        if (ds.child("photo").exists()){
-                            if(ds.child("photo").getValue().toString().equals(null))
+        if (clave.equals("key")) {
+            busquedas = mDatabase.child("Mascotas").orderByChild(clave).equalTo(busqueda);
+            busquedas.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        for (DataSnapshot ds : snapshot.getChildren()) {
+                            String key = ds.getKey();
+                            String name = ds.child("name").getValue().toString();
+                            String img;
+                            if (ds.child("photo").exists()) {
+                                if (ds.child("photo").getValue().toString().equals(null))
+                                    img = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
+                                else
+                                    img = ds.child("photo").getValue().toString();
+                            } else {
                                 img = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
-                            else
-                                img = ds.child("photo").getValue().toString();
-                        }else {
-                            img = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
-                        }
-                        String edad =ds.child("birth").getValue().toString();
-                        String genero =ds.child("sex").getValue().toString();
-                        String raza =ds.child("raze").getValue().toString();
-                        String esp =ds.child("species").getValue().toString();
-                        String corred =ds.child("key").getValue().toString();
-                         correoDueno(corred, new OnCorreoDuenoListener() {
-                            @Override
-                            public void onCorreoDuenoObtenido(String correoDueno) {
-
-                                mascotaList.add(new mostrarMascota(
-                                        key, name, img, edad, raza, genero, esp, correoDueno
-                                ));
-                                AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
-                                recyclerView.setAdapter(adapter);
-                                adapter.notifyDataSetChanged();
-
                             }
-                        });
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "No se encontró ninguna mascota con el código QR proporcionado", Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                            String edad = ds.child("birth").getValue().toString();
+                            String genero = ds.child("sex").getValue().toString();
+                            String raza = ds.child("raze").getValue().toString();
+                            String esp = ds.child("species").getValue().toString();
+                            String estado = ds.child("status").getValue().toString();
+                            String corred = ds.child("key").getValue().toString();
+                            correoDueno(corred, new OnCorreoDuenoListener() {
+                                @Override
+                                public void onCorreoDuenoObtenido(String correoDueno) {
 
-            }
-        });
+                                    mascotaList.add(new mostrarMascota(
+                                            key, name, img, edad, raza, genero, esp, estado, correoDueno
+                                    ));
+                                    AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
+                                    recyclerView.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+
+                                }
+                            });
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "No se encontró ninguna mascota con la busqueda realizada", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        if  (clave.equals("qr")){
+            busquedas = mDatabase.child("Mascotas").child(busqueda);
+            busquedas.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+
+                            String key = snapshot.getKey();
+                            String name = snapshot.child("name").getValue().toString();
+                            String img;
+                            if (snapshot.child("photo").exists()) {
+                                if (snapshot.child("photo").getValue().toString().equals(null))
+                                    img = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
+                                else
+                                    img = snapshot.child("photo").getValue().toString();
+                            } else {
+                                img = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
+                            }
+                            String edad = snapshot.child("birth").getValue().toString();
+                            String genero = snapshot.child("sex").getValue().toString();
+                            String raza = snapshot.child("raze").getValue().toString();
+                            String esp = snapshot.child("species").getValue().toString();
+                            String estado = snapshot.child("status").getValue().toString();
+                            String corred = snapshot.child("key").getValue().toString();
+                            correoDueno(corred, new OnCorreoDuenoListener() {
+                                @Override
+                                public void onCorreoDuenoObtenido(String correoDueno) {
+
+                                    mascotaList.add(new mostrarMascota(
+                                            key, name, img, edad, raza, genero, esp, estado, correoDueno
+                                    ));
+                                    AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
+                                    recyclerView.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
+
+                                }
+                            });
+
+                    } else {
+                        Toast.makeText(getActivity(), "No se encontró ninguna mascota con la busqueda realizada", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
+
     }
 
     public interface OnCorreoDuenoListener {
@@ -253,7 +316,7 @@ public class gestionarMasFragment extends Fragment {
         });
     }
 
-    private void obtenerInfo(){
+    /*private void obtenerInfo(){
         mascotaList.clear();
         mDatabase.child("Mascotas").addValueEventListener(new ValueEventListener() {
             @Override
@@ -274,13 +337,14 @@ public class gestionarMasFragment extends Fragment {
                         String edad =ds.child("birth").getValue().toString();
                         String genero =ds.child("sex").getValue().toString();
                         String raza =ds.child("raze").getValue().toString();
+                        String estado =ds.child("status").getValue().toString();
                         String especie =ds.child("species").getValue().toString();
                         String correo = ds.child("key").getValue().toString();
                         correoDueno(correo, new OnCorreoDuenoListener() {
                             @Override
                             public void onCorreoDuenoObtenido(String correoDueno) {
                                 mascotaList.add(new mostrarMascota(
-                                        key, name, img, edad, raza, genero, especie, correoDueno
+                                        key, name, img, edad, raza, genero, especie, estado, correoDueno
                                 ));
 
                                 AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
@@ -296,6 +360,107 @@ public class gestionarMasFragment extends Fragment {
 
             }
         });
+    }*/
+
+    private void obtenerInfo() {
+        mascotaList.clear();
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String key = dataSnapshot.getKey();
+                String name = dataSnapshot.child("name").getValue().toString();
+                String img;
+                if (dataSnapshot.child("photo").exists()) {
+                    img = dataSnapshot.child("photo").getValue().toString();
+                } else {
+                    img = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
+                }
+                String edad = dataSnapshot.child("birth").getValue().toString();
+                String genero = dataSnapshot.child("sex").getValue().toString();
+                String raza = dataSnapshot.child("raze").getValue().toString();
+                String estado = dataSnapshot.child("status").getValue().toString();
+                String especie = dataSnapshot.child("species").getValue().toString();
+                String correo = dataSnapshot.child("key").getValue().toString();
+                correoDueno(correo, new OnCorreoDuenoListener() {
+                    @Override
+                    public void onCorreoDuenoObtenido(String correoDueno) {
+                        mostrarMascota mascota = new mostrarMascota(
+                                key, name, img, edad, raza, genero, especie, estado, correoDueno
+                        );
+                        mascotaList.add(mascota);
+
+                        AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
+                        recyclerView.setAdapter(adapter);
+                    }
+                });
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                String key = dataSnapshot.getKey();
+                String name = dataSnapshot.child("name").getValue().toString();
+                String img;
+                if (dataSnapshot.child("photo").exists()) {
+                    img = dataSnapshot.child("photo").getValue().toString();
+                } else {
+                    img = "https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693";
+                }
+                String edad = dataSnapshot.child("birth").getValue().toString();
+                String genero = dataSnapshot.child("sex").getValue().toString();
+                String raza = dataSnapshot.child("raze").getValue().toString();
+                String estado = dataSnapshot.child("status").getValue().toString();
+                String especie = dataSnapshot.child("species").getValue().toString();
+                String correo = dataSnapshot.child("key").getValue().toString();
+
+                correoDueno(correo, new OnCorreoDuenoListener() {
+                    @Override
+                    public void onCorreoDuenoObtenido(String correoDueno) {
+                        mostrarMascota mascota = new mostrarMascota(
+                                key, name, img, edad, raza, genero, especie, estado, correoDueno);
+                        int index = -1;
+                        for (int i = 0; i < mascotaList.size(); i++) {
+                            if (mascotaList.get(i).getIdM().equals(key)) {
+                                index = i;
+                                break;
+                            }
+                        }
+                        if (index != -1) {
+                            mascotaList.set(index, mascota);
+                            AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
+                            recyclerView.setAdapter(adapter);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                String key = dataSnapshot.getKey();
+                int index = -1;
+                for (int i = 0; i < mascotaList.size(); i++) {
+                    if (mascotaList.get(i).getIdM().equals(key)) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index != -1) {
+                    mascotaList.remove(index);
+                    AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
+                    recyclerView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                // No es necesario implementar este método para esta situación
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Manejar errores en la consulta
+            }
+        };
+        mDatabase.child("Mascotas").addChildEventListener(childEventListener);
     }
 
 

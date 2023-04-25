@@ -34,6 +34,15 @@
     <string name="location">Ubicación</string>
     <string name="notes">Notas</string>
 
+    <string name="spinner_prompt">Selecciona una opción</string>
+    <string-array name="spinner_items">
+        <item>Casa</item>
+        <item>Revision</item>
+        <item>Operando</item>
+        <item>Internado</item>
+        <item>Estable</item>
+    </string-array>
+
     <string name="save_campaign">Guardar Campaña</string>
 
 

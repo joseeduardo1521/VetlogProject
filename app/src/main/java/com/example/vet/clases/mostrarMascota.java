@@ -1,9 +1,9 @@
 package com.example.vet.clases;
 
 public class mostrarMascota {
-    String idM,nombreM,imagenM,edadM,razaM,generoM,especieM, correoDueno;
+    String idM,nombreM,imagenM,edadM,razaM,generoM,especieM,estadoM,correoDueno;
 
-    public mostrarMascota(String idM, String nombreM, String imagenM, String edadM, String razaM, String generoM, String especieM, String correoDueno) {
+    public mostrarMascota(String idM, String nombreM, String imagenM, String edadM, String razaM, String generoM, String especieM,String estadoM, String correoDueno) {
         this.idM = idM;
         this.nombreM = nombreM;
         this.imagenM = imagenM;
@@ -11,6 +11,7 @@ public class mostrarMascota {
         this.razaM = razaM;
         this.generoM = generoM;
         this.especieM = especieM;
+        this.estadoM = estadoM;
         this.correoDueno = correoDueno;
     }
 
@@ -40,6 +41,10 @@ public class mostrarMascota {
 
     public String getEspecieM() {
         return especieM;
+    }
+
+    public String getEstadoM() {
+        return estadoM;
     }
 
     public String getCorreoDueno() {

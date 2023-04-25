@@ -3,6 +3,8 @@ package com.example.vet.clases;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,6 +49,7 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
     private DatabaseReference mDatabase;
 
 
+
     @Override
     public int getItemCount() {
         return mascotaList.size();
@@ -63,6 +67,7 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
         TextView txtNombre, txtRaza,txtEdad,txtEspecie, txtDueño,txtGenero;
         ImageView imgMasc;
         CardView cv;
+        RelativeLayout layImg;
         Button btnreceta;
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
         int position;
@@ -79,6 +84,7 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
             txtGenero = view.findViewById(R.id.generoTextView);
             imgMasc = view.findViewById(R.id.imageViewM);
             btnreceta = view.findViewById(R.id.btnRecetar);
+
             cv = view.findViewById(R.id.cardViewM);
             layout_btn = view.findViewById(R.id.layBotones);
             // Define click listener for the ViewHolder's View
@@ -186,6 +192,8 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
                 .load(mascota.getImagenM())
                 .into(viewHolder.imgMasc);
 
+        changeShapeColor(viewHolder,mascota.getEstadoM() );
+
         viewHolder.txtNombre.setText(mascota.getNombreM());
         viewHolder.txtEspecie.setText(mascota.getEspecieM());
         viewHolder.txtDueño.setText(mascota.getCorreoDueno());
@@ -196,6 +204,28 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
         viewHolder.cv.setAnimation(AnimationUtils.loadAnimation(mCtx,R.anim.fade_trans));
 
 
+    }
+
+    private void changeShapeColor(RecyclerView.ViewHolder holder, String estado) {
+         RelativeLayout layImg = holder.itemView.findViewById(R.id.layImg);
+        GradientDrawable drawable = (GradientDrawable) layImg.getBackground();
+        switch (estado){
+            case "Casa":
+                drawable.setStroke(4, Color.parseColor("#004AF0")); // Nuevo color si se cumple la condición
+                break;
+            case "Revision":
+                drawable.setStroke(4, Color.parseColor("#FFFF00")); // Nuevo color si se cumple la condición
+                break;
+            case "Operando":
+                drawable.setStroke(4, Color.parseColor("#FF0000")); // Nuevo color si se cumple la condición
+                break;
+            case "Internado":
+                drawable.setStroke(4, Color.parseColor("#FFA500")); // Nuevo color si se cumple la condición
+                break;
+            case "Estable":
+                drawable.setStroke(4, Color.parseColor("#00FF00")); // Nuevo color si se cumple la condición
+                break;
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

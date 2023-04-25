@@ -1,16 +1,22 @@
 package com.example.vet;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,15 +26,23 @@ import com.example.vet.clases.AdapterMosRecetas;
 import com.example.vet.clases.mostrarMascota;
 import com.example.vet.clases.mostrarRecetaList;
 import com.example.vet.frag.gestionarMasFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -41,6 +55,7 @@ public class mostrarReceta extends AppCompatActivity {
     private CircleImageView img_pet_photo;
     private RecyclerView recyclerView;
     private TextView tv_empty;
+    private LinearLayout btnInternar;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
@@ -60,6 +75,7 @@ public class mostrarReceta extends AppCompatActivity {
         tv_pet_birth = findViewById(R.id.tv_pet_birth);
         tv_pet_birth = findViewById(R.id.tv_pet_color);
         tv_pet_color = findViewById(R.id.tv_pet_color);
+        btnInternar = findViewById(R.id.btnInternar);
         tv_pet_raze = findViewById(R.id.tv_pet_raze);
         tv_pet_weight = findViewById(R.id.tv_pet_weight);
         recyclerView = findViewById(R.id.recycler_view_rec);
@@ -80,26 +96,131 @@ public class mostrarReceta extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        btnInternar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(mostrarReceta.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    // Si no se tiene permiso, solicitarlo
+                    ActivityCompat.requestPermissions(mostrarReceta.this, new String[]{Manifest.permission.CAMERA}, 1);
+                } else {
+                    // Si se tiene permiso, abrir el escáner de QR
+                    IntentIntegrator integrator = new IntentIntegrator(mostrarReceta.this);
+                    integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+                    integrator.setPrompt("Escanea el código QR del habitáculo");
+                    integrator.setOrientationLocked(false);
+                    integrator.initiateScan();
+                }
+            }
+        });
+
     }
 
-    private void verificarInicioDueno(){
-        String userkey =  mAuth.getCurrentUser().getUid();
+    private void verificarInicioDueno() {
+        String userkey = mAuth.getCurrentUser().getUid();
         mDatabase.child("Usuario").child(userkey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     String lvl;
                     lvl = snapshot.child("lvl").getValue().toString();
-                    if (lvl.equals("3")){
+                    if (lvl.equals("3")) {
                         btnnvRec.setVisibility(View.GONE);
                     }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
 
+
+    // Método que se ejecuta después de que se solicitan los permisos
+    @Override
+    public void onRequestPermissionsResult ( int requestCode, String[] permissions,
+                                             int[] grantResults){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Si se concedió el permiso, abrir el escáner de QR
+                IntentIntegrator integrator = new IntentIntegrator(mostrarReceta.this);
+                integrator.setPrompt("Escanea el código QR del habitáculo");
+                integrator.setBeepEnabled(false);
+                integrator.setOrientationLocked(false);
+                integrator.initiateScan();
+            } else {
+                // Si se negó el permiso, mostrar un mensaje de error
+                Toast.makeText(mostrarReceta.this, "Se necesita permiso para acceder a la cámara", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult ( int requestCode, int resultCode, @Nullable Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(this, "Cancelando internado", Toast.LENGTH_LONG).show();
+            } else {
+                // Aquí puedes obtener el resultado del escaneo del código QR y modificar los campos necesarios
+                String habitaculoCodigo = result.getContents();
+                mDatabase.child("habitaculo").orderByChild("lugar").equalTo(habitaculoCodigo).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
+                                String keyh = dataSnapshot.getKey();
+                                registrarInter(keyh);
+                            }
+                        }else
+                            Toast.makeText(mostrarReceta.this, "El codigo no correspone a ningun habitaculo", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(mostrarReceta.this, "Error al registrar el internado", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                // Modifica los campos según sea necesario
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void registrarInter (String codigo){
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+
+        Map<String, Object> updMas = new HashMap<>();
+        updMas.put("idhabit", codigo);
+        updMas.put("start_date",currentDate.toString());
+        updMas.put("status","Internado");
+        updMas.put("end_date","");
+
+
+        mDatabase.child("Mascotas").child(key).updateChildren(updMas).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+
+                // Actualizar los campos del habitáculo
+                Map<String, Object> updates = new HashMap<>();
+                updates.put("idMas", key);
+                updates.put("fecha_ingreso",currentDate);
+
+                mDatabase.child("habitaculo").child(codigo).updateChildren(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(mostrarReceta.this, "Ingreso Completado", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
 
     }
 
@@ -124,6 +245,9 @@ public class mostrarReceta extends AppCompatActivity {
                     String esp =ds.child("species").getValue().toString();
                     String color =ds.child("color").getValue().toString();
                     String weight =ds.child("weight").getValue().toString();
+                    if(ds.child("status").getValue().toString().equals("Internado")){
+
+                    }
 
 
                     Glide.with(mostrarReceta.this)

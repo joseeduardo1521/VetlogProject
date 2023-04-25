@@ -162,6 +162,35 @@
 
 
             <TextView
+                android:id="@+id/txtEstado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="Estado de la mascota"
+                android:textColor="@color/Azultxt"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edtraza" />
+
+            <Spinner
+                android:id="@+id/spinnerStatus"
+                android:layout_width="334dp"
+                android:layout_height="65dp"
+                android:background="#30ffffff"
+                android:textColor="@color/Azultxt"
+                android:prompt="@string/spinner_prompt"
+                android:entries="@array/spinner_items"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtEstado"
+                />
+
+
+            <TextView
                 android:id="@+id/txtColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -278,7 +307,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtraza" />
+                app:layout_constraintTop_toBottomOf="@+id/spinnerStatus" />
 
             <Button
                 android:id="@+id/btnUpdMas"
@@ -295,7 +324,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtraza" />
+                app:layout_constraintTop_toBottomOf="@+id/spinnerStatus" />
 
 
             <TextView

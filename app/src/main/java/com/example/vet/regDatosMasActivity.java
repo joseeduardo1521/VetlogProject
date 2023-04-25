@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -66,6 +67,7 @@ public class regDatosMasActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private String storage_path = "pet/*";
     private  String download_uri, imgupUrl="";
+    private Spinner spinnerSta;
 
     private static final int COD_SEL_IMAGE = 300;
     private Uri image_url;
@@ -95,6 +97,7 @@ public class regDatosMasActivity extends AppCompatActivity {
         edtPeso = (EditText) findViewById(R.id.edtPeso);
         edtFecha = (EditText) findViewById(R.id.edtFecha);
         sEspecie = (Spinner) findViewById(R.id.sEspecie);
+        spinnerSta = (Spinner) findViewById(R.id.spinnerStatus);
         btnSubirImg = (CircleImageView) findViewById(R.id.btnSubirImgMasc);
         imgMascota = (CircleImageView) findViewById(R.id.imgUser);
         btnRegistratmas = (Button) findViewById(R.id.btnRegMas);
@@ -110,8 +113,14 @@ public class regDatosMasActivity extends AppCompatActivity {
         awesomeValidation.addValidation(this, R.id.edtColor, "[\\s\\S]*", R.string.err_campova);
         awesomeValidation.addValidation(this, R.id.edtraza, "[\\s\\S]*", R.string.err_campova);
         awesomeValidation.addValidation(this, R.id.edtPeso, "^-?\\d+(?:\\.\\d+)?$", R.string.err_campova);
+
+
         adapter = new EspecieAdapter(this, DataEspecies.getEspecieList());
         sEspecie.setAdapter(adapter);
+
+        ArrayAdapter<CharSequence> adapterst = ArrayAdapter.createFromResource(this, R.array.spinner_items, android.R.layout.simple_spinner_item);
+        adapterst.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSta.setAdapter(adapterst);
 
         if(this.key != null){
             btnRegistratmas.setVisibility(View.VISIBLE);
@@ -158,6 +167,7 @@ public class regDatosMasActivity extends AppCompatActivity {
             String peso = String.valueOf(edtPeso.getText());
             String color = String.valueOf(edtColor.getText());
             String raza = String.valueOf(edtRaza.getText());
+            String status = spinnerSta.getSelectedItem().toString();
 
             switch ((int) sEspecie.getSelectedItemId()){
                 case 0:
@@ -188,9 +198,9 @@ public class regDatosMasActivity extends AppCompatActivity {
             if(rbHembra.isChecked()==true)
                 sexo = "Hembra";
             if(op==1)
-            registro(nom,fecha,peso,color,raza,espe,sexo);
+            registro(nom,fecha,peso,color,raza,espe,sexo,status);
             else
-                actualizarDatosMascota(nom,fecha,peso,color,raza,espe,sexo);
+                actualizarDatosMascota(nom,fecha,peso,color,raza,espe,sexo,status);
         }
     }
 
@@ -198,7 +208,6 @@ public class regDatosMasActivity extends AppCompatActivity {
         mDatabase.child("Mascotas").child(clave).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 if(snapshot.exists()) {
                     String name = snapshot.child("name").getValue().toString();
                     String color = snapshot.child("color").getValue().toString();
@@ -213,6 +222,8 @@ public class regDatosMasActivity extends AppCompatActivity {
                         String genero =snapshot.child("sex").getValue().toString();
                         String raza =snapshot.child("raze").getValue().toString();
                         String esp =snapshot.child("species").getValue().toString();
+                        String est =snapshot.child("status").getValue().toString();
+
                         key =snapshot.child("key").getValue().toString();
 
                         edtColor.setText(color);
@@ -308,7 +319,7 @@ public class regDatosMasActivity extends AppCompatActivity {
     }
 
 
-    private void actualizarDatosMascota(String name,String date, String weight, String color, String raze, String species,String sex){
+    private void actualizarDatosMascota(String name,String date, String weight, String color, String raze, String species,String sex, String status){
         idd = key+year+species+name.replace(" ","");
         final Map<String, Object> map = new HashMap<>();
         map.put("name", name);
@@ -318,6 +329,7 @@ public class regDatosMasActivity extends AppCompatActivity {
         map.put("raze", raze);
         map.put("species", species);
         map.put("sex", sex);
+        map.put("status", status);
 
         mDatabase.child("Mascotas").child(key2).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -334,7 +346,7 @@ public class regDatosMasActivity extends AppCompatActivity {
         });
     }
 
-    private void registro(String name,String date, String weight, String color, String raze, String species,String sex){
+    private void registro(String name,String date, String weight, String color, String raze, String species,String sex, String status){
         idd = key+year+species+name.replace(" ","");
         String token= mDatabase.push().getKey();
         final Map<String, Object> map = new HashMap<>();
@@ -346,6 +358,7 @@ public class regDatosMasActivity extends AppCompatActivity {
         map.put("species", species);
         map.put("sex", sex);
         map.put("key", key);
+        map.put("status", status);
 
         mDatabase.child("Mascotas").child(token).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
