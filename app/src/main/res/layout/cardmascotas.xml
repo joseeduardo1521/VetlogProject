@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:padding="6dp"
-
+                    android:visibility="gone"
                     android:layout_below="@+id/cuadro_info"
                     android:gravity="center"
                     android:layout_marginTop="16dp">
@@ -72,6 +72,7 @@
                         android:id="@+id/btnRecetar"
                         android:layout_width="0dp"
                         android:layout_weight="1"
+                        android:visibility="gone"
                         android:layout_height="wrap_content"
                         android:text="Recetar"
                         android:backgroundTint="#FFA500"
