@@ -61,6 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Duke"
+            android:textStyle="bold"
             android:gravity="center"
             android:textColor="@color/Azultxt"
             android:textSize="16sp"
@@ -231,19 +232,65 @@
         android:clipToPadding="false"
         android:scrollbars="horizontal" />
 
+
     <!-- Botón para agregar una nueva receta -->
-    <Button
-        android:id="@+id/btn_nueva_receta"
-        android:layout_width="wrap_content"
+
+
+    <LinearLayout
+        android:id="@+id/layBotones"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20sp"
-        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:padding="6dp"
+        android:visibility="visible"
         android:gravity="center"
-        android:textStyle="bold"
-        android:layout_marginBottom="10dp"
-        android:text="Nueva receta"
-        android:textColor="@color/white"
-        android:background="@drawable/btnredondo"
-        android:layout_alignParentBottom="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="16dp">
+
+
+
+        <Button
+            android:id="@+id/btn_nueva_receta"
+            android:layout_width="150dp"
+            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content"
+            android:padding="20sp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:text="Nueva receta"
+            android:textColor="@color/white"
+            android:background="@drawable/btnredondo"
+            android:layout_alignParentBottom="true" />
+
+        <Button
+            android:id="@+id/btnInternar"
+            android:layout_width="150dp"
+            android:layout_marginTop="8dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_height="wrap_content"
+            android:padding="20sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            android:text="Internar"
+            android:textColor="@color/white"
+            android:background="@drawable/btnredondo"
+            android:layout_alignParentBottom="true" />
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
 
 </RelativeLayout>

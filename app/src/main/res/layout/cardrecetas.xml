@@ -76,6 +76,7 @@
                         app:autoSizeTextType="uniform"/>
 
                 </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/cuadro_info"
                 android:layout_width="match_parent"
@@ -150,6 +151,12 @@
                         app:autoSizeTextType="uniform"
                         android:textColor="@color/white"
                         android:text="Durante: "/>
+
+                <ScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:verticalScrollbarPosition="right">
+
                 <TextView
                     android:id="@+id/txtObservaciones"
                     android:layout_width="match_parent"
@@ -158,9 +165,10 @@
                     app:autoSizeTextType="uniform"
                     android:textColor="@color/white"
                     android:text="Observasiones"/>
+                </ScrollView>
             </LinearLayout>
 
-
+           ≈
 
             </RelativeLayout>
         </LinearLayout>
