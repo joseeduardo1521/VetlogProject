@@ -172,10 +172,10 @@ public class Menu extends AppCompatActivity {
             btnCancel = (Button) userPopupView.findViewById(R.id.btncCancel);
             updImage = (CircleImageView) userPopupView.findViewById(R.id.imgUser);
             btnSubirImgMasc = (CircleImageView) userPopupView.findViewById(R.id.btnSubirImgMasc);
-
+            String regex= "^(?!\\s*$).+";
             awesomeValidation = new AwesomeValidation(BASIC);
-            awesomeValidation.addValidation(modUsupopup_dir, "[a-zA-Z0-9\\s]+", "Ingrese una direccion");
-            awesomeValidation.addValidation(modUsupopup_nom, "[a-zA-Z\\s]+", "Ingrese su nombre completo");
+            awesomeValidation.addValidation(modUsupopup_dir, regex, "Ingrese una direccion");
+            awesomeValidation.addValidation(modUsupopup_nom, regex, "Ingrese su nombre completo");
             awesomeValidation.addValidation(modUsupopup_tel , RegexTemplate.TELEPHONE, "Ingrese un numero telefonico");
 
             dialogBuilder.setView(userPopupView);

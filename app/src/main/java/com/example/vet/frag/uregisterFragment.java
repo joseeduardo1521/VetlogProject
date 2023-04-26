@@ -87,10 +87,10 @@ public class uregisterFragment extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         arr = mAuthM.getInstance().getCurrentUser().getIdToken(true).toString();
-
+        String regex= "^(?!\\s*$).+";
         awesomeValidation = new AwesomeValidation(BASIC);
-        awesomeValidation.addValidation( edtDir, "[\\s\\S]*", "Ingrese una direccion");
-        awesomeValidation.addValidation( edtNom, "[\\s\\S]*", "Ingrese su nombre completo");
+        awesomeValidation.addValidation( edtDir, regex, "Ingrese una direccion");
+        awesomeValidation.addValidation( edtNom, regex, "Ingrese su nombre completo");
         awesomeValidation.addValidation( edtTel, RegexTemplate.TELEPHONE, "Ingrese un numero de telefono");
 
 

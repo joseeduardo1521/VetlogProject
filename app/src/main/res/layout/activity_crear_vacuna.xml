@@ -157,40 +157,48 @@
 
     </LinearLayout>
 
-        </LinearLayout>
-</ScrollView>
-    <Button
-        android:id="@+id/btnNuevaCamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:animation="@anim/pulse_animation"
-        android:background="@drawable/btnredondo"
-        android:gravity="center"
-        android:visibility="gone"
-        android:padding="16dp"
-        android:text="@string/save_campaign"
-        android:textColor="@color/white"
-        app:strokeColor="@color/azul_back"
-        app:strokeWidth="1dp" />
+            <Button
+                android:id="@+id/btnNuevaCamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:animation="@anim/pulse_animation"
+                android:background="@drawable/btnredondo"
+                android:gravity="center"
+                android:visibility="gone"
+                android:padding="16dp"
+                android:text="@string/save_campaign"
+                android:textColor="@color/white"
+                app:strokeColor="@color/azul_back"
+                app:strokeWidth="1dp" />
 
-    <Button
-        android:id="@+id/btnactualizar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:animation="@anim/pulse_animation"
-        android:background="@drawable/btnredondo"
-        android:gravity="center"
-        android:visibility="gone"
-        android:padding="16dp"
-        android:text="Actualizar Campaña"
-        android:textColor="@color/white"
-        app:strokeColor="@color/azul_back"
-        app:strokeWidth="1dp" />
+            <Button
+                android:id="@+id/btnactualizar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:animation="@anim/pulse_animation"
+                android:background="@drawable/btnredondo"
+                android:gravity="center"
+               android:visibility="gone"
+                android:padding="16dp"
+                android:text="Actualizar Campaña"
+                android:textColor="@color/white"
+                app:strokeColor="@color/azul_back"
+                app:strokeWidth="1dp" />
+
+        </LinearLayout>
+
+
+</ScrollView>
+
 
 </RelativeLayout>

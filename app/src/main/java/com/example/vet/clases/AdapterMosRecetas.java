@@ -68,7 +68,7 @@ public class AdapterMosRecetas extends RecyclerView.Adapter<AdapterMosRecetas.Mo
         Button btnEdReceta, btnBorrarReceta;
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
         int position;
-        LinearLayout layout_btn;
+        LinearLayout layout_btn, layBtn;
         String idRec;
 
         public MosMacotasViewHolder(View view) {
@@ -83,6 +83,7 @@ public class AdapterMosRecetas extends RecyclerView.Adapter<AdapterMosRecetas.Mo
             txtObservaciones = view.findViewById(R.id.txtObservaciones);
             btnEdReceta = view.findViewById(R.id.btnEdReceta);
             btnBorrarReceta = view.findViewById(R.id.btnBorrarReceta);
+            layBtn = view.findViewById(R.id.layBtn);
 
             cv = view.findViewById(R.id.cardViewM);
             layout_btn = view.findViewById(R.id.layBotones);
@@ -91,6 +92,10 @@ public class AdapterMosRecetas extends RecyclerView.Adapter<AdapterMosRecetas.Mo
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    int vw =(layout_btn.getVisibility() ==  v.GONE)? v.VISIBLE: v.GONE;
+                    TransitionManager.beginDelayedTransition(layout_btn, new AutoTransition());
+                    layout_btn.setVisibility(vw);
                     mAuth = FirebaseAuth.getInstance();
                     mDatabase = FirebaseDatabase.getInstance().getReference();
                     String id= mAuth.getCurrentUser().getUid();
@@ -100,10 +105,8 @@ public class AdapterMosRecetas extends RecyclerView.Adapter<AdapterMosRecetas.Mo
                             if(snapshot.exists()){
                                 String lvl;
                                 lvl = snapshot.child("lvl").getValue().toString();
-                                if (lvl.equals("1")|| lvl.equals("2")){
-                                    int vw =(layout_btn.getVisibility() ==  v.GONE)? v.VISIBLE: v.GONE;
-                                    TransitionManager.beginDelayedTransition(layout_btn, new AutoTransition());
-                                    layout_btn.setVisibility(vw);
+                                if (lvl.equals("1")){
+                                   layBtn.setVisibility(View.VISIBLE);
                                 }
                             }
                         }

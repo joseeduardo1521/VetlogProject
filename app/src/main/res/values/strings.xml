@@ -30,7 +30,7 @@
     <string name="campaign_name">Nombre de la Campaña</string>
     <string name="species">Especie</string>
     <string name="start_date">Fecha de inicio</string>
-    <string name="end_date">Fecha de finalización</string>
+    <string name="end_date">Fecha de fin</string>
     <string name="location">Ubicación</string>
     <string name="notes">Notas</string>
 

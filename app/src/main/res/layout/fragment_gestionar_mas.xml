@@ -95,6 +95,21 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_below="@+id/layotuInfoMas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Esta cuenta no tiene ninguna mascota registrada"
+        android:textColor="@color/Azultxt"
+        android:textSize="24sp"
+        android:elevation="4dp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp" />
+
 
 
 

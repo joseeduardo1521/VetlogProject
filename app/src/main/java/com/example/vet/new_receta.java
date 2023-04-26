@@ -60,12 +60,12 @@ public class new_receta extends AppCompatActivity {
         editTextObserv = findViewById(R.id.editTextObserv);
         buttonPrescribe = findViewById(R.id.buttonPrescribe);
         btnUpdateRes = findViewById(R.id.btnUpdateRes);
-
+        String regex= "^(?!\\s*$).+";
         awesomeValidation = new AwesomeValidation(BASIC);
-        awesomeValidation.addValidation(this, R.id.editTextMedicine, ".*", R.string.err_campova);
-        awesomeValidation.addValidation(this, R.id.editTextDose, ".*", R.string.err_campova);
-        awesomeValidation.addValidation(this, R.id.editTextFrequency, ".*", R.string.err_campova);
-        awesomeValidation.addValidation(this, R.id.editTextDuration, ".*", R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.editTextMedicine, regex, R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.editTextDose, regex, R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.editTextFrequency, regex, R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.editTextDuration, regex, R.string.err_campova);
 
 
         buttonPrescribe.setOnClickListener(new View.OnClickListener() {

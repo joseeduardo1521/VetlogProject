@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -68,9 +69,10 @@ public class regDatosMasActivity extends AppCompatActivity {
     private String storage_path = "pet/*";
     private  String download_uri, imgupUrl="";
     private Spinner spinnerSta;
+    private ProgressDialog progressDialog;
 
     private static final int COD_SEL_IMAGE = 300;
-    private Uri image_url;
+    private Uri image_url = Uri.parse("");
     private String photo = "photo";
     private String idd;
 
@@ -107,11 +109,11 @@ public class regDatosMasActivity extends AppCompatActivity {
         edtFecha.setText(getTodaysDate());
         rbMacho.setChecked(true);
         data = new DataEspecies();
-
+        String regex= "^(?!\\s*$).+";
         awesomeValidation = new AwesomeValidation(BASIC);
-        awesomeValidation.addValidation(this, R.id.edtNomM, "[\\s\\S]*", R.string.err_campova);
-        awesomeValidation.addValidation(this, R.id.edtColor, "[\\s\\S]*", R.string.err_campova);
-        awesomeValidation.addValidation(this, R.id.edtraza, "[\\s\\S]*", R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.edtNomM, regex, R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.edtColor, regex, R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.edtraza, regex, R.string.err_campova);
         awesomeValidation.addValidation(this, R.id.edtPeso, "^-?\\d+(?:\\.\\d+)?$", R.string.err_campova);
 
 
@@ -157,6 +159,19 @@ public class regDatosMasActivity extends AppCompatActivity {
                setDatos(1);
             }
         });
+    }
+
+    private void mostrarPantallaCarga() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Cargando datos de la mascota...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    private void ocultarPantallaCarga() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
     }
 
 
@@ -205,6 +220,8 @@ public class regDatosMasActivity extends AppCompatActivity {
     }
 
     private void obtenerDatosMascota(String clave) {
+        ArrayAdapter<CharSequence> adapterst = ArrayAdapter.createFromResource(this, R.array.spinner_items, android.R.layout.simple_spinner_item);
+
         mDatabase.child("Mascotas").child(clave).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -231,6 +248,14 @@ public class regDatosMasActivity extends AppCompatActivity {
                         edtPeso.setText(peso);
                         edtRaza.setText(raza);
                         edtNomM.setText(name);
+
+                    adapterst.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerSta.setAdapter(adapterst);
+
+
+                    int index = adapterst.getPosition(est);
+
+                        spinnerSta.setSelection(index);
 
                     switch (esp){
                         case "Canino":
@@ -299,7 +324,6 @@ public class regDatosMasActivity extends AppCompatActivity {
                             HashMap<String, Object> map = new HashMap<>();
                             map.put("photo", download_uri);
                             mDatabase.child("Mascotas").child(token).updateChildren(map);
-                            Toast.makeText(regDatosMasActivity.this, "Imagen subida correctamente", Toast.LENGTH_SHORT).show();
                             salir();
                         }
                     });
@@ -337,6 +361,7 @@ public class regDatosMasActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task2) {
                 if(task2.isSuccessful()){
+                    mostrarPantallaCarga();
                     Toast.makeText(regDatosMasActivity.this, "Actualizado", Toast.LENGTH_SHORT).show();
                     if (!(String.valueOf(image_url).equals(""))&&!(String.valueOf(image_url).equals("null"))){
                         subirPhoto(image_url, key2);
@@ -369,8 +394,14 @@ public class regDatosMasActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task2) {
                 if(task2.isSuccessful()){
+                    mostrarPantallaCarga();
                     Toast.makeText(regDatosMasActivity.this, "Registrado", Toast.LENGTH_SHORT).show();
-                    subirPhoto(image_url,token);
+                    Toast.makeText(regDatosMasActivity.this, image_url.toString(), Toast.LENGTH_SHORT).show();
+                    if(image_url.toString() != ""){
+                    subirPhoto(image_url,token);}
+                    else {
+                        salir();
+                    }
                 }
                 else Toast.makeText(regDatosMasActivity.this, "Error al registrar datos", Toast.LENGTH_SHORT).show();
             }
@@ -392,29 +423,8 @@ public class regDatosMasActivity extends AppCompatActivity {
     }
 
     private void salir(){
-        String id= mAuth.getCurrentUser().getUid();
-        mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    String lvl;
-                    lvl = snapshot.child("lvl").getValue().toString();
-                    switch (lvl){
-                        case "1":
-                           regresarmenu();
-                            break;
-                        case "2":
-                            regresarmenu2();
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        ocultarPantallaCarga();
+        finish();
     }
 
     private void initDatePicker(){

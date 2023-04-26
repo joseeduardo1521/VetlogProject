@@ -1,5 +1,7 @@
 package com.example.vet;
 
+import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.example.vet.R;
 import com.example.vet.clases.AdapterMosCamp;
 import com.example.vet.clases.AdapterMosRecetas;
@@ -27,6 +30,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +43,7 @@ public class mostrarCamp extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private TextView title;
     private DatabaseReference mDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +58,7 @@ public class mostrarCamp extends AppCompatActivity {
         title = findViewById(R.id.txttitle);
         campList = new ArrayList<>();
         verificarInicioDueno();
-        deleteExpiredCampaigns();
-        obtenerInfoRecetas();
+        obtenerInfoCampañas();
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,39 +88,37 @@ public class mostrarCamp extends AppCompatActivity {
         });
     }
 
-    private void obtenerInfoRecetas(){
+    private void obtenerInfoCampañas() {
         campList.clear();
         mDatabase.child("Campains").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    for(DataSnapshot ds: snapshot.getChildren()){
+                if (snapshot.exists()) {
+                    campList.clear();
+                    deleteExpiredCampaigns();
+                    for (DataSnapshot ds : snapshot.getChildren()) {
                         String idCam = ds.getKey();
                         String nomCam = ds.child("namecam").getValue().toString();
-                        String iniD =ds.child("iniciodate").getValue().toString();
-                        String finD =ds.child("findate").getValue().toString();
-                        String esp =ds.child("speciescam").getValue().toString();
-                        String ubi =ds.child("ubicam").getValue().toString();
+                        String iniD = ds.child("iniciodate").getValue().toString();
+                        String finD = ds.child("findate").getValue().toString();
+                        String esp = ds.child("speciescam").getValue().toString();
+                        String ubi = ds.child("ubicam").getValue().toString();
                         String nota = ds.child("notecam").getValue().toString();
-
 
                         campList.add(new mostrarCamList(
                                 idCam, nomCam, iniD, finD, ubi, esp, nota
                         ));
-
-                        AdapterMosCamp adapter = new AdapterMosCamp(mostrarCamp.this, campList);
-                        recyclerView.setAdapter(adapter);
-
                     }
+                    AdapterMosCamp adapter = new AdapterMosCamp(mostrarCamp.this, campList);
+                    recyclerView.setAdapter(adapter);
                 }
                 verificarCamp();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
-
     }
 
     private void deleteExpiredCampaigns() {
@@ -125,23 +127,29 @@ public class mostrarCamp extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                 Date currentDate = new Date();
-
-                boolean hasDeletedCampaign = false;
+                List<String> campaignsToDelete = new ArrayList<>();
 
                 for (DataSnapshot campaignSnapshot : dataSnapshot.getChildren()) {
                     String endDateString = campaignSnapshot.child("findate").getValue().toString();
                     try {
                         Date endDate = dateFormat.parse(endDateString);
-                        if (endDate.before(currentDate)) {
-                            mDatabase.child("Campains").child(campaignSnapshot.getKey()).removeValue();
-                            hasDeletedCampaign = true;
+                        // Elimina la hora del día de ambas fechas
+                        Date currentDateWithoutTime = dateFormat.parse(dateFormat.format(currentDate));
+                        Date endDateWithoutTime = dateFormat.parse(dateFormat.format(endDate));
+
+                        // Comprueba si la fecha de finalización es estrictamente anterior a la fecha actual sin la hora del día
+                        if (endDateWithoutTime.before(currentDateWithoutTime)) {
+                            campaignsToDelete.add(campaignSnapshot.getKey());
                         }
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
                 }
 
-                if (hasDeletedCampaign) {
+                if (!campaignsToDelete.isEmpty()) {
+                    for (String campaignKey : campaignsToDelete) {
+                        mDatabase.child("Campains").child(campaignKey).removeValue();
+                    }
                     updateRecyclerView();
                 }
             }
@@ -152,11 +160,11 @@ public class mostrarCamp extends AppCompatActivity {
         });
     }
 
+
     private void updateRecyclerView() {
         campList.clear();
-        obtenerInfoRecetas();
+        obtenerInfoCampañas();
     }
-
 
 
     private void verificarCamp(){

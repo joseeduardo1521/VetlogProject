@@ -90,13 +90,12 @@ public class CrearVacuna extends AppCompatActivity {
         // Inicializar los calendarios de fecha de inicio y fecha de fin
         startDateCalendar = Calendar.getInstance();
         endDateCalendar = Calendar.getInstance();
-
+        String regex= "^(?!\\s*$).+";
         awesomeValidation = new AwesomeValidation(BASIC);
-        awesomeValidation.addValidation(this, R.id.campaign_name_edit_text, ".*", R.string.err_campova);
-        awesomeValidation.addValidation(this, R.id.start_date_edit_text, ".*", R.string.err_campova);
-        awesomeValidation.addValidation(this, R.id.end_date_edit_text, ".*", R.string.err_campova);
-        awesomeValidation.addValidation(this, R.id.notes_edit_text, ".*", R.string.err_campova);
-        awesomeValidation.addValidation(this, R.id.location_edit_text, ".*", R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.campaign_name_edit_text, regex, R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.start_date_edit_text, regex, R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.end_date_edit_text, regex, R.string.err_campova);
+        awesomeValidation.addValidation(this, R.id.location_edit_text, regex, R.string.err_campova);
         adapter = new EspecieAdapter(this, DataEspecies.getEspecieList());
         species.setAdapter(adapter);
 

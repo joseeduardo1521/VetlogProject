@@ -37,13 +37,40 @@
                 <LinearLayout
                     android:id="@+id/layBotones"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="6dp"
                     android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="6dp"
                     android:layout_below="@+id/cuadro_info"
                     android:gravity="center"
                     android:layout_marginTop="16dp">
+
+
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:verticalScrollbarPosition="right">
+
+                        <TextView
+                            android:id="@+id/txtObservaciones"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Observasiones"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            app:autoSizeTextType="uniform" />
+                    </ScrollView>
+
+                    <LinearLayout
+                        android:id="@+id/layBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="6dp"
+                        android:visibility="gone"
+                        android:layout_below="@+id/cuadro_info"
+                        android:gravity="center"
+                        android:layout_marginTop="16dp">
 
                     <Button
                         android:id="@+id/btnEdReceta"
@@ -74,6 +101,8 @@
                         android:text="Borrar"
                         android:maxLines="1"
                         app:autoSizeTextType="uniform"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -152,20 +181,7 @@
                         android:textColor="@color/white"
                         android:text="Durante: "/>
 
-                <ScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:verticalScrollbarPosition="right">
 
-                <TextView
-                    android:id="@+id/txtObservaciones"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    app:autoSizeTextType="uniform"
-                    android:textColor="@color/white"
-                    android:text="Observasiones"/>
-                </ScrollView>
             </LinearLayout>
 
            ≈
