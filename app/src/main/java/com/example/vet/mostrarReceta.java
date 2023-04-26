@@ -126,6 +126,7 @@ public class mostrarReceta extends AppCompatActivity {
                     lvl = snapshot.child("lvl").getValue().toString();
                     if (lvl.equals("3")) {
                         btnnvRec.setVisibility(View.GONE);
+                        btnInternar.setVisibility(View.GONE);
                     }
                 }
             }
@@ -202,7 +203,6 @@ public class mostrarReceta extends AppCompatActivity {
         updMas.put("start_date",currentDate.toString());
         updMas.put("status","Internado");
         updMas.put("end_date","");
-
 
         mDatabase.child("Mascotas").child(key).updateChildren(updMas).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

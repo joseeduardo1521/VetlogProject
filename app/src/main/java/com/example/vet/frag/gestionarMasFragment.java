@@ -171,8 +171,15 @@ public class gestionarMasFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
-                                String llave = dataSnapshot.child("idMas").getValue().toString();
-                                 buscarMascota(llave,"qr");
+                                if(dataSnapshot.child("idMas").exists()) {
+                                    String llave = dataSnapshot.child("idMas").getValue().toString();
+                                    if(llave != "")
+                                    buscarMascota(llave, "qr");
+                                    else
+                                    Toast.makeText(getActivity(), "No hay mascota en este habitaculo", Toast.LENGTH_SHORT).show();
+                                }else{
+                                    Toast.makeText(getActivity(), "No hay mascota en este habitaculo", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }else
                             Toast.makeText(getActivity(), "El codigo no correspone a ningun habitaculo", Toast.LENGTH_SHORT).show();
@@ -250,7 +257,6 @@ public class gestionarMasFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()) {
-
                             String key = snapshot.getKey();
                             String name = snapshot.child("name").getValue().toString();
                             String img;

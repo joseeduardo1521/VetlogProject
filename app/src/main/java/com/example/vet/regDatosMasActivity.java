@@ -300,6 +300,7 @@ public class regDatosMasActivity extends AppCompatActivity {
                             map.put("photo", download_uri);
                             mDatabase.child("Mascotas").child(token).updateChildren(map);
                             Toast.makeText(regDatosMasActivity.this, "Imagen subida correctamente", Toast.LENGTH_SHORT).show();
+                            salir();
                         }
                     });
                 }
@@ -310,6 +311,7 @@ public class regDatosMasActivity extends AppCompatActivity {
 
                 if (String.valueOf(image_url).equals(imgupUrl)){
                     Toast.makeText(regDatosMasActivity.this, "No se cambio la foto", Toast.LENGTH_SHORT).show();
+                    salir();
                 }else{
                     Toast.makeText(regDatosMasActivity.this, "Error al cargar foto", Toast.LENGTH_SHORT).show();
                 }
@@ -338,8 +340,11 @@ public class regDatosMasActivity extends AppCompatActivity {
                     Toast.makeText(regDatosMasActivity.this, "Actualizado", Toast.LENGTH_SHORT).show();
                     if (!(String.valueOf(image_url).equals(""))&&!(String.valueOf(image_url).equals("null"))){
                         subirPhoto(image_url, key2);
+                    }else{
+                        salir();
                     }
-                    salir();
+
+
                 }
                 else Toast.makeText(regDatosMasActivity.this, "Error al actualizar datos", Toast.LENGTH_SHORT).show();
             }
@@ -366,7 +371,6 @@ public class regDatosMasActivity extends AppCompatActivity {
                 if(task2.isSuccessful()){
                     Toast.makeText(regDatosMasActivity.this, "Registrado", Toast.LENGTH_SHORT).show();
                     subirPhoto(image_url,token);
-                    salir();
                 }
                 else Toast.makeText(regDatosMasActivity.this, "Error al registrar datos", Toast.LENGTH_SHORT).show();
             }
