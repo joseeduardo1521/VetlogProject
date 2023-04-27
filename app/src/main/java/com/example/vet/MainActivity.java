@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                                 use();
                                 break;
                             case "3":
-                                test();
+                                menuU();
                                 break;
                             default:
                                 Toast.makeText(MainActivity.this, "Error",
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(reg);
         finish();
     }
-    private void test(){
+    private void menuU(){
         Intent reg = new Intent(this, Usuario_Menu.class);
         reg.putExtra("mail", et_mail.getText().toString());
         reg.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);

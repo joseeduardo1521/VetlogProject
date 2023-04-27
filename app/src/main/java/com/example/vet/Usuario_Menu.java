@@ -64,11 +64,9 @@ public class Usuario_Menu extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         mnombre = (TextView) findViewById(R.id.usu);
         mRol = (TextView) findViewById(R.id.puesto);
-        cardPersonal = (View) findViewById(R.id.D4);
         cardCerSesion = (View) findViewById(R.id.D7);
         cardCitas = (View) findViewById(R.id.D3);
         cardGesM = (View) findViewById(R.id.D1);
-        cardQR = (View) findViewById(R.id.D2);
         cardAdop =(View) findViewById(R.id.D5);
         cardVacu = (View) findViewById(R.id.D6);
         imgUsu =  findViewById(R.id.imgUsuario);
@@ -99,7 +97,7 @@ public class Usuario_Menu extends AppCompatActivity {
         cardGesM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent gesMascotas = new Intent(Usuario_Menu.this,gesMacotasActivity.class);
+                Intent gesMascotas = new Intent(Usuario_Menu.this,verMascotasD.class);
                 startActivity(gesMascotas);
             }
         });
@@ -126,13 +124,13 @@ public class Usuario_Menu extends AppCompatActivity {
                     lvl = snapshot.child("lvl").getValue().toString();
                     switch (lvl){
                         case "1":
-                            mRol.setText("Veterinario");
+                            mRol.setText("Rol: Veterinario");
                             break;
                         case "2":
-                            mRol.setText("Secretario");
+                            mRol.setText("Rol: Secretario");
                             break;
                         case "3":
-                            mRol.setText("Dueño de mascota");
+                            mRol.setText("Rol: Dueño de mascota");
                             break;
                     }
                     mnombre.setText(nombre);

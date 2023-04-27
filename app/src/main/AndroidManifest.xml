@@ -33,6 +33,14 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".verMascotasD"
+            android:exported="false"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".mostrarReceta"
             android:exported="false"
             android:screenOrientation="portrait">

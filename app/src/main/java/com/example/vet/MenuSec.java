@@ -317,13 +317,13 @@ public class MenuSec extends AppCompatActivity {
                     lvl = snapshot.child("lvl").getValue().toString();
                     switch (lvl){
                         case "1":
-                            mRol.setText("Veterinario");
+                            mRol.setText("Rol: Veterinario");
                             break;
                         case "2":
-                            mRol.setText("Secretario");
+                            mRol.setText("Rol: Secretario");
                             break;
                         case "3":
-                            mRol.setText("Dueño de mascota");
+                            mRol.setText("Rol: Dueño de mascota");
                             break;
                     }
                     mnombre.setText(nombre);
