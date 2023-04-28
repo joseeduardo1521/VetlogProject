@@ -5,119 +5,145 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:screenOrientation="portrait"
-    android:background="@drawable/backgroundnl"
     tools:context=".RegCitas">
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-57dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="170sp"
+        android:background="@drawable/wave"
+        tools:ignore="MissingConstraints" >
 
         <TextView
-            android:id="@+id/txtNom"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="120dp"
-            android:gravity="center"
-            android:text="Seleccione la Fecha"
+            android:id="@+id/textView7"
+            android:layout_width="419dp"
+            android:layout_height="120dp"
+            android:paddingTop="20dp"
+            android:text="Registrar Citas"
             android:textColor="@color/white"
-            android:textSize="25sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.093"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.24" />
+            android:textSize="38dp"
+            android:layout_marginStart="5dp"
+            android:textStyle="bold"></TextView>
+        <ImageView
+            android:layout_width="209dp"
+            android:layout_height="120dp"
+            android:src="@drawable/pata"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="265dp">
 
-        <EditText
-            android:id="@+id/fechitas"
-            android:layout_width="334dp"
-            android:layout_height="65dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:background="#30ffffff"
-            android:editable="false"
-            android:drawableLeft="@drawable/ic_baseline_calendar_month_24"
-            android:drawablePadding="20dp"
-            android:hint="dd/mm/yyyy"
-            android:padding="20dp"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.402"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.315" />
-
-        <Button
-            android:id="@+id/dataPickerButton"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:text="JAN 01 2022"
-            android:textSize="30sp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:textColor="@color/Azultxt"
-            style="?android:spinnerStyle"
-            android:layout_marginTop="40dp"
-            android:onClick="openDatePicker"/>
-
-        <EditText
-            android:id="@+id/horitas"
-            android:layout_width="334dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:background="#30ffffff"
-            android:drawableLeft="@drawable/ic_baseline_access_time_24"
-            android:drawablePadding="20dp"
-            android:editable="false"
-            android:hint="12:00 PM"
-            android:padding="20dp"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.402"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.315" />
+        </ImageView>
+    </RelativeLayout>
 
 
-        <Button
-            android:id="@+id/TimePickerButton"
-            style="?android:timePickerMode"
-            android:layout_width="168dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:background="@drawable/tatanka_button"
-            android:gravity="center"
-            android:onClick="openTimePicker"
-            android:text="Seleccione la hora"
-            android:textColor="@color/white"
-            android:textSize="13sp" />
 
-        <Button
-            android:id="@+id/ecita"
-            android:layout_width="250dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="75dp"
-            android:background="@drawable/btnredondo"
-            android:gravity="center"
-            android:text="Registrar"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp" />
+    <TextView
+        android:id="@+id/txtNom"
+        android:layout_width="309dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="120dp"
+        android:gravity="center"
+        android:text="Seleccione la Fecha"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.598"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.055" />
 
+    <EditText
+        android:id="@+id/fechitas"
+        android:layout_width="66dp"
+        android:layout_height="49dp"
+        android:layout_gravity="center"
+        android:background="@drawable/edt_bground"
+        android:drawableLeft="@drawable/ic_baseline_calendar_month_24"
+        android:drawablePadding="20dp"
+        android:editable="false"
+        android:hint="dd/mm/yyyy"
+        android:padding="20dp"
+        android:textColor="@color/black"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.249"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.958" />
 
-    </LinearLayout>
-    </ScrollView>
+    <Button
+        android:id="@+id/dataPickerButton"
+        style="?android:spinnerStyle"
+        android:layout_width="270dp"
+        android:layout_height="70dp"
+        android:background="@drawable/edt_bground"
+        android:drawableLeft="@drawable/ic_baseline_calendar_month_24"
+        android:gravity="center"
+        android:onClick="openDatePicker"
+        android:text="JAN 01 2022"
+        android:textColor="@color/Azultxt"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.364" />
+
+    <EditText
+        android:id="@+id/horitas"
+        android:layout_width="270dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="25dp"
+        android:layout_marginBottom="344dp"
+        android:background="@drawable/edt_bground"
+        android:drawableLeft="@drawable/ic_baseline_access_time_24"
+        android:drawablePadding="20dp"
+        android:editable="false"
+        android:hint="12:00 PM"
+        android:padding="20dp"
+        android:textColor="@color/Azultxt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/TimePickerButton"
+        style="?android:timePickerMode"
+        android:layout_width="80dp"
+        android:layout_height="27dp"
+        android:layout_gravity="center"
+        android:background="@drawable/tatanka_button"
+        android:gravity="center"
+        android:onClick="openTimePicker"
+        android:text="Seleccione la hora"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.915"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.96" />
+
+    <Button
+        android:id="@+id/ecita"
+        android:layout_width="157dp"
+        android:layout_height="55dp"
+        android:layout_gravity="center"
+        android:background="@drawable/tatanka_button"
+        android:gravity="center"
+        android:text="Registrar"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.639" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

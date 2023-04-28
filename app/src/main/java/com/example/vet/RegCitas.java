@@ -54,9 +54,9 @@ RegCitas extends AppCompatActivity {
         hor = (EditText) findViewById(R.id.horitas);
         grabacita = findViewById(R.id.ecita);
         dateButton.setText(getTodaysDate());
-        timeButton = findViewById(R.id.TimePickerButton);
+        //hor = findViewById(R.id.TimePickerButton);
         getUserInfo();
-        timeButton.setOnClickListener(new View.OnClickListener() {
+        hor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();

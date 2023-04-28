@@ -23,7 +23,16 @@
             habitáculos"
             android:textColor="@color/white"
             android:textSize="38dp"
+            android:layout_marginStart="5dp"
             android:textStyle="bold"></TextView>
+        <ImageView
+            android:layout_width="209dp"
+            android:layout_height="120dp"
+            android:src="@drawable/pata"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="265dp">
+
+        </ImageView>
     </RelativeLayout>
 
 
