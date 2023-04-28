@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Alpha Vetlog</string>
-    <string name="app_ver">Alpha 1.1.2</string>
+    <string name="app_name">Vetlog</string>
+    <string name="app_ver">1.1.4</string>
     <string name="err_email">Ingrese un correo valido</string>
     <string name="err_pass">Ingrese una contraseña valida 8 carcteres</string>
     <!-- TODO: Remove or change this placeholder text -->
