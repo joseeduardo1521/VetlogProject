@@ -5,13 +5,18 @@ import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -68,10 +73,13 @@ public class regDatosMasActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private String storage_path = "pet/*";
     private  String download_uri, imgupUrl="";
+    private String corred="";
     private Spinner spinnerSta;
+    private String estadoactual="";
     private ProgressDialog progressDialog;
-
+    private static final int SMS_PERMISSION_REQUEST_CODE = 123;
     private static final int COD_SEL_IMAGE = 300;
+
     private Uri image_url = Uri.parse("");
     private String photo = "photo";
     private String idd;
@@ -219,7 +227,27 @@ public class regDatosMasActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == SMS_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // El permiso fue otorgado, realiza las acciones que necesitas aquí
+            } else {
+                // El permiso fue denegado, muestra un mensaje o realiza acciones alternativas si es necesario
+            }
+        }
+    }
+
     private void obtenerDatosMascota(String clave) {
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            // Solicita el permiso si no lo tienes
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, SMS_PERMISSION_REQUEST_CODE);
+        } else {
+            // Si ya tienes el permiso, realiza las acciones que necesitas aquí
+        }
         ArrayAdapter<CharSequence> adapterst = ArrayAdapter.createFromResource(this, R.array.spinner_items, android.R.layout.simple_spinner_item);
 
         mDatabase.child("Mascotas").child(clave).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -240,6 +268,8 @@ public class regDatosMasActivity extends AppCompatActivity {
                         String raza =snapshot.child("raze").getValue().toString();
                         String esp =snapshot.child("species").getValue().toString();
                         String est =snapshot.child("status").getValue().toString();
+                        corred = snapshot.child("key").getValue().toString();
+                        estadoactual = est;
 
                         key =snapshot.child("key").getValue().toString();
 
@@ -309,39 +339,45 @@ public class regDatosMasActivity extends AppCompatActivity {
     }
 
     private void subirPhoto(Uri image_url, String token) {
-        String rute_storage_photo = storage_path + "" + photo + "" + key +""+ idd;
-        StorageReference reference = storageReference.child(rute_storage_photo);
-        reference.putFile(image_url).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                while (!uriTask.isSuccessful());
-                if (uriTask.isSuccessful()){
-                    uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            download_uri = uri.toString();
-                            HashMap<String, Object> map = new HashMap<>();
-                            map.put("photo", download_uri);
-                            mDatabase.child("Mascotas").child(token).updateChildren(map);
-                            salir();
-                        }
-                    });
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
 
-                if (String.valueOf(image_url).equals(imgupUrl)){
-                    Toast.makeText(regDatosMasActivity.this, "No se cambio la foto", Toast.LENGTH_SHORT).show();
-                    salir();
-                }else{
-                    Toast.makeText(regDatosMasActivity.this, "Error al cargar foto", Toast.LENGTH_SHORT).show();
+        if (String.valueOf(image_url).equals(imgupUrl)){
+            Toast.makeText(regDatosMasActivity.this, "No se cambio la foto", Toast.LENGTH_SHORT).show();
+            salir();
+        }else {
+            String rute_storage_photo = storage_path + "" + photo + "" + key + "" + idd;
+            StorageReference reference = storageReference.child(rute_storage_photo);
+            reference.putFile(image_url).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uriTask.isSuccessful()) ;
+                    if (uriTask.isSuccessful()) {
+                        uriTask.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                download_uri = uri.toString();
+                                HashMap<String, Object> map = new HashMap<>();
+                                map.put("photo", download_uri);
+                                mDatabase.child("Mascotas").child(token).updateChildren(map);
+                                salir();
+                            }
+                        });
+                    }
                 }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
 
-            }
-        });
+                    if (String.valueOf(image_url).equals(imgupUrl)) {
+                        Toast.makeText(regDatosMasActivity.this, "No se cambio la foto", Toast.LENGTH_SHORT).show();
+                        salir();
+                    } else {
+                        Toast.makeText(regDatosMasActivity.this, "Error al cargar foto", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+        }
     }
 
 
@@ -356,12 +392,24 @@ public class regDatosMasActivity extends AppCompatActivity {
         map.put("species", species);
         map.put("sex", sex);
         map.put("status", status);
-
         mDatabase.child("Mascotas").child(key2).updateChildren(map).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task2) {
                 if(task2.isSuccessful()){
                     mostrarPantallaCarga();
+                    if(estadoactual != status){
+                        correoDueno(corred, new gestionarMasFragment.OnCorreoDuenoListener() {
+                            @Override
+                            public void onCorreoDuenoObtenido(String correoDueno) {
+                                try {
+                                    SmsManager smsManager = SmsManager.getDefault();
+                                    smsManager.sendTextMessage(correoDueno,null, "El estado de la mascota: "+name+"\nA cambiado a: "+status +"\n"+"Si desea consultar mas informacion use el siguiente enlace: vetlog.page.link/rM3L",null,null);
+                                }catch (Exception e){
+                                    Toast.makeText(regDatosMasActivity.this, "Es necesario activar los permisos de sms", Toast.LENGTH_SHORT).show();
+                                }
+                               }
+                        });
+                    }
                     Toast.makeText(regDatosMasActivity.this, "Actualizado", Toast.LENGTH_SHORT).show();
                     if (!(String.valueOf(image_url).equals(""))&&!(String.valueOf(image_url).equals("null"))){
                         subirPhoto(image_url, key2);
@@ -372,6 +420,26 @@ public class regDatosMasActivity extends AppCompatActivity {
 
                 }
                 else Toast.makeText(regDatosMasActivity.this, "Error al actualizar datos", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
+    public interface OnCorreoDuenoListener {
+        void onCorreoDuenoObtenido(String correoDueno);
+    }
+
+    private void correoDueno(String keydueno, gestionarMasFragment.OnCorreoDuenoListener listener){
+        String[] correoDu = new String[1];
+        mDatabase.child("Usuario").child(keydueno).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                correoDu[0] = snapshot.child("phone").getValue().toString();
+                listener.onCorreoDuenoObtenido(correoDu[0]);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
@@ -409,18 +477,6 @@ public class regDatosMasActivity extends AppCompatActivity {
 
     }
 
-    private void regresarmenu() {
-    Intent intent = new Intent(this,Menu.class);
-    startActivity(intent);
-    finish();
-
-    }
-
-    private void regresarmenu2() {
-        Intent intent = new Intent(this,MenuSec.class);
-        startActivity(intent);
-        finish();
-    }
 
     private void salir(){
         ocultarPantallaCarga();

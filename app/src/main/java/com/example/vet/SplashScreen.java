@@ -7,11 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -34,6 +39,7 @@ public class SplashScreen extends AppCompatActivity {
             finish();
 
         }else {
+
             nofi.setVisibility(View.INVISIBLE);
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -44,7 +50,34 @@ public class SplashScreen extends AppCompatActivity {
                 }
             },7000);
         }
+        handleDynamicLink(getIntent());
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Maneja el enlace dinámico cuando la actividad se reanuda
+        handleDynamicLink(getIntent());
+    }
+
+    private void handleDynamicLink(Intent intent) {
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(intent)
+                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        // Obtiene el enlace dinámico
+                        Uri deepLink = null;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+                        }
+
+                        if (deepLink != null) {
+                            // Maneja el enlace aquí, por ejemplo, navegando a la pantalla principal
+                        }
+                    }
+                });
     }
 
     private boolean isConnected(){

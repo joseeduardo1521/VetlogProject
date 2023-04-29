@@ -14,8 +14,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,9 +56,11 @@ public class mostrarReceta extends AppCompatActivity {
     private TextView tv_pet_name,tv_pet_species, tv_pet_sex, tv_pet_birth, tv_pet_color, tv_pet_raze, tv_pet_weight;
     private CircleImageView img_pet_photo;
     private RecyclerView recyclerView;
-    private TextView tv_empty;
+    private TextView tv_empty,txtbtnInternar;
     private LinearLayout btnInternar;
     private FirebaseAuth mAuth;
+    private static final int SMS_PERMISSION_REQUEST_CODE = 123;
+    private String corred = "";
     private DatabaseReference mDatabase;
 
     @Override
@@ -75,6 +79,7 @@ public class mostrarReceta extends AppCompatActivity {
         tv_pet_birth = findViewById(R.id.tv_pet_birth);
         tv_pet_birth = findViewById(R.id.tv_pet_color);
         tv_pet_color = findViewById(R.id.tv_pet_color);
+        txtbtnInternar = findViewById(R.id.txtbtnInternar);
         btnInternar = findViewById(R.id.btnInternar);
         tv_pet_raze = findViewById(R.id.tv_pet_raze);
         tv_pet_weight = findViewById(R.id.tv_pet_weight);
@@ -112,9 +117,12 @@ public class mostrarReceta extends AppCompatActivity {
                     integrator.initiateScan();
                 }
             }
+
         });
 
     }
+
+
 
     private void verificarInicioDueno() {
         String userkey = mAuth.getCurrentUser().getUid();
@@ -137,7 +145,6 @@ public class mostrarReceta extends AppCompatActivity {
         });
     }
 
-
     // Método que se ejecuta después de que se solicitan los permisos
     @Override
     public void onRequestPermissionsResult ( int requestCode, String[] permissions,
@@ -154,6 +161,14 @@ public class mostrarReceta extends AppCompatActivity {
             } else {
                 // Si se negó el permiso, mostrar un mensaje de error
                 Toast.makeText(mostrarReceta.this, "Se necesita permiso para acceder a la cámara", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if (requestCode == SMS_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // El permiso fue otorgado, realiza las acciones que necesitas aquí
+            } else {
+                // El permiso fue denegado, muestra un mensaje o realiza acciones alternativas si es necesario
             }
         }
     }
@@ -195,33 +210,121 @@ public class mostrarReceta extends AppCompatActivity {
     }
 
     private void registrarInter (String codigo){
+
+        String txtinterno = txtbtnInternar.getText().toString();
         Calendar calendar = Calendar.getInstance();
-        Date currentDate = calendar.getTime();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1; // Los meses en Calendar empiezan desde 0, por lo que debemos sumarle 1.
+        int year = calendar.get(Calendar.YEAR);
 
-        Map<String, Object> updMas = new HashMap<>();
-        updMas.put("idhabit", codigo);
-        updMas.put("start_date",currentDate.toString());
-        updMas.put("status","Internado");
-        updMas.put("end_date","");
+        String currentDate = String.format("%02d/%02d/%04d", day, month, year);
 
-        mDatabase.child("Mascotas").child(key).updateChildren(updMas).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+        if (txtinterno.equals("Internar")) {
+
+
+            Map<String, Object> updMas = new HashMap<>();
+            updMas.put("idhabit", codigo);
+            updMas.put("start_date", currentDate.toString());
+            updMas.put("status", "Internado");
+            updMas.put("end_date", "");
+
+            mDatabase.child("Mascotas").child(key).updateChildren(updMas).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+
+                    // Actualizar los campos del habitáculo
+                    Map<String, Object> updates = new HashMap<>();
+                    updates.put("idMas", key);
+                    updates.put("fecha_ingreso", currentDate);
+
+                    mDatabase.child("habitaculo").child(codigo).updateChildren(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(mostrarReceta.this, "Ingreso Completado", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            });
+
+            txtbtnInternar.setText("Dar alta");
+        }
+        else{
+
+            Map<String, Object> updMas = new HashMap<>();
+            updMas.put("idhabit", "");
+            updMas.put("status", "Casa");
+            updMas.put("end_date", currentDate.toString());
+
+            mDatabase.child("Mascotas").child(key).updateChildren(updMas).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+            // Actualizar los campos del habitáculo
+            Map<String, Object> updates = new HashMap<>();
+            updates.put("idMas", "");
+            updates.put("fecha_ingreso", "");
+
+            mDatabase.child("habitaculo").child(codigo).updateChildren(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    Toast.makeText(mostrarReceta.this, "Alta Completada", Toast.LENGTH_SHORT).show();
+                }
+            });
+                }
+            });
+
+
+            txtbtnInternar.setText("Internar");
+        }
+        actualizarEstado(key);
+    }
+
+    public interface OnCorreoDuenoListener {
+        void onCorreoDuenoObtenido(String correoDueno);
+    }
+
+    private void correoDueno(String keydueno, gestionarMasFragment.OnCorreoDuenoListener listener){
+        String[] correoDu = new String[1];
+        mDatabase.child("Usuario").child(keydueno).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                correoDu[0] = snapshot.child("phone").getValue().toString();
+                listener.onCorreoDuenoObtenido(correoDu[0]);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                // Actualizar los campos del habitáculo
-                Map<String, Object> updates = new HashMap<>();
-                updates.put("idMas", key);
-                updates.put("fecha_ingreso",currentDate);
-
-                mDatabase.child("habitaculo").child(codigo).updateChildren(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(mostrarReceta.this, "Ingreso Completado", Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
         });
+    }
 
+    private void actualizarEstado(String key){
+        mDatabase.child("Mascotas").child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String status = snapshot.child("status").getValue().toString();
+                    String name = snapshot.child("name").getValue().toString();
+                    correoDueno(corred, new gestionarMasFragment.OnCorreoDuenoListener() {
+                        @Override
+                        public void onCorreoDuenoObtenido(String correoDueno) {
+                            try {
+                                SmsManager smsManager = SmsManager.getDefault();
+                                smsManager.sendTextMessage(correoDueno,null, "El estado de la mascota: "+name+"\nA cambiado a: "+status +"\n"+"Si desea consultar mas informacion use el siguiente enlace: vetlog.page.link/rM3L",null,null);
+                            }catch (Exception e){
+                                Toast.makeText(mostrarReceta.this, "Es necesario activar los permisos de sms", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void buscarMascota(String clave) {
@@ -245,9 +348,10 @@ public class mostrarReceta extends AppCompatActivity {
                     String esp =ds.child("species").getValue().toString();
                     String color =ds.child("color").getValue().toString();
                     String weight =ds.child("weight").getValue().toString();
-                    if(ds.child("status").getValue().toString().equals("Internado")){
+                    corred = ds.child("key").getValue().toString();
+                    internado(clave);
 
-                    }
+
 
 
                     Glide.with(mostrarReceta.this)
@@ -263,6 +367,7 @@ public class mostrarReceta extends AppCompatActivity {
 
 
 
+
                 } else {
                     Toast.makeText(mostrarReceta.this, "No se encontró ninguna mascota con el código QR proporcionado", Toast.LENGTH_SHORT).show();
                 }
@@ -272,6 +377,28 @@ public class mostrarReceta extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void internado(String clave){
+
+        mDatabase.child("habitaculo").orderByChild("idMas").equalTo(clave).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean habitaculoEncontrado = false;
+                    if (snapshot.exists()) {
+                        habitaculoEncontrado = true;
+                     }
+                    if (habitaculoEncontrado){
+                        txtbtnInternar.setText("Dar alta");
+                    }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
 
