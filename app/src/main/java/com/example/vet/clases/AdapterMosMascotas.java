@@ -124,6 +124,26 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
             });
 
 
+            view.findViewById(R.id.btnEdtMas).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mCtx, regDatosMasActivity.class);
+                    intent.putExtra("llave2", llave);
+                    mCtx.startActivity(intent);
+
+                }
+            });
+
+            view.findViewById(R.id.btnRecetar).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mCtx, mostrarReceta.class);
+                    intent.putExtra("llave2", llave);
+                    mCtx.startActivity(intent);
+
+                }
+            });
+
             view.findViewById(R.id.btnBorrarM).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
