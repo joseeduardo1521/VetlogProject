@@ -125,7 +125,7 @@ public class Menu extends AppCompatActivity {
         cardAdop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent adop = new Intent(Menu.this, CrearAdopcion.class);
+                Intent adop = new Intent(Menu.this, mostrarAdopcion.class);
                 startActivity(adop);
             }
         });
@@ -152,6 +152,7 @@ public class Menu extends AppCompatActivity {
                 startActivity(qrs);
             }
         });
+
 
 
     }

@@ -102,6 +102,14 @@ public class Usuario_Menu extends AppCompatActivity {
             }
         });
 
+        cardAdop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent Adopmas = new Intent(Usuario_Menu.this,mostrarAdopcion.class);
+                startActivity(Adopmas);
+            }
+        });
+
     }
 
 

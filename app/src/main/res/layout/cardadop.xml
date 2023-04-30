@@ -1,0 +1,185 @@
+
+    <androidx.cardview.widget.CardView
+        android:onClick="expandC"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cardViewAdop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="#50b3c3">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="6dp">
+
+                <RelativeLayout
+                    android:id="@+id/layImg"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/indicator">
+
+                    <ImageView
+                        android:id="@+id/imageViewM"
+                        android:layout_width="90dp"
+                        android:layout_height="95dp"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20sp"
+                        android:paddingLeft="14dp"
+                        android:paddingRight="14dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/perro" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/layBotones"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="6dp"
+                    android:visibility="gone"
+                    android:layout_below="@+id/cuadro_info"
+                    android:gravity="center"
+                    android:layout_marginTop="16dp">
+
+                    <Button
+                        android:id="@+id/btnEdtMas"
+                        android:drawableStart="@drawable/ic_baseline_edit_24"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:visibility="invisible"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:layout_marginEnd="8dp"
+                        android:textColor="@android:color/white"
+                        android:backgroundTint="#007C91"
+                        android:text="Editar"
+                        app:autoSizeTextType="uniform"/>
+
+                    <Button
+
+                        android:id="@+id/btnRecetar"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Recetar"
+                        android:visibility="gone"
+                        android:backgroundTint="#FFA500"
+                        android:textColor="@android:color/white"
+                        android:drawableStart="@drawable/ic_baseline_add_alert_24"
+                        android:layout_gravity="center"
+                        android:maxLines="1"
+                        app:autoSizeTextType="uniform"/>
+
+                    <Button
+                        android:id="@+id/btnBorrarM"
+                        android:drawableEnd="@drawable/ic_baseline_delete_forever_24"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:textColor="@android:color/white"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:backgroundTint="#F04C5D"
+                        android:text="Borrar"
+                        android:maxLines="1"
+                        app:autoSizeTextType="uniform"/>
+
+                </LinearLayout>
+            <LinearLayout
+                android:id="@+id/cuadro_info"
+                android:layout_width="match_parent"
+                android:backgroundTint="@color/azul_back"
+                android:elevation="7dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_toEndOf="@+id/layImg"
+                android:layout_marginStart="18dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/nombreTextView"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:autoSizeTextType="uniform"
+                        android:textColor="@color/white"
+                        android:text="Nombre de la mascota"/>
+
+                    <TextView
+                        android:id="@+id/edadTesxtView"
+                        app:autoSizeTextType="uniform"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="6dp"
+                        android:layout_marginLeft="6dp"
+                        android:padding="6dp"
+                        android:gravity="center"
+                        android:visibility="invisible"
+                        android:text="Edad de mascota"
+                        android:textColor="@color/Azultxt"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+
+
+                    <TextView
+                        android:id="@+id/razaTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        app:autoSizeTextType="uniform"
+                        android:textColor="@color/white"
+                        android:text="Raza de la mascota"/>
+
+                    <TextView
+                        android:id="@+id/generoTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        app:autoSizeTextType="uniform"
+                        android:textColor="@color/white"
+                        android:text="Género de la mascota"/>
+
+                    <TextView
+                        android:id="@+id/especieTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:autoSizeTextType="uniform"
+                        android:textColor="@color/white"
+                        android:text="Especie de la mascota"/>
+
+                    <TextView
+                        android:id="@+id/edadTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        app:autoSizeTextType="uniform"
+                        android:textColor="@color/white"
+                        android:text="Estado"/>
+            </LinearLayout>
+
+
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>

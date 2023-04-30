@@ -42,7 +42,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MenuSec extends AppCompatActivity {
 
-    private View cardCerSesion, cardAgregarMas, cardVisualCita;
+    private View cardCerSesion, cardAgregarMas, cardVisualCita, cardAdop, cardVacun;
     private FirebaseAuth mAuth;
     private String idMas;
     private TextView mnombre, mRol;
@@ -77,6 +77,8 @@ public class MenuSec extends AppCompatActivity {
         cardAgregarMas  = (View) findViewById(R.id.D1);
         cardCerSesion = (View) findViewById(R.id.D7);
         cardVisualCita = (View) findViewById(R.id.D3);
+        cardAdop = (View) findViewById(R.id.D5);
+        cardVacun = (View) findViewById(R.id.D6);
         mnombre = (TextView) findViewById(R.id.usu);
         mRol = (TextView) findViewById(R.id.puesto);
         imgUsu =  findViewById(R.id.imgUsuario);
@@ -112,6 +114,22 @@ public class MenuSec extends AppCompatActivity {
                 editor.putString("pass","");
                 editor.apply();
                 cerrarSesion();
+            }
+        });
+
+
+        cardAdop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent adp = new Intent(MenuSec.this,mostrarAdopcion.class);
+                startActivity(adp);
+            }
+        });
+        cardVacun.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent vacu = new Intent(MenuSec.this,mostrarCamp.class);
+                startActivity(vacu);
             }
         });
 
