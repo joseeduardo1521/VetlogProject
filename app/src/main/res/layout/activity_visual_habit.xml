@@ -1,95 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".VisualCitas"
-    android:background="@drawable/backgroundnl" >
+    android:background="@color/azul_back"
+    android:layout_height="match_parent">
 
-    <ScrollView
+    <TextView
+        android:id="@+id/txttitle"
         android:layout_width="match_parent"
-        android:layout_height="721dp"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="12dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="345dp"
-            android:orientation="vertical"
-            android:padding="18dp">
+        android:gravity="center"
+        android:background="@drawable/bg_header3"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_centerHorizontal="true"
+        android:text="Habitaculos registrados"
+        android:textColor="@color/Azultxt"
+        android:textSize="24sp"
+        android:elevation="4dp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/hab_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/txttitle"
+        android:padding="8dp"
+        android:scrollbars="vertical"
+        />
 
-            <EditText
-                android:id="@+id/nomHabi"
-                android:layout_width="334dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:background="#30ffffff"
-                android:drawablePadding="20dp"
-                android:hint="Numero de habitáculo"
-                android:padding="20dp"
-                android:textColor="@color/black"/>
-            <EditText
-                android:id="@+id/fechCita"
-                android:layout_width="334dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:background="#30ffffff"
-                android:drawablePadding="20dp"
-                android:hint="Falta información"
-                android:padding="20dp"
-                android:textColor="@color/black"/>
-            <EditText
-                android:id="@+id/habitad"
-                android:layout_width="334dp"
-                android:layout_height="65dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                android:background="#30ffffff"
-                android:drawablePadding="20dp"
-                android:hint="Falta información"
-                android:padding="20dp"
-                android:textColor="@color/black"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_hab_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_baseline_add_24"
+        app:backgroundTint="@color/teal_200"
+        app:tint="@android:color/white" />
 
-
-
-            <ListView
-                android:id="@+id/lv_datoshabit"
-                android:layout_width="match_parent"
-                android:layout_height="135dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.482"
-                android:padding="8dp"
-                android:layout_margin="@dimen/cardview_default_elevation"
-                app:layout_constraintStart_toStartOf="parent" />
-
-
-            <Button
-                android:id="@+id/btnactualizar"
-                android:layout_width="200dp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="128dp"
-                android:background="@drawable/tatanka_button"
-                android:text="Limpiar Campos"
-                android:textColor="@color/black"
-                android:textSize="18dp" />
-
-        </LinearLayout>
-    </ScrollView>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

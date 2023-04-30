@@ -1,8 +1,10 @@
-package com.example.vet.clases;
+package com.example.vet.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
@@ -20,10 +22,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.vet.CrearVacuna;
 import com.example.vet.R;
+import com.example.vet.clases.mostrarMascota;
 import com.example.vet.mostrarReceta;
-import com.example.vet.new_receta;
 import com.example.vet.regDatosMasActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -39,21 +40,30 @@ import com.google.firebase.storage.StorageReference;
 import java.util.List;
 
 
-public class AdapterMosAdop extends RecyclerView.Adapter<AdapterMosAdop.MosAdopViewHolder> {
+public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.MosMacotasViewHolder> {
+
     private LayoutInflater mInflater;
     private Context mCtx;
-    private List<mostrarAdop> adopLists;
+    private List<mostrarMascota> mascotaList;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
 
-    public AdapterMosAdop(Context mCtx, List<mostrarAdop> adopLists) {
-        this.mCtx=mCtx;
-        this.adopLists = adopLists;
-        this.mInflater = LayoutInflater.from(mCtx);
+
+    @Override
+    public int getItemCount() {
+        return mascotaList.size();
     }
 
-    public class MosAdopViewHolder extends RecyclerView.ViewHolder {
+    public AdapterMosMascotas(Context mCtx, List<mostrarMascota> mascotaList) {
+        this.mCtx=mCtx;
+        this.mascotaList = mascotaList;
+        this.mInflater = LayoutInflater.from(mCtx);
+
+    }
+
+
+    public class MosMacotasViewHolder extends RecyclerView.ViewHolder {
         TextView txtNombre, txtRaza,txtEdad,txtEspecie, txtDueño,txtGenero;
         ImageView imgMasc;
         CardView cv;
@@ -61,13 +71,11 @@ public class AdapterMosAdop extends RecyclerView.Adapter<AdapterMosAdop.MosAdopV
         Button btnreceta;
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
         int position;
-        Button btnEdCamp, btnBorrarCamp;
         LinearLayout layout_btn;
         String llave,imgMascota;
 
-        public MosAdopViewHolder(View view) {
+        public MosMacotasViewHolder(View view) {
             super(view);
-
             txtNombre = view.findViewById(R.id.nombreTextView);
             txtRaza = view.findViewById(R.id.razaTextView);
             txtEdad = view.findViewById(R.id.edadTextView);
@@ -77,7 +85,7 @@ public class AdapterMosAdop extends RecyclerView.Adapter<AdapterMosAdop.MosAdopV
             imgMasc = view.findViewById(R.id.imageViewM);
             btnreceta = view.findViewById(R.id.btnRecetar);
 
-            cv = view.findViewById(R.id.cardViewAdop);
+            cv = view.findViewById(R.id.cardViewM);
             layout_btn = view.findViewById(R.id.layBotones);
             // Define click listener for the ViewHolder's View
 
@@ -99,12 +107,12 @@ public class AdapterMosAdop extends RecyclerView.Adapter<AdapterMosAdop.MosAdopV
                                     layout_btn.setVisibility(vw);
                                 }
                                 if (lvl.equals("1")){
-                                    btnreceta.setVisibility(View.INVISIBLE);
+                                    btnreceta.setVisibility(View.VISIBLE);
                                 }
                                 if (lvl.equals("3")){
                                     Intent intent = new Intent(mCtx, mostrarReceta.class);
                                     intent.putExtra("llave2", llave);
-                                    //mCtx.startActivity(intent);
+                                    mCtx.startActivity(intent);
                                 }
                             }
                         }
@@ -114,6 +122,7 @@ public class AdapterMosAdop extends RecyclerView.Adapter<AdapterMosAdop.MosAdopV
                     });
                 }
             });
+
 
             view.findViewById(R.id.btnEdtMas).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -138,7 +147,7 @@ public class AdapterMosAdop extends RecyclerView.Adapter<AdapterMosAdop.MosAdopV
             view.findViewById(R.id.btnBorrarM).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DatabaseReference registroRef = databaseRef.child("Adopcion").child(llave);
+                    DatabaseReference registroRef = databaseRef.child("Mascotas").child(llave);
                     if (!(imgMascota.equals("https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693"))) {
                         StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(imgMascota);
                         // Borra el archivo de Firebase Storage
@@ -155,7 +164,7 @@ public class AdapterMosAdop extends RecyclerView.Adapter<AdapterMosAdop.MosAdopV
                         });
                     }
                     registroRef.removeValue();
-                    //mascotaList.remove(position);
+                    mascotaList.remove(position);
                     notifyItemRemoved(position);
                 }
             });
@@ -165,36 +174,61 @@ public class AdapterMosAdop extends RecyclerView.Adapter<AdapterMosAdop.MosAdopV
 
 
 
-    @NonNull
+
+    // Create new views (invoked by the layout manager)
     @Override
-    public AdapterMosAdop.MosAdopViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view  = mInflater.from(parent.getContext()).inflate(R.layout.cardadop, parent,false);
-        return new AdapterMosAdop.MosAdopViewHolder(view);
+    public MosMacotasViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        // Create a new view, which defines the UI of the list item
+        View view  = mInflater.from(viewGroup.getContext()).inflate(R.layout.cardmascotas, viewGroup,false   );
+        return new MosMacotasViewHolder(view);
     }
 
+    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(@NonNull AdapterMosAdop.MosAdopViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        mostrarAdop campa = adopLists.get(position);
-        holder.imgMascota = campa.getImagenM();
-        holder.llave = campa.getIdM();
+    public void onBindViewHolder(MosMacotasViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
+        mostrarMascota mascota = mascotaList.get(position);
+        viewHolder.imgMascota = mascota.getImagenM();
+        viewHolder.llave = mascota.getIdM();
         Glide.with(mCtx)
-                .load(campa.getImagenM())
-                .into(holder.imgMasc);
+                .load(mascota.getImagenM())
+                .into(viewHolder.imgMasc);
 
-        holder.txtNombre.setText(campa.getNombreM());
-        holder.txtEspecie.setText(campa.getEspecieM());
-        //holder.txtDueño.setText(campa.getCorreoDueno());
-        holder.txtRaza.setText(campa.getColorM());
-        holder.txtEdad.setText(campa.getEdadM());
-        holder.txtGenero.setText(campa.getGeneroM());
-        holder.position = position;
-        holder.cv.setAnimation(AnimationUtils.loadAnimation(mCtx,R.anim.fade_trans));
+        changeShapeColor(viewHolder,mascota.getEstadoM() );
+
+        viewHolder.txtNombre.setText(mascota.getNombreM());
+        viewHolder.txtEspecie.setText(mascota.getEspecieM());
+        viewHolder.txtDueño.setText(mascota.getCorreoDueno());
+        viewHolder.txtRaza.setText(mascota.getRazaM());
+        viewHolder.txtEdad.setText(mascota.getEdadM());
+        viewHolder.txtGenero.setText(mascota.getGeneroM());
+        viewHolder.position = position;
+        viewHolder.cv.setAnimation(AnimationUtils.loadAnimation(mCtx,R.anim.fade_trans));
 
 
     }
 
-    @Override
-    public int getItemCount() {
-       return adopLists.size();
+    private void changeShapeColor(RecyclerView.ViewHolder holder, String estado) {
+         RelativeLayout layImg = holder.itemView.findViewById(R.id.layImg);
+        GradientDrawable drawable = (GradientDrawable) layImg.getBackground();
+        switch (estado){
+            case "Casa":
+                drawable.setStroke(4, Color.parseColor("#004AF0")); // Nuevo color si se cumple la condición
+                break;
+            case "Revision":
+                drawable.setStroke(4, Color.parseColor("#FFFF00")); // Nuevo color si se cumple la condición
+                break;
+            case "Operando":
+                drawable.setStroke(4, Color.parseColor("#FF0000")); // Nuevo color si se cumple la condición
+                break;
+            case "Internado":
+                drawable.setStroke(4, Color.parseColor("#FFA500")); // Nuevo color si se cumple la condición
+                break;
+            case "Estable":
+                drawable.setStroke(4, Color.parseColor("#00FF00")); // Nuevo color si se cumple la condición
+                break;
+        }
     }
+
+    // Return the size of your dataset (invoked by the layout manager)
+
 }

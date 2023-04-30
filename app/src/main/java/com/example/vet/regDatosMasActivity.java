@@ -28,10 +28,8 @@ import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.bumptech.glide.Glide;
-import com.example.vet.clases.AdapterMosMascotas;
 import com.example.vet.clases.DataEspecies;
 import com.example.vet.clases.EspecieAdapter;
-import com.example.vet.clases.mostrarMascota;
 import com.example.vet.frag.gestionarMasFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -464,8 +462,7 @@ public class regDatosMasActivity extends AppCompatActivity {
                 if(task2.isSuccessful()){
                     mostrarPantallaCarga();
                     Toast.makeText(regDatosMasActivity.this, "Registrado", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(regDatosMasActivity.this, image_url.toString(), Toast.LENGTH_SHORT).show();
-                    if(image_url.toString() != ""){
+                    if(image_url.toString() != "" || image_url != null){
                     subirPhoto(image_url,token);}
                     else {
                         salir();

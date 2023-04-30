@@ -47,7 +47,7 @@ public class Genqr extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Button btnSave = findViewById(R.id.btnSave);
-        Button btnlist = findViewById(R.id.btnLista);
+
         btnGenera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,14 +62,6 @@ public class Genqr extends AppCompatActivity {
                 } catch (Exception e){
                     e.printStackTrace();
                 }
-            }
-        });
-
-        btnlist.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent pu = new Intent(Genqr.this, VisualHabit.class);
-                startActivity(pu);
             }
         });
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +81,6 @@ public class Genqr extends AppCompatActivity {
         if (imgQr != null) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) imgQr.getDrawable();
             Bitmap bitmap = bitmapDrawable.getBitmap();
-
             ContentResolver resolver = getContentResolver();
             ContentValues contentValues = new ContentValues();
             contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "imagen_qr.jpg");
@@ -113,11 +104,16 @@ public class Genqr extends AppCompatActivity {
                 }
             }
         }
+        else {
+            Toast.makeText(this, "Primero debes generar el QR", Toast.LENGTH_SHORT).show();
+        }
     }
     private void registro(String hab){
 
         final Map<String, Object> map = new HashMap<>();
         map.put("lugar", hab);
+        map.put("idMas", "");
+        map.put("fecha_ingreso", "");
 
         String id = mDatabase.push().getKey();
         mDatabase.child("habitaculo").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
