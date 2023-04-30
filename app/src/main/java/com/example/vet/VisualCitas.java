@@ -61,7 +61,7 @@ public class VisualCitas extends AppCompatActivity implements View.OnClickListen
     }
 
     private void listarDatos() {
-        databaseReference.child("Citas").addValueEventListener(new ValueEventListener() {
+        databaseReference.child("Citas").orderByChild("date").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listPerson.clear();
@@ -79,6 +79,7 @@ public class VisualCitas extends AppCompatActivity implements View.OnClickListen
             }
         });
     }
+
 
     private void inicializarFirebase() {
         FirebaseApp.initializeApp(this);
