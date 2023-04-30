@@ -1,20 +1,23 @@
 package com.example.vet.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,9 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.vet.CrearVacuna;
 import com.example.vet.R;
-import com.example.vet.clases.mostrarCamList;
 import com.example.vet.clases.mostrarqrList;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +36,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.BarcodeFormat;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 public class AdapterMosQr extends RecyclerView.Adapter<AdapterMosQr.MosMacotasViewHolder> {
@@ -60,7 +63,7 @@ public class AdapterMosQr extends RecyclerView.Adapter<AdapterMosQr.MosMacotasVi
     public class MosMacotasViewHolder extends RecyclerView.ViewHolder {
         TextView txthabitaculo, txtMascota, txtFechaIntern;
         CardView cv;
-        Button  btnBorrarCamp;
+        Button  btnBorrarQr, btnGuardarQr;
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
         int position;
         LinearLayout layout_btn;
@@ -75,7 +78,8 @@ public class AdapterMosQr extends RecyclerView.Adapter<AdapterMosQr.MosMacotasVi
             layb = view.findViewById(R.id.layBtn);
             txtMascota = view.findViewById(R.id.txtMascota);
             txtFechaIntern = view.findViewById(R.id.txtFechaIntern);
-            btnBorrarCamp = view.findViewById(R.id.btnBorrarQr);
+            btnBorrarQr = view.findViewById(R.id.btnBorrarQr);
+            btnGuardarQr = view.findViewById(R.id.btnSaveQr);
             imgQr =  view.findViewById(R.id.qrCode);
             cv = view.findViewById(R.id.carQr);
             layout_btn = view.findViewById(R.id.layBotones);
@@ -97,7 +101,7 @@ public class AdapterMosQr extends RecyclerView.Adapter<AdapterMosQr.MosMacotasVi
                                 String lvl;
                                 lvl = snapshot.child("lvl").getValue().toString();
                                 if (lvl.equals("1")){
-                                    btnBorrarCamp.setVisibility(View.VISIBLE);
+                                    btnBorrarQr.setVisibility(View.VISIBLE);
                                     layb.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -119,6 +123,45 @@ public class AdapterMosQr extends RecyclerView.Adapter<AdapterMosQr.MosMacotasVi
                     notifyItemRemoved(position);
                 }
             });
+
+            view.findViewById(R.id.btnSaveQr).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveToGallery(MosMacotasViewHolder.this);
+                }
+            });
+        }
+    }
+
+
+
+    private void saveToGallery(MosMacotasViewHolder viewHolder) {
+        if (viewHolder.imgQr != null) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) viewHolder.imgQr.getDrawable();
+            Bitmap bitmap = bitmapDrawable.getBitmap();
+
+            ContentResolver resolver = mCtx.getContentResolver();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "imagen_qr.jpg");
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+
+            // Cambiar el directorio de almacenamiento a DCIM o Pictures
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM);
+            // contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+
+            Uri imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+            if (imageUri != null) {
+                try {
+                    OutputStream outputStream = resolver.openOutputStream(imageUri);
+                    if (outputStream != null) {
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                        outputStream.close();
+                        Toast.makeText(mCtx, "Imagen guardada en la galería", Toast.LENGTH_SHORT).show(); // Mostrar mensaje de guardado
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -138,7 +181,6 @@ public class AdapterMosQr extends RecyclerView.Adapter<AdapterMosQr.MosMacotasVi
         viewHolder.txthabitaculo.setText(qr.getLugar());
         viewHolder.txtFechaIntern.setText("Fecha de ingreso: "+qr.getFech_in());
         String mas = qr.getIdMas();
-        Toast.makeText(mCtx, mas, Toast.LENGTH_SHORT).show();
         if(mas.equals("")) {
             viewHolder.txtMascota.setText("Sin mascota en habitaculo");
         }

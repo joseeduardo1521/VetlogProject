@@ -81,7 +81,6 @@ public class Genqr extends AppCompatActivity {
         if (imgQr != null) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) imgQr.getDrawable();
             Bitmap bitmap = bitmapDrawable.getBitmap();
-
             ContentResolver resolver = getContentResolver();
             ContentValues contentValues = new ContentValues();
             contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, "imagen_qr.jpg");
@@ -104,6 +103,9 @@ public class Genqr extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        }
+        else {
+            Toast.makeText(this, "Primero debes generar el QR", Toast.LENGTH_SHORT).show();
         }
     }
     private void registro(String hab){
