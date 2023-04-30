@@ -148,7 +148,7 @@ public class Menu extends AppCompatActivity {
         cardQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent qrs = new Intent(Menu.this,Genqr.class);
+                Intent qrs = new Intent(Menu.this,VisualHabit.class);
                 startActivity(qrs);
             }
         });

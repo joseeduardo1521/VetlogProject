@@ -1,18 +1,22 @@
-package com.example.vet.clases;
+package com.example.vet.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.transition.AutoTransition;
 import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -20,77 +24,71 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vet.CrearVacuna;
 import com.example.vet.R;
-import com.example.vet.new_receta;
+import com.example.vet.clases.mostrarCamList;
+import com.example.vet.clases.mostrarqrList;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.BarcodeFormat;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.List;
 
-
-public class AdapterMosCamp extends RecyclerView.Adapter<AdapterMosCamp.MosMacotasViewHolder> {
+public class AdapterMosQr extends RecyclerView.Adapter<AdapterMosQr.MosMacotasViewHolder> {
 
     private LayoutInflater mInflater;
     private Context mCtx;
-    private List<mostrarCamList> camLists;
+    private List<mostrarqrList> qrlist;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
-
     @Override
     public int getItemCount() {
-        return camLists.size();
+        return qrlist.size();
     }
 
-    public AdapterMosCamp(Context mCtx, List<mostrarCamList> camLists) {
+    public AdapterMosQr(Context mCtx, List<mostrarqrList> qrlist) {
         this.mCtx=mCtx;
-        this.camLists = camLists;
+        this.qrlist = qrlist;
         this.mInflater = LayoutInflater.from(mCtx);
     }
 
 
     public class MosMacotasViewHolder extends RecyclerView.ViewHolder {
-        TextView txtCampaign_name;
-        TextView txtCampaign_dates;
-        TextView txtCampaign_location;
-        TextView txtCampaign_species;
-        TextView txtCampaign_additional_notes;
+        TextView txthabitaculo, txtMascota, txtFechaIntern;
         CardView cv;
-        Button btnEdCamp, btnBorrarCamp;
+        Button  btnBorrarCamp;
         DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
         int position;
-        RelativeLayout layout_btn;
-        String idCam;
+        LinearLayout layout_btn;
+        LinearLayout layb;
+        String idHab;
+        ImageView imgQr;
 
         public MosMacotasViewHolder(View view) {
             super(view);
 
-            txtCampaign_name = view.findViewById(R.id.campaign_name);
-            txtCampaign_dates = view.findViewById(R.id.campaign_dates);
-            txtCampaign_location = view.findViewById(R.id.campaign_location);
-            txtCampaign_species = view.findViewById(R.id.campaign_species);
-            txtCampaign_additional_notes = view.findViewById(R.id.campaign_additional_notes);
-            btnEdCamp = view.findViewById(R.id.btnEdCamp);
-            btnBorrarCamp = view.findViewById(R.id.btnBorrarCamp);
-
-
-            cv = view.findViewById(R.id.cardCamp);
+            txthabitaculo = view.findViewById(R.id.txthabitaculo);
+            layb = view.findViewById(R.id.layBtn);
+            txtMascota = view.findViewById(R.id.txtMascota);
+            txtFechaIntern = view.findViewById(R.id.txtFechaIntern);
+            btnBorrarCamp = view.findViewById(R.id.btnBorrarQr);
+            imgQr =  view.findViewById(R.id.qrCode);
+            cv = view.findViewById(R.id.carQr);
             layout_btn = view.findViewById(R.id.layBotones);
             // Define click listener for the ViewHolder's View
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    mAuth = FirebaseAuth.getInstance();
+                    mDatabase = FirebaseDatabase.getInstance().getReference();
                     int vw =(layout_btn.getVisibility() ==  v.GONE)? v.VISIBLE: v.GONE;
                     TransitionManager.beginDelayedTransition(layout_btn, new AutoTransition());
                     layout_btn.setVisibility(vw);
-
-                    mAuth = FirebaseAuth.getInstance();
-                    mDatabase = FirebaseDatabase.getInstance().getReference();
                     String id= mAuth.getCurrentUser().getUid();
                     mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
                         @Override
@@ -98,9 +96,9 @@ public class AdapterMosCamp extends RecyclerView.Adapter<AdapterMosCamp.MosMacot
                             if(snapshot.exists()){
                                 String lvl;
                                 lvl = snapshot.child("lvl").getValue().toString();
-                                if (lvl.equals("1")|| lvl.equals("2")){
+                                if (lvl.equals("1")){
                                     btnBorrarCamp.setVisibility(View.VISIBLE);
-                                    btnEdCamp.setVisibility(View.VISIBLE);
+                                    layb.setVisibility(View.VISIBLE);
                                 }
                             }
                         }
@@ -112,21 +110,12 @@ public class AdapterMosCamp extends RecyclerView.Adapter<AdapterMosCamp.MosMacot
                 }
             });
 
-            view.findViewById(R.id.btnEdCamp).setOnClickListener(new View.OnClickListener() {
+            view.findViewById(R.id.btnBorrarQr).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                        Intent intent = new Intent(mCtx, CrearVacuna.class);
-                        intent.putExtra("llaveCam", idCam);
-                        mCtx.startActivity(intent);
-                }
-            });
-
-            view.findViewById(R.id.btnBorrarCamp).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DatabaseReference registroRef = databaseRef.child("Campains").child(idCam);
+                    DatabaseReference registroRef = databaseRef.child("habitaculo").child(idHab);
                     registroRef.removeValue();
-                    camLists.remove(position);
+                    qrlist.remove(position);
                     notifyItemRemoved(position);
                 }
             });
@@ -137,23 +126,54 @@ public class AdapterMosCamp extends RecyclerView.Adapter<AdapterMosCamp.MosMacot
     @Override
     public MosMacotasViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
-        View view  = mInflater.from(viewGroup.getContext()).inflate(R.layout.cardcamp, viewGroup,false   );
+        View view  = mInflater.from(viewGroup.getContext()).inflate(R.layout.cardqr, viewGroup,false);
         return new MosMacotasViewHolder(view);
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(MosMacotasViewHolder viewHolder, @SuppressLint("RecyclerView") int position) {
-        mostrarCamList campa = camLists.get(position);
-        viewHolder.idCam = campa.getIdC();
-        viewHolder.txtCampaign_name.setText(campa.getNomca());
-        viewHolder.txtCampaign_dates.setText(campa.getInidate()+" --- "+campa.getFindate());
-        viewHolder.txtCampaign_location.setText(campa.getLoc());
-        viewHolder.txtCampaign_species.setText(campa.getEsp());
-        viewHolder.txtCampaign_additional_notes.setText(campa.getNota());
+        mostrarqrList qr = qrlist.get(position);
+        viewHolder.idHab = qr.getIdH();
+        viewHolder.txthabitaculo.setText(qr.getLugar());
+        viewHolder.txtFechaIntern.setText("Fecha de ingreso: "+qr.getFech_in());
+        String mas = qr.getIdMas();
+        Toast.makeText(mCtx, mas, Toast.LENGTH_SHORT).show();
+        if(mas.equals("")) {
+            viewHolder.txtMascota.setText("Sin mascota en habitaculo");
+        }
+        else {
+            getPetName(qr.getIdMas(), viewHolder);
+        }
+        try {
+            // Oculta el teclado
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.encodeBitmap(qr.getLugar(), BarcodeFormat.QR_CODE, 750,750);
+            viewHolder.imgQr.setImageBitmap(bitmap);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
         viewHolder.cv.setAnimation(AnimationUtils.loadAnimation(mCtx,R.anim.fade_trans));
     }
 
+    private void getPetName(String idPet, MosMacotasViewHolder viewHolder){
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("Mascotas").child(idPet).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    String nomMas = snapshot.child("name").getValue().toString();
+                    viewHolder.txtMascota.setText(nomMas);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
     // Return the size of your dataset (invoked by the layout manager)
 
 }

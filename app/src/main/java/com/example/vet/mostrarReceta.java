@@ -17,15 +17,12 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.vet.clases.AdapterMosMascotas;
-import com.example.vet.clases.AdapterMosRecetas;
-import com.example.vet.clases.mostrarMascota;
+import com.example.vet.adapters.AdapterMosRecetas;
 import com.example.vet.clases.mostrarRecetaList;
 import com.example.vet.frag.gestionarMasFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -41,7 +38,6 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -409,6 +405,7 @@ public class mostrarReceta extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
+                    recetaList.clear();
                     for(DataSnapshot ds: snapshot.getChildren()){
                         String idMed = ds.getKey();
                         String med = ds.child("medicamento").getValue().toString();
@@ -418,16 +415,11 @@ public class mostrarReceta extends AppCompatActivity {
                         String freq =ds.child("frecuencia").getValue().toString();
                         String obs = ds.child("observaciones").getValue().toString();
                         String vet = ds.child("vet").getValue().toString();
-
                         recetaList.add(new mostrarRecetaList(
                                 idMed, vet, fecha, med, dosis, freq, durante, obs
                         ));
-
-
-
                         AdapterMosRecetas adapter = new AdapterMosRecetas(mostrarReceta.this, recetaList,key);
                         recyclerView.setAdapter(adapter);
-
                     }
                 }
                 verificarRecetas();

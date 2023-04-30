@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.vet.R;
-import com.example.vet.clases.AdapterMosMascotas;
+import com.example.vet.adapters.AdapterMosMascotas;
 import com.example.vet.clases.mostrarMascota;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;

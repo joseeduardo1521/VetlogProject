@@ -188,8 +188,6 @@ public class new_receta extends AppCompatActivity {
     }
 
     private void regresarmenu() {
-        Intent intent = new Intent(this,Menu.class);
-        startActivity(intent);
         finish();
     }
 
