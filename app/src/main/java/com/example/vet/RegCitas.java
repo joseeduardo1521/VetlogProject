@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
@@ -30,8 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
-public class
-RegCitas extends AppCompatActivity {
+public class RegCitas extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private TimePickerDialog timePickerDialog;
@@ -86,6 +87,8 @@ RegCitas extends AppCompatActivity {
                 fecha = String.valueOf(textoss.getText());
                 hora = String.valueOf(hor.getText());
                 registro(fecha,hora,mnombre);
+               //Intent mas = new Intent(RegCitas.this,Usuarios.class);
+                //startActivity(mas);
             }
         });
 
@@ -110,25 +113,53 @@ RegCitas extends AppCompatActivity {
             }
         });
     }
-    private void registro(String fecha,String hora, String mnombre){
-
+    private void registro(String fecha, String hora, String mnombre) {
         final Map<String, Object> map = new HashMap<>();
         map.put("date", fecha);
-        map.put("time",hora);
-        map.put("name",mnombre);
+        map.put("time", hora);
+        map.put("name", mnombre);
         String id = mDatabase.push().getKey();
-        String idu= mAuth.getCurrentUser().getUid();
-        mDatabase.child("Citas").child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+        String idu = mAuth.getCurrentUser().getUid();
+        map.put("uid", id);
+        map.put("id", idu);
+
+        // Crear referencia a la ubicación de la base de datos que contiene los registros
+        DatabaseReference citasRef = mDatabase.child("Citas");
+
+        // Crear consulta para verificar si ya existe un registro con la misma fecha, hora y nombre
+        Query consulta = citasRef.orderByChild("time").equalTo(hora);
+
+        // Agregar un ValueEventListener para escuchar cambios en los datos
+        consulta.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task2) {
-                if(task2.isSuccessful()){
-                    Toast.makeText(RegCitas.this, "Registrado", Toast.LENGTH_SHORT).show();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Comprobar si los datos existen
+                if (dataSnapshot.exists()) {
+                    Toast.makeText(RegCitas.this, "La hora de la cita ya existe", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Agregar el nuevo registro
+                    citasRef.child(id).setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task2) {
+                            if (task2.isSuccessful()) {
+                                Toast.makeText(RegCitas.this, "Registrado", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(RegCitas.this, "Error al registrar datos", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
-                else Toast.makeText(RegCitas.this, "Error al registrar datos", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Manejar error de la consulta
+                Toast.makeText(RegCitas.this, "Error al verificar si el registro existe", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
+
+
     private String getTodaysDate() {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);

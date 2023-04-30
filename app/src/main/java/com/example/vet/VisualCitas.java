@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.vet.clases.Cit;
 import com.google.firebase.FirebaseApp;
@@ -38,7 +39,7 @@ public class VisualCitas extends AppCompatActivity implements View.OnClickListen
         nombre = findViewById(R.id.nomCita);
         fecha = findViewById(R.id.fechCita);
         hora = findViewById(R.id.horCita);
-        btnactuali = findViewById(R.id.btnactuali);
+        btnactuali = findViewById(R.id.btnEliminar);
         listV_personas = findViewById(R.id.lv_datosPersonas);
         inicializarFirebase();
         listarDatos();
@@ -54,9 +55,11 @@ public class VisualCitas extends AppCompatActivity implements View.OnClickListen
         btnactuali.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                limpiarCajas();
+                eliminarCita();
             }
         });
+
+
 
     }
 
@@ -86,6 +89,21 @@ public class VisualCitas extends AppCompatActivity implements View.OnClickListen
         firebaseDatabase = FirebaseDatabase.getInstance();
         //firebaseDatabase.setPersistenceEnabled(true);
         databaseReference = firebaseDatabase.getReference();
+    }
+    private void eliminarCita() {
+        if (personaSelected != null) {
+            // Eliminar la cita de la lista
+            listPerson.remove(personaSelected);
+            arrayAdapterPersona.notifyDataSetChanged();
+
+            // Eliminar la cita de la base de datos
+            databaseReference.child("Citas").child(personaSelected.getUid()).removeValue();
+
+            // Limpiar las cajas de texto
+            limpiarCajas();
+        } else {
+            Toast.makeText(this, "Seleccione una cita para eliminar", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

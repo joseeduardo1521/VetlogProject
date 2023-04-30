@@ -35,6 +35,8 @@ public class Usuario_Menu extends AppCompatActivity {
     private TextView mnombre,mRol;
     private FirebaseAuth mAuth;
     private String idMas;
+    private TextView fechamos, horamos;
+    private TextView mname,mfecha,mhora;
     private CircleImageView imgUsu;
     private DatabaseReference mDatabase;
     public static final String SHARED_PREFS ="sharedPrefs.mail";
@@ -70,6 +72,10 @@ public class Usuario_Menu extends AppCompatActivity {
         cardAdop =(View) findViewById(R.id.D5);
         cardVacu = (View) findViewById(R.id.D6);
         imgUsu =  findViewById(R.id.imgUsuario);
+        fechamos = (TextView) findViewById(R.id.demo);
+        horamos = (TextView) findViewById(R.id.hdemos);
+        mfecha = (TextView) findViewById(R.id.txtmoshora);
+        mhora = (TextView) findViewById(R.id.txtmosfecha);
         getUserInfo();
 
         cardCerSesion.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +156,36 @@ public class Usuario_Menu extends AppCompatActivity {
 
             }
         });
+
+        mDatabase.child("Citas").orderByChild("id").equalTo(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    for(DataSnapshot dataSnapshot: snapshot.getChildren()){
+                        String nombre,fecha,hora;
+                        nombre = dataSnapshot.child("name").getValue().toString();
+                        fecha = dataSnapshot.child("date").getValue().toString();
+                        hora = dataSnapshot.child("time").getValue().toString();
+                        mfecha.setText(hora);
+                        mhora.setText(fecha);
+                    }
+                }else{
+                    mfecha.setVisibility(View.INVISIBLE);
+                    mhora.setVisibility(View.INVISIBLE);
+                    fechamos.setText("No cuenta con una cita");
+                    horamos.setText("Asignada a su cuenta");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
     }
 
     private void cerrarSesion(){
