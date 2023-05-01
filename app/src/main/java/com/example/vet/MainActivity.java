@@ -1,5 +1,6 @@
 package com.example.vet;
 
+import static android.content.ContentValues.TAG;
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 import android.content.DialogInterface;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +36,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.concurrent.TimeUnit;
 
@@ -76,6 +79,52 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(regist);
             }
         });
+
+       /* FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+
+                    // Obtener el token de registro del dispositivo
+                    String token = task.getResult();
+
+                    // Guardar el token en Realtime Database
+                    DatabaseReference tokensRef = FirebaseDatabase.getInstance().getReference("tokens");
+                    tokensRef.child(token).setValue(true);
+                });*/
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        // Get new FCM registration token
+                        String token = task.getResult();
+
+                        // Log and toast
+                        Log.d(TAG, "FCM registration token: " + token);
+                    }
+                });
+
+        FirebaseMessaging.getInstance().subscribeToTopic("campaigns")
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            // Suscrito exitosamente al tema
+                            Log.d(TAG, "Suscrito");
+                        } else {
+                            // Error al suscribirse al tema
+                            Log.d(TAG, "Error al suscribir");
+                        }
+                    }
+                });
 
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override

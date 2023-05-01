@@ -24,7 +24,6 @@
             android:orientation="horizontal"
             android:padding="6dp">
 
-
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/imgQR"
                 android:layout_width="80dp"

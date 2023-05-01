@@ -1,13 +1,17 @@
 package com.example.vet;
 
+import static android.content.ContentValues.TAG;
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import android.app.DatePickerDialog;
+import android.app.Notification;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,8 +22,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
+import com.example.vet.clases.ApiService;
 import com.example.vet.clases.DataEspecies;
 import com.example.vet.clases.EspecieAdapter;
+import com.example.vet.clases.RetrofitClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -30,13 +36,30 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class CrearVacuna extends AppCompatActivity {
 
@@ -319,6 +342,7 @@ public class CrearVacuna extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task2) {
                 if(task2.isSuccessful()){
                     Toast.makeText(CrearVacuna.this, "Campaña registrada correctamente", Toast.LENGTH_SHORT).show();
+                    sendNotificationToTopic("campaigns", "Nueva campaña de: "+nomCam+" \n Fechas activas del " +startCam+" al "+endCam, "Una nueva campaña ha sido creada");
                     salir();
                 }
                 else Toast.makeText(CrearVacuna.this, "Error al registrar datos de la campaña", Toast.LENGTH_SHORT).show();
@@ -327,6 +351,51 @@ public class CrearVacuna extends AppCompatActivity {
 
 
     }
+
+
+
+
+
+
+    private void sendNotificationToTopic(String topic, String title, String message) {
+        Retrofit retrofit = RetrofitClient.getClient();
+        ApiService apiService = retrofit.create(ApiService.class);
+
+        JSONObject notification = new JSONObject();
+        try {
+            notification.put("title", title);
+            notification.put("body", message);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JSONObject data = new JSONObject();
+        try {
+            data.put("to", "/topics/" + topic);
+            data.put("notification", notification);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), data.toString());
+        Call<Void> call = apiService.sendNotification(requestBody);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    Log.d("Notification", "Notification sent successfully");
+                } else {
+                    Log.e("Notification", "Failed to send notification, response code: " + response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Log.e("Notification", "Failed to send notification: " + t.getMessage());
+            }
+        });
+    }
+
 
     private void updCamp(String nomCam,String ubiCam,String startCam,String endCam,String noteCam,String espe){
 
