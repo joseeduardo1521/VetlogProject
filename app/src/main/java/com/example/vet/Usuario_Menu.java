@@ -335,7 +335,6 @@ public class Usuario_Menu extends AppCompatActivity {
 
 
     private void getUserInfo(){
-
         String id= mAuth.getCurrentUser().getUid();
         mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
             @Override
@@ -372,20 +371,24 @@ public class Usuario_Menu extends AppCompatActivity {
 
             }
         });
+        consultarCita(id);
+    }
 
+
+    private void consultarCita(String id) {
         mDatabase.child("Citas").orderByChild("id").equalTo(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists()){
-                    for(DataSnapshot dataSnapshot: snapshot.getChildren()){
-                        String nombre,fecha,hora;
+                if (snapshot.exists()) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        String nombre, fecha, hora;
                         nombre = dataSnapshot.child("name").getValue().toString();
                         fecha = dataSnapshot.child("date").getValue().toString();
                         hora = dataSnapshot.child("time").getValue().toString();
                         mfecha.setText(hora);
                         mhora.setText(fecha);
                     }
-                }else{
+                } else {
                     mfecha.setVisibility(View.INVISIBLE);
                     mhora.setVisibility(View.INVISIBLE);
                     fechamos.setText("No cuenta con una cita");
@@ -398,10 +401,6 @@ public class Usuario_Menu extends AppCompatActivity {
 
             }
         });
-
-
-
-
     }
 
     private void cerrarSesion(){

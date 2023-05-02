@@ -93,11 +93,13 @@ public class gestionarMasFragment extends Fragment {
                     mDatabase.child("Usuario").orderByChild("email").equalTo(searchText).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                                llaveCodu = dataSnapshot.getKey();
-                                buscarMascota(llaveCodu, "key");
-                            }
-
+                            if(snapshot.exists()) {
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    llaveCodu = dataSnapshot.getKey();
+                                    buscarMascota(llaveCodu, "key");
+                                }
+                            }else
+                                Toast.makeText(getActivity(), "No no encuentra ninguna mascota con ese correo", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
