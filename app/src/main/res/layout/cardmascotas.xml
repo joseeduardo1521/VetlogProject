@@ -166,6 +166,14 @@
                         android:text="Especie de la mascota"/>
 
                     <TextView
+                        android:id="@+id/statusTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:autoSizeTextType="uniform"
+                        android:textColor="@color/white"
+                        android:text="Estado de la mascota"/>
+
+                    <TextView
                         android:id="@+id/correoDueño"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

@@ -329,8 +329,12 @@ public class MenuSec extends AppCompatActivity {
                     String nombre,lvl,photo;
                     nombre = snapshot.child("name").getValue().toString();
                     if (snapshot.child("photo").exists()) {
+                        try {
                         photo = snapshot.child("photo").getValue().toString();
-                        Glide.with(MenuSec.this).load(photo).into(imgUsu);
+                            Glide.with(MenuSec.this).load(photo).into(imgUsu);
+                        }catch (Exception e){
+
+                        }
                     }
                     lvl = snapshot.child("lvl").getValue().toString();
                     switch (lvl){

@@ -59,12 +59,11 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
         this.mCtx=mCtx;
         this.mascotaList = mascotaList;
         this.mInflater = LayoutInflater.from(mCtx);
-
     }
 
 
     public class MosMacotasViewHolder extends RecyclerView.ViewHolder {
-        TextView txtNombre, txtRaza,txtEdad,txtEspecie, txtDueño,txtGenero;
+        TextView txtNombre, txtRaza,txtEdad,txtEspecie, txtDueño,txtGenero,txtEstado;
         ImageView imgMasc;
         CardView cv;
         RelativeLayout layImg;
@@ -77,6 +76,7 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
         public MosMacotasViewHolder(View view) {
             super(view);
             txtNombre = view.findViewById(R.id.nombreTextView);
+            txtEstado = view.findViewById(R.id.statusTextView);
             txtRaza = view.findViewById(R.id.razaTextView);
             txtEdad = view.findViewById(R.id.edadTextView);
             txtEspecie = view.findViewById(R.id.especieTextView);
@@ -147,21 +147,28 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
             view.findViewById(R.id.btnBorrarM).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+
+
                     DatabaseReference registroRef = databaseRef.child("Mascotas").child(llave);
                     if (!(imgMascota.equals("https://firebasestorage.googleapis.com/v0/b/vetlog-fec63.appspot.com/o/user%2Fvetg.png?alt=media&token=75ea52f3-4fe1-4c8e-821f-575edbced693"))) {
-                        StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(imgMascota);
-                        // Borra el archivo de Firebase Storage
-                        storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // Borra la referencia al archivo en la base de datos
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // Maneja el error al borrar el archivo de Firebase Storage
-                            }
-                        });
+                        try {
+                            StorageReference storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(imgMascota);
+                            // Borra el archivo de Firebase Storage
+                            storageRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    // Borra la referencia al archivo en la base de datos
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    // Maneja el error al borrar el archivo de Firebase Storage
+                                }
+                            });
+                        }catch (Exception e){
+
+                        }
                     }
                     registroRef.removeValue();
                     mascotaList.remove(position);
@@ -196,11 +203,12 @@ public class AdapterMosMascotas extends RecyclerView.Adapter<AdapterMosMascotas.
         changeShapeColor(viewHolder,mascota.getEstadoM() );
 
         viewHolder.txtNombre.setText(mascota.getNombreM());
-        viewHolder.txtEspecie.setText(mascota.getEspecieM());
+        viewHolder.txtEspecie.setText("Especie: "+mascota.getEspecieM());
         viewHolder.txtDueño.setText(mascota.getCorreoDueno());
-        viewHolder.txtRaza.setText(mascota.getRazaM());
+        viewHolder.txtRaza.setText("Raza: "+mascota.getRazaM());
         viewHolder.txtEdad.setText(mascota.getEdadM());
-        viewHolder.txtGenero.setText(mascota.getGeneroM());
+        viewHolder.txtEstado.setText("Estado: "+mascota.getEstadoM());
+        viewHolder.txtGenero.setText("Sexo: "+mascota.getGeneroM());
         viewHolder.position = position;
         viewHolder.cv.setAnimation(AnimationUtils.loadAnimation(mCtx,R.anim.fade_trans));
 

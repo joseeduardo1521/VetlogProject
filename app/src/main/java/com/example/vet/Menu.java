@@ -359,8 +359,12 @@ public class Menu extends AppCompatActivity {
                     String nombre,lvl,photo;
                     nombre = snapshot.child("name").getValue().toString();
                     if (snapshot.child("photo").exists()) {
+                        try {
                         photo = snapshot.child("photo").getValue().toString();
                         Glide.with(Menu.this).load(photo).into(imgUsu);
+                        }catch (Exception e){
+
+                        }
                     }
                     lvl = snapshot.child("lvl").getValue().toString();
                     switch (lvl){

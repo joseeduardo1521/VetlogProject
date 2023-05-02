@@ -122,7 +122,7 @@
                     android:orientation="horizontal">
                     <TextView
                         android:id="@+id/txtMedicamento"
-                        android:layout_width="wrap_content"
+                        android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:textSize="20sp"
                         android:textStyle="bold"
@@ -133,7 +133,7 @@
                     <TextView
                         android:id="@+id/txtFechaReceta"
                         app:autoSizeTextType="uniform"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="6dp"
                         android:layout_marginLeft="6dp"

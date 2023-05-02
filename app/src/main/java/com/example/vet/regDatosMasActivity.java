@@ -70,7 +70,7 @@ public class regDatosMasActivity extends AppCompatActivity {
     private EspecieAdapter adapter;
     private StorageReference storageReference;
     private String storage_path = "pet/*";
-    private  String download_uri, imgupUrl="";
+    private  String download_uri, imgupUrl;
     private String corred="";
     private Spinner spinnerSta;
     private String estadoactual="";
@@ -88,7 +88,8 @@ public class regDatosMasActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reg_datos_mas);
-
+        download_uri = "";
+        imgupUrl="";
         String key2 = getIntent().getExtras().getString("llave2");
         this.key2 = key2;
         String key = getIntent().getExtras().getString("llave");
@@ -337,11 +338,11 @@ public class regDatosMasActivity extends AppCompatActivity {
     }
 
     private void subirPhoto(Uri image_url, String token) {
-
         if (String.valueOf(image_url).equals(imgupUrl)){
             Toast.makeText(regDatosMasActivity.this, "No se cambio la foto", Toast.LENGTH_SHORT).show();
             salir();
         }else {
+            try {
             String rute_storage_photo = storage_path + "" + photo + "" + key + "" + idd;
             StorageReference reference = storageReference.child(rute_storage_photo);
             reference.putFile(image_url).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -375,11 +376,15 @@ public class regDatosMasActivity extends AppCompatActivity {
 
                 }
             });
+            }catch (Exception e){
+                Toast.makeText(regDatosMasActivity.this, "Error al cargar foto", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
 
     private void actualizarDatosMascota(String name,String date, String weight, String color, String raze, String species,String sex, String status){
+        mostrarPantallaCarga();
         idd = key+year+species+name.replace(" ","");
         final Map<String, Object> map = new HashMap<>();
         map.put("name", name);
@@ -394,14 +399,14 @@ public class regDatosMasActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task2) {
                 if(task2.isSuccessful()){
-                    mostrarPantallaCarga();
+
                     if(estadoactual != status){
-                        correoDueno(corred, new gestionarMasFragment.OnCorreoDuenoListener() {
+                        phoneDueno(corred, new regDatosMasActivity.OnphoneDuenoListener() {
                             @Override
-                            public void onCorreoDuenoObtenido(String correoDueno) {
+                            public void onphoneDuenoObtenido(String phoneDueno) {
                                 try {
                                     SmsManager smsManager = SmsManager.getDefault();
-                                    smsManager.sendTextMessage(correoDueno,null, "El estado de la mascota: "+name+"\nA cambiado a: "+status +"\n"+"Si desea consultar mas informacion use el siguiente enlace: vetlog.page.link/rM3L",null,null);
+                                    smsManager.sendTextMessage(phoneDueno,null, "El estado de la mascota: "+name+"\nA cambiado a: "+status +"\n"+"Si desea consultar mas informacion use el siguiente enlace: vetlog.page.link/rM3L",null,null);
                                 }catch (Exception e){
                                     Toast.makeText(regDatosMasActivity.this, "Es necesario activar los permisos de sms", Toast.LENGTH_SHORT).show();
                                 }
@@ -423,17 +428,17 @@ public class regDatosMasActivity extends AppCompatActivity {
     }
 
 
-    public interface OnCorreoDuenoListener {
-        void onCorreoDuenoObtenido(String correoDueno);
+    public interface OnphoneDuenoListener {
+        void onphoneDuenoObtenido(String phoneDueno);
     }
 
-    private void correoDueno(String keydueno, gestionarMasFragment.OnCorreoDuenoListener listener){
-        String[] correoDu = new String[1];
+    private void phoneDueno(String keydueno, regDatosMasActivity.OnphoneDuenoListener listener) {
+        String[] phoneDu = new String[1];
         mDatabase.child("Usuario").child(keydueno).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                correoDu[0] = snapshot.child("phone").getValue().toString();
-                listener.onCorreoDuenoObtenido(correoDu[0]);
+                phoneDu[0] = snapshot.child("phone").getValue().toString();
+                listener.onphoneDuenoObtenido(phoneDu[0]);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -443,6 +448,7 @@ public class regDatosMasActivity extends AppCompatActivity {
     }
 
     private void registro(String name,String date, String weight, String color, String raze, String species,String sex, String status){
+        mostrarPantallaCarga();
         idd = key+year+species+name.replace(" ","");
         String token= mDatabase.push().getKey();
         final Map<String, Object> map = new HashMap<>();
@@ -460,9 +466,9 @@ public class regDatosMasActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task2) {
                 if(task2.isSuccessful()){
-                    mostrarPantallaCarga();
+
                     Toast.makeText(regDatosMasActivity.this, "Registrado", Toast.LENGTH_SHORT).show();
-                    if(image_url.toString() != "" || image_url != null){
+                    if (!(String.valueOf(image_url).equals(""))&&!(String.valueOf(image_url).equals("null"))){
                     subirPhoto(image_url,token);}
                     else {
                         salir();
@@ -477,7 +483,41 @@ public class regDatosMasActivity extends AppCompatActivity {
 
     private void salir(){
         ocultarPantallaCarga();
-        finish();
+        String id= mAuth.getCurrentUser().getUid();
+        mDatabase.child("Usuario").child(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String lvl;
+                    lvl = snapshot.child("lvl").getValue().toString();
+                    switch (lvl){
+                        case "1":
+                            regresarmenu();
+                            break;
+                        case "2":
+                            regresarmenu2();
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void regresarmenu() {
+        Intent intent = new Intent(this,Menu.class);
+        startActivity(intent);
+        finishAffinity();
+    }
+
+    private void regresarmenu2() {
+        Intent intent = new Intent(this,MenuSec.class);
+        startActivity(intent);
+        finishAffinity();
     }
 
     private void initDatePicker(){

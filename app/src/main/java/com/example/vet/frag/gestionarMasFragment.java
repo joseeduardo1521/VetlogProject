@@ -215,10 +215,10 @@ public class gestionarMasFragment extends Fragment {
                                     mascotaList.add(new mostrarMascota(
                                             key, name, img, edad, raza, genero, esp, estado, correoDueno
                                     ));
+
                                     AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
                                     recyclerView.setAdapter(adapter);
                                     adapter.notifyDataSetChanged();
-
                                 }
                             });
                         }
@@ -356,7 +356,10 @@ public class gestionarMasFragment extends Fragment {
                                 key, name, img, edad, raza, genero, especie, estado, correoDueno
                         );
                         mascotaList.add(mascota);
-
+                        if (getActivity() != null) {
+                            AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
+                            recyclerView.setAdapter(adapter);
+                        }
                         AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
                         recyclerView.setAdapter(adapter);
                     }
@@ -386,12 +389,18 @@ public class gestionarMasFragment extends Fragment {
                     public void onCorreoDuenoObtenido(String correoDueno) {
                         mostrarMascota mascota = new mostrarMascota(
                                 key, name, img, edad, raza, genero, especie, estado, correoDueno);
+
+
                         int index = -1;
                         for (int i = 0; i < mascotaList.size(); i++) {
                             if (mascotaList.get(i).getIdM().equals(key)) {
                                 index = i;
                                 break;
                             }
+                        }
+                        if (getActivity() != null) {
+                            AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
+                            recyclerView.setAdapter(adapter);
                         }
                         if (index != -1) {
                             mascotaList.set(index, mascota);
@@ -411,6 +420,10 @@ public class gestionarMasFragment extends Fragment {
                         index = i;
                         break;
                     }
+                }
+                if (getActivity() != null) {
+                    AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
+                    recyclerView.setAdapter(adapter);
                 }
                 if (index != -1) {
                     mascotaList.remove(index);
