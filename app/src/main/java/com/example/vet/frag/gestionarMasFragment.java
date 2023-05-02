@@ -151,7 +151,7 @@ public class gestionarMasFragment extends Fragment {
                             for(DataSnapshot dataSnapshot:snapshot.getChildren()) {
                                 if(dataSnapshot.child("idMas").exists()) {
                                     String llave = dataSnapshot.child("idMas").getValue().toString();
-                                    if(llave != "") {
+                                    if(!(llave.equals(""))) {
                                         buscarMascota(llave, "qr");
                                     }
                                     else {
@@ -401,12 +401,13 @@ public class gestionarMasFragment extends Fragment {
                         if (getActivity() != null) {
                             AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
                             recyclerView.setAdapter(adapter);
+                            if (index != -1) {
+                                mascotaList.set(index, mascota);
+                                AdapterMosMascotas adaapter = new AdapterMosMascotas(getActivity(), mascotaList);
+                                recyclerView.setAdapter(adaapter);
+                            }
                         }
-                        if (index != -1) {
-                            mascotaList.set(index, mascota);
-                            AdapterMosMascotas adapter = new AdapterMosMascotas(getActivity(), mascotaList);
-                            recyclerView.setAdapter(adapter);
-                        }
+
                     }
                 });
             }

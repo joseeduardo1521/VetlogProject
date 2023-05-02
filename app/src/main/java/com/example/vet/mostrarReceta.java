@@ -217,8 +217,6 @@ public class mostrarReceta extends AppCompatActivity {
 
 
         if (txtinterno.equals("Internar")) {
-
-
             Map<String, Object> updMas = new HashMap<>();
             updMas.put("idhabit", codigo);
             updMas.put("start_date", currentDate.toString());
@@ -246,40 +244,65 @@ public class mostrarReceta extends AppCompatActivity {
             txtbtnInternar.setText("Dar alta");
         }
         else{
-
-            Map<String, Object> updMas = new HashMap<>();
-            updMas.put("idhabit", "");
-            updMas.put("status", "Casa");
-            updMas.put("end_date", currentDate.toString());
-
-            mDatabase.child("Mascotas").child(key).updateChildren(updMas).addOnCompleteListener(new OnCompleteListener<Void>() {
+            mDatabase.child("habitaculo").orderByChild("idMas").equalTo(key).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
-                public void onComplete(@NonNull Task<Void> task) {
-            // Actualizar los campos del habitáculo
-            Map<String, Object> updates = new HashMap<>();
-            updates.put("idMas", "");
-            updates.put("fecha_ingreso", "");
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        // La consulta devuelve al menos un nodo con el valor idMas igual a key
+                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                            // Procesa cada nodo hijo que cumpla con la condición
+                            String codigoHabitaculo = childSnapshot.getKey();
 
-            mDatabase.child("habitaculo").child(codigo).updateChildren(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            if(codigoHabitaculo.equals(codigo)){
+
+                            Map<String, Object> updMas = new HashMap<>();
+                            updMas.put("idhabit", "");
+                            updMas.put("status", "Casa");
+                            updMas.put("end_date", currentDate.toString());
+
+                            mDatabase.child("Mascotas").child(key).updateChildren(updMas).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+
+                                    // Actualizar los campos del habitáculo
+                                    Map<String, Object> updates = new HashMap<>();
+                                    updates.put("idMas", "");
+                                    updates.put("fecha_ingreso", "");
+
+                                    mDatabase.child("habitaculo").child(codigo).updateChildren(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            Toast.makeText(mostrarReceta.this, "Alta Completada", Toast.LENGTH_SHORT).show();
+                                            txtbtnInternar.setText("Internar");
+                                            actualizarEstado(key);
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                                Toast.makeText(mostrarReceta.this, "Esta mascota no se encuentra en este habitaculo", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    }
+                    else {
+                        Toast.makeText(mostrarReceta.this, "Esta mascota no se encuentra en este habitaculo", Toast.LENGTH_SHORT).show();
+                    }
+                }
                 @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    Toast.makeText(mostrarReceta.this, "Alta Completada", Toast.LENGTH_SHORT).show();
+                public void onCancelled(@NonNull DatabaseError error) {
+
                 }
             });
-                }
-            });
 
 
-            txtbtnInternar.setText("Internar");
         }
-        actualizarEstado(key);
+
     }
 
-    public interface OnCorreoDuenoListener {
-        void onCorreoDuenoObtenido(String correoDueno);
-    }
 
-    private void correoDueno(String keydueno, gestionarMasFragment.OnCorreoDuenoListener listener){
+
+    private void correoDueno(String keydueno, mostrarReceta.OnCorreoDuenoListener listener){
         String[] correoDu = new String[1];
         mDatabase.child("Usuario").child(keydueno).addValueEventListener(new ValueEventListener() {
             @Override
@@ -293,6 +316,9 @@ public class mostrarReceta extends AppCompatActivity {
             }
         });
     }
+    public interface OnCorreoDuenoListener {
+        void onCorreoDuenoObtenido(String correoDueno);
+    }
 
     private void actualizarEstado(String key){
         mDatabase.child("Mascotas").child(key).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -301,7 +327,7 @@ public class mostrarReceta extends AppCompatActivity {
                 if(snapshot.exists()){
                     String status = snapshot.child("status").getValue().toString();
                     String name = snapshot.child("name").getValue().toString();
-                    correoDueno(corred, new gestionarMasFragment.OnCorreoDuenoListener() {
+                    correoDueno(corred, new mostrarReceta.OnCorreoDuenoListener() {
                         @Override
                         public void onCorreoDuenoObtenido(String correoDueno) {
                             try {
