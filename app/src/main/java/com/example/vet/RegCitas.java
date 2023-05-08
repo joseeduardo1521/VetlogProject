@@ -143,6 +143,8 @@ public class RegCitas extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task2) {
                             if (task2.isSuccessful()) {
                                 Toast.makeText(RegCitas.this, "Registrado", Toast.LENGTH_SHORT).show();
+                                retorno();
+
                             } else {
                                 Toast.makeText(RegCitas.this, "Error al registrar datos", Toast.LENGTH_SHORT).show();
                             }
@@ -169,6 +171,12 @@ public class RegCitas extends AppCompatActivity {
         return makeDateString(day,month,year);
     }
 
+
+    private void retorno(){
+        Intent ns = new Intent(RegCitas.this,Usuario_Menu.class);
+        startActivity(ns);
+
+    }
 
     private void initDatePicker(){
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener(){
