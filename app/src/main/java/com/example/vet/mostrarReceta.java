@@ -146,7 +146,7 @@ public class mostrarReceta extends AppCompatActivity {
     public void onRequestPermissionsResult ( int requestCode, String[] permissions,
                                              int[] grantResults){
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1) {
+        if (requestCode == 1 ) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Si se concedió el permiso, abrir el escáner de QR
                 IntentIntegrator integrator = new IntentIntegrator(mostrarReceta.this);
@@ -236,12 +236,14 @@ public class mostrarReceta extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             Toast.makeText(mostrarReceta.this, "Ingreso Completado", Toast.LENGTH_SHORT).show();
+                            txtbtnInternar.setText("Dar alta");
+                            actualizarEstado(key);
                         }
                     });
                 }
             });
 
-            txtbtnInternar.setText("Dar alta");
+
         }
         else{
             mDatabase.child("habitaculo").orderByChild("idMas").equalTo(key).addListenerForSingleValueEvent(new ValueEventListener() {

@@ -6,9 +6,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.sax.StartElementListener;
@@ -74,6 +77,8 @@ public class Usuario_Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usuario_menu);
+
+        requestPermissions();
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -329,6 +334,44 @@ public class Usuario_Menu extends AppCompatActivity {
                 Toast.makeText(Usuario_Menu.this, "Error al cargar foto", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private static final int PERMISSIONS_REQUEST_ALL = 1;
+    private static final String[] PERMISSIONS = {
+            Manifest.permission.CAMERA,
+            Manifest.permission.SEND_SMS,
+            Manifest.permission.RECEIVE_BOOT_COMPLETED,
+            Manifest.permission.ACCESS_NOTIFICATION_POLICY,
+            Manifest.permission.POST_NOTIFICATIONS
+    };
+
+    private void requestPermissions() {
+        ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSIONS_REQUEST_ALL);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ALL: {
+                // Check if all permissions are granted
+                boolean allGranted = true;
+                for (int grantResult : grantResults) {
+                    if (grantResult != PackageManager.PERMISSION_GRANTED) {
+                        allGranted = false;
+                        break;
+                    }
+                }
+                if (allGranted) {
+                    // Permissions granted
+                } else {
+                    // Permissions denied
+                }
+                return;
+            }
+            // Other cases for other permissions you may have requested
+        }
     }
 
 

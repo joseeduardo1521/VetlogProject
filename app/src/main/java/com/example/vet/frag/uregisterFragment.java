@@ -1,9 +1,11 @@
 package com.example.vet.frag;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.basgeekball.awesomevalidation.ValidationStyle.BASIC;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.utility.RegexTemplate;
+import com.example.vet.MainActivity;
 import com.example.vet.Menu;
 import com.example.vet.R;
 import com.example.vet.RegisUser;
@@ -48,7 +51,7 @@ public class uregisterFragment extends Fragment {
     private DatabaseReference mDatabase;
     String  arr;
     AwesomeValidation awesomeValidation;
-
+    public static final String SHARED_PREFS ="sharedPrefs.mail";
     public uregisterFragment() {
         // Required empty public constructor
     }
@@ -130,7 +133,7 @@ public class uregisterFragment extends Fragment {
                                                 if (task.isSuccessful()) {
                                                     registro(name,email,address,phone,nivels,photo);
                                                     progressDialog.dismiss();
-                                                    volverMenu();
+                                                    cerrarSesion();
                                                 } else {
                                                     Toast.makeText(getActivity(), "Error al verificar el correo",Toast.LENGTH_SHORT).show();
                                                 }
@@ -175,13 +178,19 @@ public class uregisterFragment extends Fragment {
         });
     }
 
+    private void cerrarSesion() {
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("mail", "");
+        editor.putString("pass", "");
+        editor.apply();
 
-    private void volverMenu (){
-        mAuthM.signInWithCustomToken(arr);
-        Intent iniciar = new Intent(getActivity(), Menu.class);
-        iniciar.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        Intent iniciar = new Intent(requireActivity(), MainActivity.class);
+        iniciar.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(iniciar);
-        getActivity().finish();
+        requireActivity().finishAffinity();
     }
+
+
 
 }
