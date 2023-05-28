@@ -175,6 +175,7 @@ public class RegCitas extends AppCompatActivity {
     private void retorno(){
         Intent ns = new Intent(RegCitas.this,Usuario_Menu.class);
         startActivity(ns);
+        finish();
 
     }
 

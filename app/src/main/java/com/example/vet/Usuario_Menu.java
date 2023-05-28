@@ -47,7 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Usuario_Menu extends AppCompatActivity {
 
-    private View cardPersonal,cardCerSesion,cardCitas,cardGesM, cardQR, cardAdop, cardVacu;
+    private View cardPersonal,cardCerSesion,cardCitas,cardGesM, cardQR, cardAdop, cardVacu, cardCuesta;
     private TextView mnombre,mRol;
     private FirebaseAuth mAuth;
     private String idMas;
@@ -89,6 +89,7 @@ public class Usuario_Menu extends AppCompatActivity {
         cardGesM = (View) findViewById(R.id.D1);
         cardAdop =(View) findViewById(R.id.D5);
         cardVacu = (View) findViewById(R.id.D6);
+        cardCuesta = (View) findViewById(R.id.D27);
         imgUsu =  findViewById(R.id.imgUsuario);
         fechamos = (TextView) findViewById(R.id.demo);
         horamos = (TextView) findViewById(R.id.hdemos);
@@ -138,6 +139,14 @@ public class Usuario_Menu extends AppCompatActivity {
             public void onClick(View v) {
                 Intent Adopmas = new Intent(Usuario_Menu.this,mostrarAdopcion.class);
                 startActivity(Adopmas);
+            }
+        });
+
+        cardCuesta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent cu = new Intent(Usuario_Menu.this, Encuesta.class);
+                startActivity(cu);
             }
         });
 
